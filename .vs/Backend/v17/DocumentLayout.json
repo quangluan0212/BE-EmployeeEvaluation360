@@ -1,0 +1,83 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "D:\\DOANTOTNGHIEP\\DanhGiaNhanSu\\Backend\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{66602F94-8D9B-4E9E-86FC-ABF4B0300417}|EmployeeEvaluation360\\EmployeeEvaluation360.csproj|d:\\doantotnghiep\\danhgianhansu\\backend\\employeeevaluation360\\employeeevaluation360.http||{5703B403-55E7-4C63-8C88-A8F52C7A45C5}",
+      "RelativeMoniker": "D:0:0:{66602F94-8D9B-4E9E-86FC-ABF4B0300417}|EmployeeEvaluation360\\EmployeeEvaluation360.csproj|solutionrelative:employeeevaluation360\\employeeevaluation360.http||{5703B403-55E7-4C63-8C88-A8F52C7A45C5}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{66602F94-8D9B-4E9E-86FC-ABF4B0300417}|EmployeeEvaluation360\\EmployeeEvaluation360.csproj|d:\\doantotnghiep\\danhgianhansu\\backend\\employeeevaluation360\\weatherforecast.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{66602F94-8D9B-4E9E-86FC-ABF4B0300417}|EmployeeEvaluation360\\EmployeeEvaluation360.csproj|solutionrelative:employeeevaluation360\\weatherforecast.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{66602F94-8D9B-4E9E-86FC-ABF4B0300417}|EmployeeEvaluation360\\EmployeeEvaluation360.csproj|d:\\doantotnghiep\\danhgianhansu\\backend\\employeeevaluation360\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{66602F94-8D9B-4E9E-86FC-ABF4B0300417}|EmployeeEvaluation360\\EmployeeEvaluation360.csproj|solutionrelative:employeeevaluation360\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 3,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{74946827-37a0-11d2-a273-00c04f8ef4ff}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{0174dea2-fdbe-4ef1-8f99-c0beae78880f}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{1c4feeaa-4718-4aa9-859d-94ce25d182ba}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "EmployeeEvaluation360.http",
+              "DocumentMoniker": "D:\\DOANTOTNGHIEP\\DanhGiaNhanSu\\Backend\\EmployeeEvaluation360\\EmployeeEvaluation360.http",
+              "RelativeDocumentMoniker": "EmployeeEvaluation360\\EmployeeEvaluation360.http",
+              "ToolTip": "D:\\DOANTOTNGHIEP\\DanhGiaNhanSu\\Backend\\EmployeeEvaluation360\\EmployeeEvaluation360.http",
+              "RelativeToolTip": "EmployeeEvaluation360\\EmployeeEvaluation360.http",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAYAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003502|",
+              "WhenOpened": "2025-04-22T02:53:13.138Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "Program.cs",
+              "DocumentMoniker": "D:\\DOANTOTNGHIEP\\DanhGiaNhanSu\\Backend\\EmployeeEvaluation360\\Program.cs",
+              "RelativeDocumentMoniker": "EmployeeEvaluation360\\Program.cs",
+              "ToolTip": "D:\\DOANTOTNGHIEP\\DanhGiaNhanSu\\Backend\\EmployeeEvaluation360\\Program.cs",
+              "RelativeToolTip": "EmployeeEvaluation360\\Program.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-22T02:53:10.624Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "WeatherForecast.cs",
+              "DocumentMoniker": "D:\\DOANTOTNGHIEP\\DanhGiaNhanSu\\Backend\\EmployeeEvaluation360\\WeatherForecast.cs",
+              "RelativeDocumentMoniker": "EmployeeEvaluation360\\WeatherForecast.cs",
+              "ToolTip": "D:\\DOANTOTNGHIEP\\DanhGiaNhanSu\\Backend\\EmployeeEvaluation360\\WeatherForecast.cs",
+              "RelativeToolTip": "EmployeeEvaluation360\\WeatherForecast.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-22T02:53:09.672Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
