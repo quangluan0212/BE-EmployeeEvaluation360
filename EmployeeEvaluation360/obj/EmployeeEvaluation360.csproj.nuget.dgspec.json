@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "D:\\DOANTOTNGHIEP\\DanhGiaNhanSu\\Backend\\EmployeeEvaluation360\\EmployeeEvaluation360.csproj": {}
+    "D:\\DOANTOTNGHIEP\\DanhGiaNhanSu\\backend\\EmployeeEvaluation360\\EmployeeEvaluation360.csproj": {}
   },
   "projects": {
-    "D:\\DOANTOTNGHIEP\\DanhGiaNhanSu\\Backend\\EmployeeEvaluation360\\EmployeeEvaluation360.csproj": {
+    "D:\\DOANTOTNGHIEP\\DanhGiaNhanSu\\backend\\EmployeeEvaluation360\\EmployeeEvaluation360.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\DOANTOTNGHIEP\\DanhGiaNhanSu\\Backend\\EmployeeEvaluation360\\EmployeeEvaluation360.csproj",
+        "projectUniqueName": "D:\\DOANTOTNGHIEP\\DanhGiaNhanSu\\backend\\EmployeeEvaluation360\\EmployeeEvaluation360.csproj",
         "projectName": "EmployeeEvaluation360",
-        "projectPath": "D:\\DOANTOTNGHIEP\\DanhGiaNhanSu\\Backend\\EmployeeEvaluation360\\EmployeeEvaluation360.csproj",
+        "projectPath": "D:\\DOANTOTNGHIEP\\DanhGiaNhanSu\\backend\\EmployeeEvaluation360\\EmployeeEvaluation360.csproj",
         "packagesPath": "C:\\Users\\LE QUANG LUAN\\.nuget\\packages\\",
-        "outputPath": "D:\\DOANTOTNGHIEP\\DanhGiaNhanSu\\Backend\\EmployeeEvaluation360\\obj\\",
+        "outputPath": "D:\\DOANTOTNGHIEP\\DanhGiaNhanSu\\backend\\EmployeeEvaluation360\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -50,6 +50,14 @@
         "net8.0": {
           "targetAlias": "net8.0",
           "dependencies": {
+            "Microsoft.EntityFrameworkCore": {
+              "target": "Package",
+              "version": "[8.0.0, )"
+            },
+            "Microsoft.EntityFrameworkCore.SqlServer": {
+              "target": "Package",
+              "version": "[8.0.0, )"
+            },
             "Microsoft.VisualStudio.Azure.Containers.Tools.Targets": {
               "target": "Package",
               "version": "[1.21.0, )"

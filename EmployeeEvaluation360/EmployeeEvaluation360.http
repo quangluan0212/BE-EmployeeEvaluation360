@@ -1,6 +1,1 @@
 @EmployeeEvaluation360_HostAddress = http://localhost:5294
-
-GET {{EmployeeEvaluation360_HostAddress}}/weatherforecast/
-Accept: application/json
-
-###
