@@ -1,4 +1,13 @@
 
+using EmployeeEvaluation360.Database;
+using EmployeeEvaluation360.Interfaces;
+using EmployeeEvaluation360.Services;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
+using System.Security.Claims;
+
 namespace EmployeeEvaluation360
 {
     public class Program
@@ -12,9 +21,87 @@ namespace EmployeeEvaluation360
             builder.Services.AddControllers();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
-            builder.Services.AddSwaggerGen();
+            builder.Services.AddSwaggerGen(c =>
+			{
+				c.SwaggerDoc("v1", new OpenApiInfo { Title = "EmployeeEvaluation360", Version = "v1" });
+				c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+				{
+					Description = "JWT Authorization header using the Bearer scheme. \r\n\r\n Enter 'Bearer' [space] and then your token in the text input below.\r\n\r\nExample: \"Bearer 12345abcdef\"",
+					Name = "Authorization",
+					In = ParameterLocation.Header,
+					Type = SecuritySchemeType.ApiKey,
+					Scheme = "Bearer"
+				});
+				c.AddSecurityRequirement(new OpenApiSecurityRequirement
+				{
+					{
+						new OpenApiSecurityScheme
+						{
+							Reference = new OpenApiReference
+							{
+								Type = ReferenceType.SecurityScheme,
+								Id = "Bearer"
+							},
+							Scheme = "oauth2",
+							Name = "Bearer",
+							In = ParameterLocation.Header
+						},
+						new List<string>()
+					}
+				});
+			});
+            builder.Services.AddDbContext<ApplicationDBContext>(options =>
+				options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-            var app = builder.Build();
+
+            builder.Services.AddScoped<IChucVuService, ChucVuService>();
+			builder.Services.AddScoped<INguoiDungService, NguoiDungService>();
+			builder.Services.AddScoped<ITokenService, TokenService>();
+
+			builder.Services.AddAuthentication(options =>
+			{
+				options.DefaultAuthenticateScheme =
+				options.DefaultChallengeScheme =
+				options.DefaultForbidScheme =
+				options.DefaultScheme =
+				options.DefaultSignInScheme =
+				options.DefaultSignOutScheme = JwtBearerDefaults.AuthenticationScheme;
+			}).AddJwtBearer(options =>
+			{
+				options.TokenValidationParameters = new TokenValidationParameters
+				{
+					ValidateIssuer = true,
+					ValidIssuer = builder.Configuration["JWT:Issuer"],
+					ValidateAudience = true,
+					ValidAudience = builder.Configuration["JWT:Audience"],
+					ValidateIssuerSigningKey = true,
+					IssuerSigningKey = new SymmetricSecurityKey(
+						System.Text.Encoding.UTF8.GetBytes(builder.Configuration["JWT:SigningKey"])
+					),
+					RoleClaimType =  ClaimTypes.Role
+				};
+
+				options.Events = new JwtBearerEvents
+				{
+					OnMessageReceived = context =>
+					{
+						var token = context.Request.Headers["Authorization"].FirstOrDefault();
+						if (!string.IsNullOrEmpty(token) && !token.StartsWith("Bearer "))
+						{
+							context.Request.Headers["Authorization"] = "Bearer " + token;
+						}
+						return Task.CompletedTask;
+					}
+				};
+			});
+
+			builder.Services.AddControllers().AddJsonOptions(options =>
+			{
+				options.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.Preserve;
+				options.JsonSerializerOptions.WriteIndented = true;
+			});
+
+			var app = builder.Build();
 
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
@@ -24,8 +111,8 @@ namespace EmployeeEvaluation360
             }
 
             app.UseHttpsRedirection();
-
-            app.UseAuthorization();
+			app.UseAuthentication();
+			app.UseAuthorization();
 
 
             app.MapControllers();
