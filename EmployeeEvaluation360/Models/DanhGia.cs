@@ -26,6 +26,9 @@ namespace EmployeeEvaluation360.Models
 		[Required]
 		[Column("Diem", TypeName = "DECIMAL(5,2)")]
 		public decimal Diem { get; set; }
+		[Required]
+		[Column("HeSo")]
+		public int HeSo { get; set; }
 
 		[Required]
 		[Column("TrangThai", TypeName = "NVARCHAR(20)")]

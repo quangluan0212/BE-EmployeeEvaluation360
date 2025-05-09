@@ -20,7 +20,8 @@ namespace EmployeeEvaluation360.Controllers
 		}
 
 		[HttpGet]
-		public async Task<ActionResult<IEnumerable<ChucVu>>> GetChucVus()
+		[Route("danh-sach-chuc-vu")]
+		public async Task<ActionResult> GetChucVus()
 		{
 			var chucVus = await _chucVuService.GetAllChucVuAsync();
 			if (chucVus == null || !chucVus.Any())
@@ -31,8 +32,16 @@ namespace EmployeeEvaluation360.Controllers
 			return Ok(Success(chucVuDtos));
 		}
 
+		[HttpGet]
+		[Route("danh-sach-chuc-vu-paged")]
+		public async Task<ActionResult> GetChucVusPaged([FromQuery] int page = 1, [FromQuery] int pageSize = 10, string? search = null)
+		{
+			var chucVus = await _chucVuService.GetAllChucVuPagedAsync(page, pageSize, search);
+			return Ok(Success(chucVus));
+		}
 
-		[HttpGet("{id}")]
+
+		[HttpGet("chi-tiet-chuc-vu")]
 		public async Task<ActionResult<ChucVu>> GetChucVu(int id)
 		{
 			var chucVu = await _chucVuService.GetChucVuByIdAsync(id);
@@ -42,13 +51,12 @@ namespace EmployeeEvaluation360.Controllers
 				return NotFound(new { message = "Không tìm thấy chức vụ" });
 			}
 
-			return Ok(chucVu);
+			return Ok(Success(chucVu.ToDto()));
 		}
 
 
 		[HttpPost]
-		[Route("create")]
-		//[Authorize(Roles = "Admin")]
+		[Route("them-chuc-vu")]
 		public async Task<ActionResult<ChucVu>> CreateChucVu(ChucVuCreateDto chucVuDto)
 		{
 			if (!ModelState.IsValid)
@@ -63,74 +71,64 @@ namespace EmployeeEvaluation360.Controllers
 			};
 
 			var createdChucVu = await _chucVuService.CreateChucVuAsync(chucVu);
-			return CreatedAtAction(nameof(GetChucVu), new { id = createdChucVu.MaChucVu }, createdChucVu);
+			if (createdChucVu == null)
+			{
+				return BadRequest(new { message = "Không thể tạo chức vụ" });
+			}
+			return Ok(Success(chucVu.ToDto()));
 		}
 
-		[HttpPut("{id}")]
-		//[Authorize(Roles = "Admin")]
-		public async Task<IActionResult> UpdateChucVu(int id, ChucVuUpdateDto chucVuDto)
+		[HttpPut]
+		[Route("cap-nhat-chuc-vu")]
+		public async Task<ActionResult<ChucVu>> UpdateChucVu(int id, ChucVuUpdateDto chucVuDto)
 		{
 			if (!ModelState.IsValid)
 			{
 				return BadRequest(ModelState);
 			}
-
-			var chucVu = new ChucVu
+			var chucVu = await _chucVuService.GetChucVuByIdAsync(id);
+			if (chucVu == null)
 			{
-				MaChucVu = id,
-				TenChucVu = chucVuDto.tenChucVu,
-				TrangThai = chucVuDto.trangThai ?? "Active"
-			};
-
+				return NotFound(new { message = "Không tìm thấy chức vụ" });
+			}
+			chucVu.TenChucVu = chucVuDto.tenChucVu;
+			chucVu.TrangThai = chucVuDto.trangThai;
 			var updatedChucVu = await _chucVuService.UpdateChucVuAsync(id, chucVu);
 			if (updatedChucVu == null)
 			{
-				return NotFound(new { message = "Không tìm thấy chức vụ" });
+				return BadRequest(new { message = "Không thể cập nhật chức vụ" });
 			}
-
-			return Ok(updatedChucVu);
+			return Ok(Success(updatedChucVu.ToDto()));
 		}
-
-		[HttpDelete("{id}")]
-		//[Authorize(Roles = "Admin")]
-		public async Task<IActionResult> DeleteChucVu(int id)
+		[HttpDelete]
+		[Route("xoa-chuc-vu")]
+		public async Task<ActionResult> DeleteChucVu(int id)
 		{
-			if (!await _chucVuService.ChucVuExistsAsync(id))
+			var chucVu = await _chucVuService.GetChucVuByIdAsync(id);
+			if (chucVu == null)
 			{
 				return NotFound(new { message = "Không tìm thấy chức vụ" });
 			}
 
-			var result = await _chucVuService.DeleteChucVuAsync(id);
-			if (!result)
+			var nguoiDungs = await _chucVuService.GetNguoiDungByChucVuAsync(id);
+			if (nguoiDungs != null && nguoiDungs.Any())
 			{
-				return BadRequest(new { message = "Không thể xóa chức vụ này vì đang có người dùng sử dụng" });
+				chucVu.TrangThai = "Deleted";
+				var updatedChucVu = await _chucVuService.UpdateChucVuAsync(id, chucVu);
+				if (updatedChucVu == null)
+				{
+					return BadRequest(new { message = "Không thể cập nhật trạng thái chức vụ" });
+				}
+				return Ok(Success(updatedChucVu.ToDto()));
 			}
 
-			return NoContent();
+			var isDeleted = await _chucVuService.DeleteChucVuAsync(id);
+			if (!isDeleted)
+			{
+				return BadRequest(new { message = "Không thể xóa chức vụ" });
+			}
+
+			return Ok(Success(new { message = "Xóa chức vụ thành công" }));
 		}
-
-
-		//[HttpPatch("{id}/status")]
-		//[Authorize(Roles = "Admin")]
-		//public async Task<IActionResult> SetStatus(int id, [FromBody] StatusDto statusDto)
-		//{
-		//	if (!ModelState.IsValid)
-		//	{
-		//		return BadRequest(ModelState);
-		//	}
-
-		//	if (!await _chucVuService.ChucVuExistsAsync(id))
-		//	{
-		//		return NotFound(new { message = "Không tìm thấy chức vụ" });
-		//	}
-
-		//	var result = await _chucVuService.SetStatusAsync(id, statusDto.TrangThai);
-		//	if (!result)
-		//	{
-		//		return BadRequest(new { message = "Không thể cập nhật trạng thái" });
-		//	}
-
-		//	return NoContent();
-		//}
 	}
 }

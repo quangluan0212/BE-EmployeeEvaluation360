@@ -1,5 +1,6 @@
 ﻿using EmployeeEvaluation360.Database;
 using EmployeeEvaluation360.DTOs;
+using EmployeeEvaluation360.Helppers;
 using EmployeeEvaluation360.Interfaces;
 using EmployeeEvaluation360.Models;
 using Microsoft.EntityFrameworkCore;
@@ -15,13 +16,115 @@ namespace EmployeeEvaluation360.Services
 			_context = context;
 		}
 
-		public async Task<IEnumerable<NguoiDung>> GetAllNguoiDungAsync()
+		public async Task<PagedResult<DanhSachNguoiDungDto>> GetNguoiDungWithRolePagedAsync(int page, int pageSize, string? s)
 		{
-			return await _context.NGUOIDUNG
-				.OrderBy(n => n.HoTen)
-				.AsNoTracking()
+			page = page < 1 ? 1 : page;
+			pageSize = pageSize < 1 ? 10 : pageSize;
+
+			var query = _context.NGUOIDUNG
+				.Include(nd => nd.NguoiDungChucVus)
+					.ThenInclude(ndcv => ndcv.ChucVu)
+				.AsNoTracking();
+
+
+			if (!string.IsNullOrEmpty(s))
+			{
+				string keyword = s.Trim().ToLower();
+				query = query.Where(n =>
+					n.HoTen.ToLower().Contains(keyword));					
+			}
+			query = query.OrderBy(n => n.MaNguoiDung);
+
+			var totalCount = await query.CountAsync();
+			var totalPages = (int)Math.Ceiling(totalCount / (double)pageSize);
+
+			var users = await query
+				.Skip((page - 1) * pageSize)
+				.Take(pageSize)
 				.ToListAsync();
+
+			var dtoItems = users.Select(user => new DanhSachNguoiDungDto
+			{
+				MaNguoiDung = user.MaNguoiDung,
+				HoTen = user.HoTen,
+				Email = user.Email,
+				DienThoai = user.DienThoai,
+				TrangThai = user.TrangThai,
+				ChucVu = user.NguoiDungChucVus
+									.Where(c => c.TrangThai == "Active")
+									.Select(c => c.ChucVu.TenChucVu)
+									.ToList()
+			}).ToList();
+
+			return new PagedResult<DanhSachNguoiDungDto>
+			{
+				CurrentPage = page,
+				TotalPages = totalPages,
+				PageSize = pageSize,
+				TotalCount = totalCount,
+				Items = dtoItems
+			};
 		}
+
+		public async Task<NguoiDung> AdminUpdateNguoiDungAsync(string maNguoiDung,AdminUpdateNguoiDungDto updateDto)
+		{
+			var nguoiDung = await _context.NGUOIDUNG.FindAsync(maNguoiDung);
+			if (nguoiDung == null)
+			{
+				return null;
+			}
+			if (nguoiDung.Email != updateDto.Email && await _context.NGUOIDUNG.AnyAsync(n => n.Email == updateDto.Email))
+			{
+				return null;
+			}
+
+			nguoiDung.HoTen = updateDto.HoTen;
+			nguoiDung.Email = updateDto.Email;
+			nguoiDung.DienThoai = updateDto.DienThoai;
+			nguoiDung.MatKhau = await HashPasswordAsync(updateDto.MatKhau);
+
+			try
+			{
+				await _context.SaveChangesAsync();
+				return nguoiDung;
+			}
+			catch (DbUpdateConcurrencyException)
+			{
+				if (!await NguoiDungExistsAsync(maNguoiDung))
+				{
+					return null;
+				}
+				throw;
+			}
+		}
+
+		public async Task<PagedResult<NguoiDung>> GetNguoiDungPagedAsync(int page, int pageSize)
+		{
+			page = page < 1 ? 1 : page;
+			pageSize = pageSize < 1 ? 10 : pageSize;
+
+			var query = _context.NGUOIDUNG
+				.AsNoTracking()
+				.OrderBy(n => n.MaNguoiDung);
+
+			var totalCount = await query.CountAsync();
+			var totalPages = (int)Math.Ceiling(totalCount / (double)pageSize);
+
+			var items = await query
+				.Skip((page - 1) * pageSize)
+				.Take(pageSize)
+				.ToListAsync();
+
+			return new PagedResult<NguoiDung>
+			{
+				CurrentPage = page,
+				TotalPages = totalPages,
+				PageSize = pageSize,
+				TotalCount = totalCount,
+				Items = items
+			};
+		}
+
 
 		public async Task<NguoiDung> GetNguoiDungByIdAsync(string maNguoiDung)
 		{
@@ -94,13 +197,6 @@ namespace EmployeeEvaluation360.Services
 			nguoiDung.HoTen = updateDto.HoTen;
 			nguoiDung.Email = updateDto.Email;
 			nguoiDung.DienThoai = updateDto.DienThoai;
-			nguoiDung.NgayVaoCongTy = updateDto.NgayVaoCongTy;
-			nguoiDung.TrangThai = updateDto.TrangThai;
-
-			if (!string.IsNullOrEmpty(updateDto.MatKhau))
-			{
-				nguoiDung.MatKhau = await HashPasswordAsync(updateDto.MatKhau);
-			}
 
 			try
 			{

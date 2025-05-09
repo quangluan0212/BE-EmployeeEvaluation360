@@ -142,6 +142,9 @@ namespace EmployeeEvaluation360.Database
 			modelBuilder.Entity<NguoiDung>()
 				.HasIndex(nd => nd.Email)
 				.IsUnique();
+			modelBuilder.Entity<NguoiDung>()
+				.HasIndex(nd => nd.DienThoai)
+				.IsUnique();
 		}
 
 		public DbSet<NguoiDung> NGUOIDUNG { get; set; }

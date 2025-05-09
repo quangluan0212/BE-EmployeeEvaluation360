@@ -1,7 +1,10 @@
 ﻿using EmployeeEvaluation360.Database;
+using EmployeeEvaluation360.DTOs;
+using EmployeeEvaluation360.Helppers;
 using EmployeeEvaluation360.Interfaces;
 using EmployeeEvaluation360.Models;
 using Microsoft.EntityFrameworkCore;
+using static Microsoft.Extensions.Logging.EventSource.LoggingEventSource;
 
 namespace EmployeeEvaluation360.Services
 {
@@ -19,6 +22,42 @@ namespace EmployeeEvaluation360.Services
 			return await _context.CHUCVU
 				.OrderBy(c => c.TenChucVu)
 				.ToListAsync();
+		}
+
+
+		public async Task<PagedResult<ChucVuDto>> GetAllChucVuPagedAsync(int page, int pageSize, string? s)
+		{
+			page = page < 1 ? 1 : page;
+			pageSize = pageSize < 1 ? 10 : pageSize;
+			var query = _context.CHUCVU.AsQueryable();
+
+			if (!string.IsNullOrEmpty(s))
+			{
+				query = query.Where(c => c.TenChucVu.Contains(s));
+			}
+
+			var totalCount = query.Count();
+			var totalPages = (int)Math.Ceiling((double)totalCount / pageSize);
+			var chucVuList = await query
+				.Skip((page - 1) * pageSize)
+				.Take(pageSize)
+				.ToListAsync();
+
+			var chucVuDtoList = chucVuList.Select(c => new ChucVuDto
+			{
+				maChucVu = c.MaChucVu,
+				tenChucVu = c.TenChucVu,
+				trangThai = c.TrangThai,
+			}).ToList();
+
+			return new PagedResult<ChucVuDto>
+			{
+				CurrentPage = page,
+				TotalPages = totalPages,
+				PageSize = pageSize,
+				TotalCount = totalCount,
+				Items = chucVuDtoList,
+			};
 		}
 
 		public async Task<ChucVu> GetChucVuByIdAsync(int maChucVu)

@@ -33,5 +33,16 @@ namespace EmployeeEvaluation360.Mappers
 				NgayVaoCongTy = DateTime.Now
 			};
 		}
+		public static ChiTietNguoiDungDto ChiTietNguoiDungDto(this NguoiDung nguoiDung)
+		{
+			if (nguoiDung == null) return null;
+			return new ChiTietNguoiDungDto
+			{
+				MaNguoiDung = nguoiDung.MaNguoiDung,
+				HoTen = nguoiDung.HoTen,
+				Email = nguoiDung.Email,
+				DienThoai = nguoiDung.DienThoai,
+			};
+		}
 	}
 }

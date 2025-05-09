@@ -1,4 +1,4 @@
-
+﻿
 using EmployeeEvaluation360.Database;
 using EmployeeEvaluation360.Interfaces;
 using EmployeeEvaluation360.Services;
@@ -57,6 +57,7 @@ namespace EmployeeEvaluation360
             builder.Services.AddScoped<IChucVuService, ChucVuService>();
 			builder.Services.AddScoped<INguoiDungService, NguoiDungService>();
 			builder.Services.AddScoped<ITokenService, TokenService>();
+			builder.Services.AddScoped<IDuAnService, DuAnService>();
 
 			builder.Services.AddAuthentication(options =>
 			{
@@ -97,8 +98,18 @@ namespace EmployeeEvaluation360
 
 			builder.Services.AddControllers().AddJsonOptions(options =>
 			{
-				options.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.Preserve;
+				options.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.IgnoreCycles;
 				options.JsonSerializerOptions.WriteIndented = true;
+			});
+
+			builder.Services.AddCors(options =>
+			{
+				options.AddPolicy("AllowFrontend",
+					policy => policy
+						.WithOrigins("http://localhost:5173")
+						.AllowAnyHeader()
+						.AllowAnyMethod()
+						.AllowCredentials());
 			});
 
 			var app = builder.Build();
@@ -114,8 +125,9 @@ namespace EmployeeEvaluation360
 			app.UseAuthentication();
 			app.UseAuthorization();
 
+			app.UseCors("AllowFrontend");
 
-            app.MapControllers();
+			app.MapControllers();
 
             app.Run();
         }

@@ -17,6 +17,21 @@ namespace EmployeeEvaluation360.DTOs
 		public string TrangThai { get; set; }
 	}
 
+	public class DanhSachNguoiDungDto
+	{
+		public string MaNguoiDung { get; set; }
+
+		public string HoTen { get; set; }
+
+		public string Email { get; set; }
+
+		public string DienThoai { get; set; }
+
+		public List<string> ChucVu { get; set; }
+
+		public string TrangThai { get; set; }
+	}
+
 	public class CreateNguoiDungDto
 	{
 		[Required(ErrorMessage = "Họ tên không được để trống")]
@@ -53,15 +68,19 @@ namespace EmployeeEvaluation360.DTOs
 		[StringLength(12, ErrorMessage = "Số điện thoại không được vượt quá 12 ký tự")]
 		[RegularExpression(@"^[0-9]*$", ErrorMessage = "Số điện thoại chỉ được chứa chữ số")]
 		public string DienThoai { get; set; }
+	}
 
-		public DateTime NgayVaoCongTy { get; set; }
+	public class AdminUpdateNguoiDungDto
+	{
+		[StringLength(100, ErrorMessage = "Họ tên không được vượt quá 100 ký tự")]
+		public string HoTen { get; set; }
+		[EmailAddress(ErrorMessage = "Email không đúng định dạng")]
+		[StringLength(50, ErrorMessage = "Email không được vượt quá 50 ký tự")]
+		public string Email { get; set; }
 
-		[Required(ErrorMessage = "Trạng thái không được để trống")]
-		[StringLength(20, ErrorMessage = "Trạng thái không được vượt quá 20 ký tự")]
-		public string TrangThai { get; set; } = "Active";
-
-		// Mật khẩu là tùy chọn khi cập nhật
-		[StringLength(60, MinimumLength = 6, ErrorMessage = "Mật khẩu phải từ 6 đến 60 ký tự")]
+		[StringLength(12, ErrorMessage = "Số điện thoại không được vượt quá 12 ký tự")]
+		[RegularExpression(@"^[0-9]*$", ErrorMessage = "Số điện thoại chỉ được chứa chữ số")]
+		public string DienThoai { get; set; }
 		public string MatKhau { get; set; }
 	}
 
@@ -105,5 +124,13 @@ namespace EmployeeEvaluation360.DTOs
 		public string MaNguoiDung { get; set; }
 		[Required(ErrorMessage = "Mã chức vụ không được để trống")]
 		public int MaChucVu { get; set; }
+	}
+
+	public class  ChiTietNguoiDungDto
+	{
+		public string MaNguoiDung { get; set; }
+		public string HoTen { get; set; }
+		public string Email { get; set; }
+		public string DienThoai { get; set; }
 	}
 }

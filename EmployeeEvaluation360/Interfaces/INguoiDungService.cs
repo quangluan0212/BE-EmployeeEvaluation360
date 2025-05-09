@@ -1,12 +1,14 @@
 ﻿using EmployeeEvaluation360.DTOs;
+using EmployeeEvaluation360.Helppers;
 using EmployeeEvaluation360.Models;
 
 namespace EmployeeEvaluation360.Interfaces
 {
 	public interface INguoiDungService
 	{
-		
-		Task<IEnumerable<NguoiDung>> GetAllNguoiDungAsync();
+		Task<NguoiDung> AdminUpdateNguoiDungAsync(string maNguoiDung, AdminUpdateNguoiDungDto updateDto);
+		Task<PagedResult<DanhSachNguoiDungDto>> GetNguoiDungWithRolePagedAsync(int page, int pageSize, string? search);
+		Task<PagedResult<NguoiDung>> GetNguoiDungPagedAsync(int page, int pageSize);
 
 		Task<NguoiDung> GetNguoiDungByIdAsync(string maNguoiDung);
 

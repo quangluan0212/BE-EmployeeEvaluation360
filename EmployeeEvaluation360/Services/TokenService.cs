@@ -22,8 +22,8 @@ namespace EmployeeEvaluation360.Services
 		{
 			var claims = new List<Claim>
 			{
-				new Claim(ClaimTypes.NameIdentifier, nguoiDung.MaNguoiDung.ToString()),
-				new Claim(JwtRegisteredClaimNames.Email, nguoiDung.Email),
+				new Claim("maNguoiDung", nguoiDung.MaNguoiDung.ToString()),
+				new Claim("hoTen", nguoiDung.HoTen),
 			};
 			var roles = nguoiDung.NguoiDungChucVus?
 				.Select(c => c.ChucVu.TenChucVu)
@@ -33,6 +33,7 @@ namespace EmployeeEvaluation360.Services
 			foreach (var role in roles)
 			{
 				claims.Add(new Claim(ClaimTypes.Role, role));
+
 			}
 
 			var creds = new SigningCredentials(_key, SecurityAlgorithms.HmacSha512Signature);

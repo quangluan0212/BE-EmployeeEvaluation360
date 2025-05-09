@@ -1,10 +1,13 @@
-﻿using EmployeeEvaluation360.Models;
+﻿using EmployeeEvaluation360.DTOs;
+using EmployeeEvaluation360.Helppers;
+using EmployeeEvaluation360.Models;
 
 namespace EmployeeEvaluation360.Interfaces
 {
 	public interface IChucVuService
 	{
 		Task<IEnumerable<ChucVu>> GetAllChucVuAsync();
+		Task<PagedResult<ChucVuDto>> GetAllChucVuPagedAsync(int page, int pageSize, string? search);
 
 		Task<ChucVu> GetChucVuByIdAsync(int maChucVu);
 
