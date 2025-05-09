@@ -6,7 +6,7 @@ namespace EmployeeEvaluation360.Interfaces
 {
 	public interface IDuAnService
 	{
-		Task<PagedResult<DuAnDto>> GetAllDuAnPagedAsync(int page, int pageSize);
+		Task<PagedResult<DuAnDto>> GetAllDuAnPagedAsync(int page, int pageSize, string? search);
 		Task<DuAn> ThemDuAn(CreateDuAnDto createDuAnDto);
 		Task<DuAn> GetDuAnByIdAsync(int maDuAn);
 		Task<DuAn> UpdateDuAnAsync(int maDuAn, UpdateDuAnDto updateDto);

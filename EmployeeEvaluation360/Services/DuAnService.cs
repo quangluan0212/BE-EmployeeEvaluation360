@@ -16,9 +16,26 @@ namespace EmployeeEvaluation360.Services
 			_context = context;
 		}
 
-		public Task<bool> DeleteDuAnAsync(int maDuAn)
+		public async Task<bool> DeleteDuAnAsync(int maDuAn)
 		{
-			throw new NotImplementedException();
+			var duAn = await _context.DUAN.FindAsync(maDuAn);
+			if (duAn == null)
+			{
+				throw new Exception("Dự án không tồn tại");
+			}
+			var isLinkedToGroup = await _context.NHOM.AnyAsync(n => n.MaDuAn == maDuAn);
+
+			if (isLinkedToGroup)
+			{
+				duAn.TrangThai = "Deleted";
+				_context.DUAN.Update(duAn);
+			}
+			else
+			{
+				_context.DUAN.Remove(duAn);
+			}
+			await _context.SaveChangesAsync();
+			return true;
 		}
 
 		public async Task<DuAn> GetDuAnByIdAsync(int maDuAn)
@@ -26,11 +43,17 @@ namespace EmployeeEvaluation360.Services
 			return await _context.DUAN.FindAsync(maDuAn);
 		}
 
-		public async Task<PagedResult<DuAnDto>> GetAllDuAnPagedAsync(int page, int pageSize)
+		public async Task<PagedResult<DuAnDto>> GetAllDuAnPagedAsync(int page, int pageSize, string? search)
 		{
 			page = page < 1 ? 1 : page;
 			pageSize = pageSize < 1 ? 10 : pageSize;
 			var query = _context.DUAN.AsQueryable();
+
+			if (!string.IsNullOrEmpty(search))
+			{
+				query = query.Where(x => x.TenDuAn.Contains(search) || x.MoTa.Contains(search));
+			}
+
 			var totalCount = query.Count();
 			var totalPages = (int)Math.Ceiling((double)totalCount / pageSize);
 			var duan = await query
@@ -63,10 +86,18 @@ namespace EmployeeEvaluation360.Services
 			{
 				throw new ArgumentNullException(nameof(createDuAnDto));
 			}
-			var result = await _context.DUAN.AddAsync(createDuAnDto.ToEntity());
-			if (result == null)
+			try
 			{
-				throw new Exception("Thêm dự án không thành công");
+				var result = await _context.DUAN.AddAsync(createDuAnDto.ToEntity());
+				if (result == null)
+				{
+					throw new Exception("Thêm dự án không thành công");
+				}
+				await _context.SaveChangesAsync();
+			}
+			catch (Exception ex)
+			{
+				throw new Exception("Lỗi khi thêm dự án", ex);
 			}
 			return createDuAnDto.ToEntity();
 		}

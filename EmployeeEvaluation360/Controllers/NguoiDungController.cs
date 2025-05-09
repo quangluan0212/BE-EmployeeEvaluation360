@@ -121,6 +121,7 @@ namespace EmployeeEvaluation360.Controllers
 		}
 
 		[HttpPut("user-cap-nhat-thong-tin-nguoi-dung")]
+		[Authorize]
 		public async Task<ActionResult> UpdateNguoiDung(string maNguoiDung, [FromBody] UpdateNguoiDungDto updateDto)
 		{
 			if (!ModelState.IsValid)

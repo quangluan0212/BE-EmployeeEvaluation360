@@ -76,6 +76,10 @@ namespace EmployeeEvaluation360.Services
 
 		public async Task<ChucVu> CreateChucVuAsync(ChucVu chucVu)
 		{
+			if (string.IsNullOrEmpty(chucVu.TenChucVu))
+				return null;
+			if (await _context.CHUCVU.AnyAsync(c => c.TenChucVu == chucVu.TenChucVu))
+				return null;
 			_context.CHUCVU.Add(chucVu);
 			await _context.SaveChangesAsync();
 			return chucVu;

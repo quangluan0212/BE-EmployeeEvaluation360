@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("EmployeeEvaluation360")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+a2c3c23cd837d92fb9993e297c4b3d8c0ac29bec")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+c4474e41c898537af6bd72b288e96679c29ebbb5")]
 [assembly: System.Reflection.AssemblyProductAttribute("EmployeeEvaluation360")]
 [assembly: System.Reflection.AssemblyTitleAttribute("EmployeeEvaluation360")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
