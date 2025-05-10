@@ -8,7 +8,7 @@ namespace EmployeeEvaluation360.Controllers
 {
 	[ApiController]
 	[Route("api/[controller]")]
-	//[Authorize(Roles = "Admin")]
+	[Authorize(Roles = "Admin")]
 	public class DuAnController : BaseController
 	{
 		private readonly IDuAnService _duAnService;
@@ -78,5 +78,15 @@ namespace EmployeeEvaluation360.Controllers
 			return Ok(Success<string>("Xóa dự án thành công."));
 		}
 
+		[HttpGet("du-an-active")]
+		public async Task<IActionResult> GetDuAnActive()
+		{
+			var result = await _duAnService.getDuAnActive();
+			if (result == null)
+			{
+				return NotFound(Error<string>("Không tìm thấy dự án nào."));
+			}
+			return Ok(Success(result));
+		}
 	}
 }

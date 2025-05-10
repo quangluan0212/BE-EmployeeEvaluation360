@@ -6,7 +6,6 @@ namespace EmployeeEvaluation360.DTOs
 	{
 		public int MaDuAn { get; set; }
 		public string TenDuAn { get; set; }
-
 		public string MoTa { get; set; }
 		public string TrangThai { get; set; }
 	}
@@ -25,6 +24,11 @@ namespace EmployeeEvaluation360.DTOs
 		public string TenDuAn { get; set; }
 		public string MoTa { get; set; }
 		public string TrangThai { get; set; }
+	}
+	public class DuAnIdNameDto
+	{
+		public int MaDuAn { get; set; }
+		public string TenDuAn { get; set; }
 	}
 
 }

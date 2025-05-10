@@ -23,7 +23,7 @@ namespace EmployeeEvaluation360.Mappers
 			{
 				TenDuAn = createDuAnDto.TenDuAn,
 				MoTa = createDuAnDto.MoTa,
-				TrangThai = "Chưa bắt đầu"
+				TrangThai = "Active"
 			};
 		}
 		public static DuAn ToEntity(this UpdateDuAnDto updateDuAnDto)

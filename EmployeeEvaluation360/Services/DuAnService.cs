@@ -129,5 +129,23 @@ namespace EmployeeEvaluation360.Services
 
 			return duAn;
 		}
+
+		public async Task<List<DuAnIdNameDto>> getDuAnActive()
+		{
+			var duAnList = await _context.DUAN
+				.Where(x => x.TrangThai == "Active")
+				.ToListAsync();
+			if (duAnList == null)
+			{
+				throw new Exception("Không tìm thấy dự án nào");
+			}
+			var duAnIdNameList = duAnList.Select(x => new DuAnIdNameDto
+			{
+				MaDuAn = x.MaDuAn,
+				TenDuAn = x.TenDuAn
+			}).ToList();
+
+			return duAnIdNameList;
+		}
 	}
 }
