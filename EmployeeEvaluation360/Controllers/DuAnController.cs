@@ -8,13 +8,25 @@ namespace EmployeeEvaluation360.Controllers
 {
 	[ApiController]
 	[Route("api/[controller]")]
-	[Authorize(Roles = "Admin")]
+	//[Authorize(Roles = "Admin")]
 	public class DuAnController : BaseController
 	{
 		private readonly IDuAnService _duAnService;
-		public DuAnController(IDuAnService duAnService)
+		public DuAnController(IDuAnService duAnService) 
 		{
 			_duAnService = duAnService;
+		}
+
+		[HttpGet("simple-danh-sach-du-an")]
+		public async Task<IActionResult> GetSimpleDanhSachDuAn()
+		{
+			var duans = await _duAnService.GetAllDuAnAsync();
+			var duansDto = duans.Select(x => new DuAnIdNameDto
+			{
+				MaDuAn = x.MaDuAn,
+				TenDuAn = x.TenDuAn,
+			});
+			return Ok(Success(duansDto));
 		}
 
 		[HttpGet("danh-sach-du-an")]

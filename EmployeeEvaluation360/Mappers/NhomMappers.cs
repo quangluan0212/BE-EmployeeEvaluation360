@@ -9,7 +9,7 @@ namespace EmployeeEvaluation360.Mappers
 		{
 			return new NhomDto
 			{
-				Id = nhom.MaNhom,
+				MaNhom = nhom.MaNhom,
 				TenNhom = nhom.TenNhom,
 				MaDuAn = nhom.MaDuAn,
 				TrangThai = nhom.TrangThai
@@ -19,7 +19,7 @@ namespace EmployeeEvaluation360.Mappers
 		{
 			return new Nhom
 			{
-				MaNhom = nhomDto.Id,
+				MaNhom = nhomDto.MaNhom,
 				TenNhom = nhomDto.TenNhom,
 				MaDuAn = nhomDto.MaDuAn,
 				TrangThai = nhomDto.TrangThai

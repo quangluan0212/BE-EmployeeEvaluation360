@@ -4,14 +4,14 @@ namespace EmployeeEvaluation360.DTOs
 {
 	public class NhomDto
 	{
-		public int Id { get; set; }
+		public int MaNhom { get; set; }
 		public string TenNhom { get; set; } = string.Empty;
 		public int MaDuAn { get; set; }
 		public string TrangThai { get; set; } = string.Empty;
 	}
 	public class  ListNhomDuAnDto
 	{
-		public int Id { get; set; }
+		public int MaNhom { get; set; }
 		public string TenNhom { get; set; } = string.Empty;
 		public string TenDuAn { get; set; } = string.Empty;
 		public string TrangThai { get; set; } = string.Empty;

@@ -62,7 +62,7 @@ namespace EmployeeEvaluation360.Services
 
 			var ListDto = items.Select(n => new ListNhomDuAnDto
 			{
-				Id = n.MaNhom,
+				MaNhom = n.MaNhom,
 				TenNhom = n.TenNhom,
 				TenDuAn = n.DuAn.TenDuAn,
 				TrangThai = n.TrangThai
@@ -124,6 +124,7 @@ namespace EmployeeEvaluation360.Services
 			{
 				return null;
 			}
+
 			var nhomTrung = await _context.NHOM
 				.FirstOrDefaultAsync(x =>
 					x.MaNhom != maNhom &&
@@ -138,11 +139,11 @@ namespace EmployeeEvaluation360.Services
 			nhomExisting.TenNhom = updateDto.TenNhom;
 			nhomExisting.MaDuAn = updateDto.MaDuAn;
 			nhomExisting.TrangThai = updateDto.TrangThai;
-			
+
 			try
-			{			
-				var result = _context.SaveChangesAsync();
-				if (result == null)
+			{
+				var result = await _context.SaveChangesAsync();
+				if (result <= 0)
 				{
 					throw new Exception("Cập nhật nhóm không thành công");
 				}
@@ -153,6 +154,7 @@ namespace EmployeeEvaluation360.Services
 				throw new Exception("Lỗi khi cập nhật nhóm");
 			}
 		}
+
 
 		public async Task<List<Nhom_NguoiDung>> ThemNhanVienVaoNhom(ThemNhanVienVaoNhomDto addDto)
 		{
@@ -246,7 +248,7 @@ namespace EmployeeEvaluation360.Services
 				.Include(nd => nd.Nhom)
 				.Select(nd => new NhomDto
 				{
-					Id = nd.Nhom.MaNhom,
+					MaNhom = nd.Nhom.MaNhom,
 					TenNhom = nd.Nhom.TenNhom,
 					MaDuAn = nd.Nhom.MaDuAn,
 					TrangThai = nd.Nhom.TrangThai

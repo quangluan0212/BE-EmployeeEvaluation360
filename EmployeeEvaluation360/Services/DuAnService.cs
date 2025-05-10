@@ -16,6 +16,11 @@ namespace EmployeeEvaluation360.Services
 			_context = context;
 		}
 
+		public async Task<List<DuAn>> GetAllDuAnAsync()
+		{
+			return await _context.DUAN.Where(d => d.TrangThai == "Active").OrderBy(d=>d.MaDuAn).ToListAsync();					 
+		}
+
 		public async Task<bool> DeleteDuAnAsync(int maDuAn)
 		{
 			var duAn = await _context.DUAN.FindAsync(maDuAn);

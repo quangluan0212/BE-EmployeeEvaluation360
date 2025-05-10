@@ -79,7 +79,7 @@ GO
 CREATE TABLE dbo.CHITIET_DOTDANHGIA (
     MaDotDanhGia         INT           NOT NULL,
     MaMau                INT           NOT NULL,
-    LoaiNguoiDuocDanhGia VARCHAR(50)   NOT NULL,
+    LoaiNguoiDuocDanhGia VARCHAR(50)   NULL,
     CONSTRAINT PK_CHITIET_DOTDANHGIA PRIMARY KEY (MaDotDanhGia, MaMau),
     CONSTRAINT FK_CTDDG_DOT FOREIGN KEY (MaDotDanhGia)
         REFERENCES dbo.DOT_DANHGIA(MaDotDanhGia) ON DELETE NO ACTION,
