@@ -19,7 +19,7 @@ namespace EmployeeEvaluation360.Models
 		public string NoiDung { get; set; }
 
 		[Column("DiemToiDa")]
-		public int? DiemToiDa { get; set; }
+		public int DiemToiDa { get; set; }
 
 		// Navigation
 		[ForeignKey("MaMau")]

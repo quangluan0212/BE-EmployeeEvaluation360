@@ -43,6 +43,6 @@ namespace EmployeeEvaluation360.Interfaces
 		Task<bool> ValidatePasswordAsync(string maNguoiDung, string password);
 
 		Task<string> GenerateMaNguoiDungAsync(DateTime NgayVaoCongTy);
-
+		Task<List<AdminActiveDto>> GetAdminActivesAsync(); 
 	}
 }

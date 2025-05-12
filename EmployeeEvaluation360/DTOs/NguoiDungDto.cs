@@ -133,4 +133,15 @@ namespace EmployeeEvaluation360.DTOs
 		public string Email { get; set; }
 		public string DienThoai { get; set; }
 	}
+
+
+	public class AdminActiveDto
+	{
+		public int MaNhomNguoiDung { get; set; }
+		public string MaNguoiDung { get; set; } = string.Empty;
+		public string Hoten { get; set; } = string.Empty;
+		public string TenNhom { get; set; } = string.Empty;
+		
+
+	}
 }

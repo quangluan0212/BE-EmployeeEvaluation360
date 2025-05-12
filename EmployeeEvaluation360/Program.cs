@@ -59,6 +59,8 @@ namespace EmployeeEvaluation360
 			builder.Services.AddScoped<ITokenService, TokenService>();
 			builder.Services.AddScoped<IDuAnService, DuAnService>();
 			builder.Services.AddScoped<INhomService, NhomService>();
+			builder.Services.AddScoped<IDanhGiaService, DanhGiaService>();
+			builder.Services.AddScoped<IDotDanhGiaService, DotDanhGiaService>();
 
 			builder.Services.AddAuthentication(options =>	
 			{

@@ -6,6 +6,7 @@ namespace EmployeeEvaluation360.Interfaces
 {
 	public interface IChucVuService
 	{
+
 		Task<IEnumerable<ChucVu>> GetAllChucVuAsync();
 		Task<PagedResult<ChucVuDto>> GetAllChucVuPagedAsync(int page, int pageSize, string? search);
 

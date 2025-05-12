@@ -177,5 +177,16 @@ namespace EmployeeEvaluation360.Controllers
 			}
 			return Ok(Success(updatedNguoiDung.ToDto()));
 		}
+
+		[HttpGet("danh-sach-admin-active")]
+		//[Authorize(Roles = "Admin")]
+		public async Task<IActionResult> GetAdminActive()
+		{
+			var listAdmin = await _nguoiDungService.GetAdminActivesAsync();
+			if (listAdmin == null)
+				return NotFound(Error<string>("Không tìm thấy admin nào !!!"));
+			return Ok(Success(listAdmin));
+		}
+ 
 	}
 }

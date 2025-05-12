@@ -3,6 +3,7 @@ using EmployeeEvaluation360.DTOs;
 using EmployeeEvaluation360.Helppers;
 using EmployeeEvaluation360.Interfaces;
 using EmployeeEvaluation360.Models;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 
 namespace EmployeeEvaluation360.Services
@@ -420,6 +421,25 @@ namespace EmployeeEvaluation360.Services
 			});
 		}
 
+		public async Task<List<AdminActiveDto>> GetAdminActivesAsync()
+		{
+			var listAdmin = await _context.NHOM_NGUOIDUNG
+				.Where(x => x.VaiTro == "Leader" && x.Nhom.TrangThai == "Active")
+				.Include(x => x.NguoiDung)
+				.Include(x => x.Nhom)
+				.ToListAsync();
 
+			if (!listAdmin.Any())
+				return null;
+
+			var ListAdminDto = listAdmin.Select(x => new AdminActiveDto
+			{
+				MaNhomNguoiDung = x.MaNhomNguoiDung,
+				MaNguoiDung = x.NguoiDung.MaNguoiDung,
+				Hoten = x.NguoiDung.HoTen,
+				TenNhom = x.Nhom.TenNhom		
+			}).ToList();
+			return ListAdminDto;
+		}
 	}
 }
