@@ -1,6 +1,8 @@
 ﻿using EmployeeEvaluation360.Database;
 using EmployeeEvaluation360.DTOs;
 using EmployeeEvaluation360.Interfaces;
+using EmployeeEvaluation360.Mappers;
+using EmployeeEvaluation360.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace EmployeeEvaluation360.Services
@@ -29,6 +31,177 @@ namespace EmployeeEvaluation360.Services
 				TrangThai = x.TrangThai,
 			}).ToList();
 			return lisdDataDto.FirstOrDefault();
+		}
+
+		public async Task<DotDanhGiaDto> CreateDotDanhGia(CreateDotDanhGiaDto danhGiaDto)
+		{
+			var dotDanhGia = new DotDanhGia
+			{
+				TenDot = danhGiaDto.TenDot,
+				ThoiGianBatDau = danhGiaDto.NgayBatDau,
+				ThoiGianKetThuc = danhGiaDto.NgayKetThuc,
+				TrangThai = "Active"
+			};
+			var result = await _context.DOT_DANHGIA.AddAsync(dotDanhGia);
+			if (result == null)
+			{
+				return null;
+			}
+
+			await _context.SaveChangesAsync();
+			string gen = await GenDanhGia(dotDanhGia.MaDotDanhGia);
+			Console.WriteLine(gen);
+			return dotDanhGia.ToDto();
+		}
+
+		public async Task<List<NguoiDungDto>> getNguoiDungActiveNotIncludeAdmin()
+		{
+			var nguoiDungs = await _context.NGUOIDUNG
+			.Where(nd => nd.TrangThai == "Active" && !nd.NguoiDungChucVus.Any(r => r.ChucVu.TenChucVu == "Admin"))
+			.Select(nd => new NguoiDungDto
+			{
+				MaNguoiDung = nd.MaNguoiDung,
+				HoTen = nd.HoTen,
+				Email = nd.Email,
+				DienThoai = nd.DienThoai,
+				NgayVaoCongTy = nd.NgayVaoCongTy,
+				TrangThai = nd.TrangThai
+			})
+			.ToListAsync();
+
+			return nguoiDungs;
+		}
+		public async Task<List<ThanhVienDto>> getListLeaderActive()
+		{
+			var leaders = await _context.NGUOIDUNG
+				.Where(nd => nd.TrangThai == "Active" &&
+							 nd.NguoiDungChucVus.Any(r => r.ChucVu.TenChucVu == "Leader"))
+				.Select(nd => new ThanhVienDto
+				{
+					MaNguoiDung = nd.MaNguoiDung,
+					HoTen = nd.HoTen,
+					MaNhomNguoiDung = nd.NhomNguoiDungs
+										.OrderBy(nnd => nnd.MaNhomNguoiDung)
+										.Select(nnd => nnd.MaNhomNguoiDung)
+										.FirstOrDefault(),
+					ChucVu = "Leader"
+				})
+				.ToListAsync();
+
+			return leaders;
+		}
+
+		public async Task<List<NguoiDungDto>> getListAdminActive()
+		{
+			var admins = await _context.NGUOIDUNG
+				.Where(nd => nd.TrangThai == "Active" &&
+							 nd.NguoiDungChucVus.Any(r => r.ChucVu.TenChucVu == "Admin"))
+				.Select(nd => new NguoiDungDto
+				{
+					MaNguoiDung = nd.MaNguoiDung,
+					HoTen = nd.HoTen,
+					Email = nd.Email,
+					DienThoai = nd.DienThoai,
+					NgayVaoCongTy = nd.NgayVaoCongTy,
+					TrangThai = nd.TrangThai
+				})
+				.ToListAsync();
+
+			return admins;
+		}
+
+		public async Task<List<NhomVaThanhVienDto>> getNhomVaThanhVienCungNhomByMaNguoiDung(string maNguoiDung)
+		{
+			var result = await _context.NHOM_NGUOIDUNG
+				.Where(nd => nd.MaNguoiDung == maNguoiDung)
+				.Select(nd => nd.MaNhom)
+				.Distinct()
+				.ToListAsync();
+
+			var nhoms = await _context.NHOM
+				.Where(n => result.Contains(n.MaNhom))
+				.Select(n => new NhomVaThanhVienDto
+				{
+					MaNhom = n.MaNhom,
+					TenNhom = n.TenNhom,
+					ThanhVien = n.NhomNguoiDungs.Select(tv => new ThanhVienDto
+					{
+						MaNhomNguoiDung = tv.MaNhomNguoiDung,
+						MaNguoiDung = tv.NguoiDung.MaNguoiDung,
+						HoTen = tv.NguoiDung.HoTen,
+						ChucVu = tv.VaiTro
+					}).ToList()
+				})
+				.ToListAsync();
+
+			return nhoms;
+		}
+
+		public async Task<string> GenDanhGia(int maDotDanhGia)
+		{
+			var admins = await getListAdminActive();
+			var leaders = await getListLeaderActive();
+			var allNguoiDung = await getNguoiDungActiveNotIncludeAdmin();
+			var danhGias = new List<DanhGia>();
+			foreach (var admin in admins)
+			{
+				foreach (var leader in leaders)
+				{					
+					danhGias.Add(new DanhGia
+					{
+						NguoiDanhGia = admin.MaNguoiDung,
+						NguoiDuocDanhGia = leader.MaNhomNguoiDung,
+						MaDotDanhGia = maDotDanhGia,
+						Diem = 0,
+						TrangThai = "Chưa đánh giá",
+						HeSo = 3,
+					});
+					
+				}
+			}
+			foreach (var user in allNguoiDung)
+			{
+				var nhoms = await getNhomVaThanhVienCungNhomByMaNguoiDung(user.MaNguoiDung);
+
+				foreach (var nhom in nhoms)
+				{
+					var thanhViens = nhom.ThanhVien;
+
+					var currentUser = thanhViens.FirstOrDefault(x => x.MaNguoiDung == user.MaNguoiDung);
+					bool isLeader = (currentUser != null && currentUser.ChucVu == "Leader");
+
+					foreach (var tv in thanhViens)
+					{
+						int heSo = 1;
+
+						if (user.MaNguoiDung == tv.MaNguoiDung)
+							heSo = 2;
+
+						else if (isLeader && user.MaNguoiDung != tv.MaNguoiDung)
+							heSo = 3;
+
+						danhGias.Add(new DanhGia
+						{
+							NguoiDanhGia = user.MaNguoiDung,
+							NguoiDuocDanhGia = tv.MaNhomNguoiDung,
+							MaDotDanhGia = maDotDanhGia,							
+							Diem = 0,
+							TrangThai = "Chưa đánh giá",
+							HeSo = heSo,
+						});
+					}
+				}
+			}
+
+			danhGias = danhGias
+				.GroupBy(d => new { d.NguoiDanhGia, d.NguoiDuocDanhGia })
+				.Select(g => g.First())
+				.ToList();
+
+			await _context.DANHGIA.AddRangeAsync(danhGias);
+			await _context.SaveChangesAsync();
+
+			return $"Đã tạo {danhGias.Count} đánh giá.";
 		}
 	}
 }

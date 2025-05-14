@@ -1,5 +1,4 @@
-﻿
-using EmployeeEvaluation360.Database;
+﻿using EmployeeEvaluation360.Database;
 using EmployeeEvaluation360.Interfaces;
 using EmployeeEvaluation360.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;

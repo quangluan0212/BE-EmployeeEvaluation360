@@ -1,0 +1,6 @@
+services:
+  employeeevaluation360:
+    image: ${DOCKER_REGISTRY-}employeeevaluation360
+    build:
+      context: .
+      dockerfile: EmployeeEvaluation360/Dockerfile

@@ -5,7 +5,8 @@ namespace EmployeeEvaluation360.Interfaces
 	public interface IDanhGiaService
 	{
 		Task<string> XacDinhLoaiDanhGiaAsync(string nguoiDanhGia, int nguoiDuocDanhGia);
-		Task<int> TinhHeSoAsync(string nguoiDanhGia, int nguoiDuocDanhGia);
-		Task<MauDanhGiaCauHoiDto> GetFormDanhGiaCauHoiAsync(string MaNguoiDanhGia, int MaNguoiDungDanhGia, int MaDotDanhGia);		
+		Task<MauDanhGiaCauHoiDto> GetFormDanhGiaCauHoiAsync(int maDanhGia);	
+		Task<List<AdminGetDanhGiaDto>> AdminGetListDanhGiaAsync(string maNguoiDung);
+		Task<List<NhanVienGetDanhGiaDto>> NhanVienGetDanhGiaAsync(string maNguoiDung);
 	}
 }

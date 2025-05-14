@@ -32,6 +32,11 @@ namespace EmployeeEvaluation360.DTOs
 		public string TrangThai { get; set; }
 	}
 
+	public class BaseNguoiDungDto 
+	{
+	}
+
+
 	public class CreateNguoiDungDto
 	{
 		[Required(ErrorMessage = "Họ tên không được để trống")]
@@ -51,7 +56,6 @@ namespace EmployeeEvaluation360.DTOs
 		[StringLength(60, MinimumLength = 6, ErrorMessage = "Mật khẩu phải từ 6 đến 60 ký tự")]
 		public string MatKhau { get; set; }
 		public int MaChucVu { get; set; }
-
 	}
 
 	public class UpdateNguoiDungDto

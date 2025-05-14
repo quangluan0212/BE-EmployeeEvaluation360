@@ -1,6 +1,7 @@
 ﻿using EmployeeEvaluation360.DTOs;
 using EmployeeEvaluation360.Interfaces;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
 
 namespace EmployeeEvaluation360.Controllers
 {
@@ -15,19 +16,42 @@ namespace EmployeeEvaluation360.Controllers
 		}
 
 		[HttpGet]
-		[Route("danh-gia")]
-		public async Task<IActionResult> DanhGia([FromQuery] string nguoiDanhGia,[FromQuery] int nguoiDuocDanhGia,[FromQuery] int maDotDanhGia)
+		[Route("get-form-danh-gia")]
+		public async Task<IActionResult> DanhGia([FromQuery] int maDanhGia)
 		{
 			if (!ModelState.IsValid)
 			{
 				return BadRequest(ModelState);
 			}
-			var formDanhGia = await _danhGiaService.GetFormDanhGiaCauHoiAsync(nguoiDanhGia, nguoiDuocDanhGia, maDotDanhGia);
+			var formDanhGia = await _danhGiaService.GetFormDanhGiaCauHoiAsync(maDanhGia);
 			if (formDanhGia != null)
 			{
 				return Ok(Success(formDanhGia));
 			}
 			return BadRequest(ModelState);
+		}
+
+		[HttpGet("admin-danh-sach-danh-gia-leader")]
+		public async Task<IActionResult> AdminGetListDanhGiaLeader([FromQuery]string maNguoiDung)
+		{
+			if (maNguoiDung.IsNullOrEmpty())
+			{
+				return BadRequest(Error<string>("Đã xảy ra lỗi vui lòng đăng nhập lại !!!"));
+			}
+			var listDanhGia = await _danhGiaService.AdminGetListDanhGiaAsync(maNguoiDung);
+			return Ok(Success(listDanhGia));
+		}
+
+
+		[HttpGet("user-danh-sach-danh-gia-team")]
+		public async Task<IActionResult> UserGetListDanhGiaTeam([FromQuery] string maNguoiDung)
+		{
+			if (maNguoiDung.IsNullOrEmpty())
+			{
+				return BadRequest(Error<string>("Đã xảy ra lỗi vui lòng đăng nhập lại !!!"));
+			}
+			var listDanhGia = await _danhGiaService.NhanVienGetDanhGiaAsync(maNguoiDung);
+			return Ok(Success(listDanhGia));
 		}
 	}
 }

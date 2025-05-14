@@ -1,4 +1,5 @@
-﻿using EmployeeEvaluation360.Interfaces;
+﻿using EmployeeEvaluation360.DTOs;
+using EmployeeEvaluation360.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EmployeeEvaluation360.Controllers
@@ -18,6 +19,20 @@ namespace EmployeeEvaluation360.Controllers
 		{
 			var ddd = await _service.GetDotDanhGiaActivesAsync();
 			return Ok(Success(ddd));
+		}
+
+		[HttpPost("them-dot-danh-gia")]
+		public async Task<IActionResult> createDotDanhGia(CreateDotDanhGiaDto createDotDanhGiaDto)
+		{
+			var ddd = await _service.CreateDotDanhGia(createDotDanhGiaDto);
+			if (ddd == null)
+			{
+				return BadRequest(Error<string>("Lỗi khi tạo đợt đánh giá !!!"));
+			}
+			else
+			{
+				return Ok(Success(ddd));
+			}
 		}
 
 	}
