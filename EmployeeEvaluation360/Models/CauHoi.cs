@@ -37,7 +37,7 @@ namespace EmployeeEvaluation360.Models
 		public int MaCauHoi { get; set; }
 
 		[Column("TraLoi")]
-		public int? TraLoi { get; set; }
+		public int TraLoi { get; set; }
 
 		// Navigation
 		[ForeignKey("MaDanhGia")]

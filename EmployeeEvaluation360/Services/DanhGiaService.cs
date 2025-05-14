@@ -14,6 +14,69 @@ namespace EmployeeEvaluation360.Services
 			_context = applicationDBContext;
 		}
 
+		public async Task<MauDanhGiaCauHoiTraLoiDto> GetCauTraLoiTheoMaDanhGiaAsync(int maDanhGia)
+		{
+			var danhGia = await _context.DANHGIA_CAUHOI
+				.Where(x => x.MaDanhGia == maDanhGia)
+				.Include(x => x.CauHoi)
+				.Select(x => new CauTraloiDto
+				
+				{
+					MaCauHoi = x.MaCauHoi,
+					NoiDung = x.CauHoi.NoiDung,
+					TraLoi = x.TraLoi
+				})
+				.ToListAsync();
+
+			if (danhGia == null || !danhGia.Any())
+				throw new Exception("Không tìm thấy câu trả lời cho mã đánh giá.");
+
+			return new MauDanhGiaCauHoiTraLoiDto
+			{
+				MaDanhGia = maDanhGia,
+				DanhSachCauTraLoi = danhGia
+			};
+		}
+
+		public async Task<bool> SubmitDanhGia(DanhGiaTraLoiDto giaTraLoiDto)
+		{
+			var danhGia = await _context.DANHGIA
+				.FirstOrDefaultAsync(dg => dg.MaDanhGia == giaTraLoiDto.MaDanhGia);
+
+			if (danhGia == null)
+				throw new InvalidOperationException("Không tìm thấy đánh giá.");
+
+			if (giaTraLoiDto.CauHoiTraLoi == null || !giaTraLoiDto.CauHoiTraLoi.Any())
+				throw new InvalidOperationException("Danh sách câu trả lời không được để trống.");
+
+			var cauHoiCu = await _context.DANHGIA_CAUHOI
+				.Where(ch => ch.MaDanhGia == giaTraLoiDto.MaDanhGia)
+				.ToListAsync();
+
+			if (cauHoiCu.Any())
+			{
+				_context.DANHGIA_CAUHOI.RemoveRange(cauHoiCu);
+			}
+
+			var danhSachTraLoi = giaTraLoiDto.CauHoiTraLoi.Select(cauTraLoi => new DanhGia_CauHoi
+			{
+				MaDanhGia = giaTraLoiDto.MaDanhGia,
+				MaCauHoi = cauTraLoi.MaCauHoi,
+				TraLoi = cauTraLoi.TraLoi
+			}).ToList();
+
+			await _context.DANHGIA_CAUHOI.AddRangeAsync(danhSachTraLoi);
+
+
+			int tongDiem = danhSachTraLoi.Sum(t => t.TraLoi);
+			danhGia.Diem = tongDiem;
+			danhGia.TrangThai = "Đã đánh giá";
+
+			await _context.SaveChangesAsync();
+
+			return true;
+		}
+
 		public async Task<List<AdminGetDanhGiaDto>> AdminGetListDanhGiaAsync(string maNguoiDung)
 		{
 			var danhGias = await _context.DANHGIA
@@ -52,8 +115,6 @@ namespace EmployeeEvaluation360.Services
 					thanhViens = group.Select(dg => new ThanhVienDanhGiaCheoDto
 					{
 						MaDanhGia = dg.MaDanhGia,
-						MaNguoiDanhGia = dg.NguoiDanhGia,
-						maNhomNguoiDung = dg.NguoiDuocDanhGia,
 						HoTen = dg.NguoiDuocDanhGiaObj.NguoiDung.HoTen,
 						TrangThai = dg.TrangThai,
 						TenChucVu = _context.NGUOIDUNG_CHUCVU
@@ -61,8 +122,6 @@ namespace EmployeeEvaluation360.Services
 							.OrderByDescending(x => x.MaChucVu)
 							.Select(x => x.ChucVu.TenChucVu)
 							.FirstOrDefault() ?? "Chưa rõ",		
-
-
 					}).ToList()
 				}).ToList();
 

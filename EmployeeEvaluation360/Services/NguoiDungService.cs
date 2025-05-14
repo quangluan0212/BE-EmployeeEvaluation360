@@ -82,7 +82,7 @@ namespace EmployeeEvaluation360.Services
 			nguoiDung.HoTen = updateDto.HoTen;
 			nguoiDung.Email = updateDto.Email;
 			nguoiDung.DienThoai = updateDto.DienThoai;
-			nguoiDung.MatKhau = await HashPasswordAsync(updateDto.MatKhau);
+			nguoiDung.MatKhau = await HashPasswordAsync("abc123@@");
 
 			try
 			{

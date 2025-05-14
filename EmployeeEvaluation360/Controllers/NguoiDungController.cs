@@ -158,7 +158,7 @@ namespace EmployeeEvaluation360.Controllers
 		}
 		[HttpPut]
 		[Route("admin-cap-nhat-thong-tin-nguoi-dung")]
-		//[Authorize(Roles = "Admin")]
+		[Authorize(Roles = "Admin")]
 		public async Task<ActionResult> AdminUpdateNguoiDung(string maNguoiDung, [FromBody] AdminUpdateNguoiDungDto updateDto)
 		{
 			if (!ModelState.IsValid)
@@ -179,7 +179,7 @@ namespace EmployeeEvaluation360.Controllers
 		}
 
 		[HttpGet("danh-sach-admin-active")]
-		//[Authorize(Roles = "Admin")]
+		[Authorize(Roles = "Admin")]
 		public async Task<IActionResult> GetAdminActive()
 		{
 			var listAdmin = await _nguoiDungService.GetAdminActivesAsync();

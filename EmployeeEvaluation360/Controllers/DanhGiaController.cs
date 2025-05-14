@@ -15,6 +15,36 @@ namespace EmployeeEvaluation360.Controllers
 			_danhGiaService = danhGiaService;
 		}
 
+		[HttpGet("get-danh-gia-by-id/{maDanhGia}")]
+		public async Task<IActionResult> LayCauTraLoi(int maDanhGia)
+		{
+			try
+			{
+				var result = await _danhGiaService.GetCauTraLoiTheoMaDanhGiaAsync(maDanhGia);
+				return Ok(Success(result));
+			}
+			catch (Exception ex)
+			{
+				return BadRequest(Error<string>(ex.Message));
+			}
+		}
+
+		[HttpPost("submit-danh-gia")]
+		public async Task<IActionResult> SubmitDanhGia([FromBody] DanhGiaTraLoiDto danhGiaDTO)
+		{
+			if (!ModelState.IsValid)
+			{
+				return BadRequest(ModelState);
+			}
+			var result = await _danhGiaService.SubmitDanhGia(danhGiaDTO);
+			if (result != null)
+			{
+				return Ok(Success(result));
+			}
+			return BadRequest(ModelState);
+		}
+
+
 		[HttpGet]
 		[Route("get-form-danh-gia")]
 		public async Task<IActionResult> DanhGia([FromQuery] int maDanhGia)
