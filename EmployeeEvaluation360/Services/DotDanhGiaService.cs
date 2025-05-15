@@ -15,6 +15,62 @@ namespace EmployeeEvaluation360.Services
 		{
 			_context = context;
 		}
+
+		public async Task<string>KetThucDotDanhGia(int maDotDanhGia)
+		{
+			var dotDanhGia = await _context.DOT_DANHGIA.FindAsync(maDotDanhGia);
+			if (dotDanhGia == null)
+			{
+				return "Đợt đánh giá không tồn tại";
+			}
+			dotDanhGia.TrangThai = "Inactive";
+			var result = await _context.SaveChangesAsync();
+			if (result == 0)
+			{
+				return "Cập nhật thất bại";
+			}
+			else
+			{
+				return "Cập nhật thành công";
+			}
+		}
+
+		public async Task<string> UpdateDotDanhGia (UpdateDotDanhGia updateDotDanhGia)
+		{
+			var dotDanhGia = await _context.DOT_DANHGIA.FindAsync(updateDotDanhGia.MaDotDanhGia);
+			if (dotDanhGia == null)
+			{
+				return "Đợt đánh giá không tồn tại";
+			}
+			dotDanhGia.TenDot = updateDotDanhGia.TenDot;
+			dotDanhGia.ThoiGianBatDau = updateDotDanhGia.NgayBatDau;
+			dotDanhGia.ThoiGianKetThuc = updateDotDanhGia.NgayKetThuc;
+			var result = await _context.SaveChangesAsync();
+			if (result == 0)
+			{
+				return "Cập nhật thất bại";
+			}
+			else
+			{
+				return "Cập nhật thành công";
+			}
+		}
+
+
+		public async Task<List<DotDanhGiaDto>> getDanhSachDotDanhGia()
+		{
+			var listData = await _context.DOT_DANHGIA.ToListAsync();
+			var listDataDto = listData.Select(x => new DotDanhGiaDto
+			{
+				MaDotDanhGia = x.MaDotDanhGia,
+				TenDot = x.TenDot,
+				ThoiGianBatDau = x.ThoiGianBatDau,
+				ThoiGianKetThuc = x.ThoiGianKetThuc,
+				TrangThai = x.TrangThai,
+			}).ToList();
+			return listDataDto;
+		}
+
 		public async Task<DotDanhGiaDto> GetDotDanhGiaActivesAsync()
 		{
 			var listData = await _context.DOT_DANHGIA.Where(x=>x.TrangThai=="Active").ToListAsync();
@@ -35,6 +91,11 @@ namespace EmployeeEvaluation360.Services
 
 		public async Task<DotDanhGiaDto> CreateDotDanhGia(CreateDotDanhGiaDto danhGiaDto)
 		{
+			var currentDdd = GetDotDanhGiaActivesAsync();
+			if (currentDdd != null)
+			{
+				return null;
+			}
 			var dotDanhGia = new DotDanhGia
 			{
 				TenDot = danhGiaDto.TenDot,

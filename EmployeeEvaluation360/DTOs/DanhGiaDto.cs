@@ -27,6 +27,7 @@
 	public class ThanhVienDanhGiaCheoDto
 	{
 		public int MaDanhGia { get; set; }
+		public string MaNguoiDuocDanhGia { set; get; } = string.Empty;
 		public string HoTen { set; get; } = string.Empty;
 		public string TenChucVu { set; get; } = string.Empty ;
 		public string TrangThai { set; get; } = string.Empty;

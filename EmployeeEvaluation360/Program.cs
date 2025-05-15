@@ -104,25 +104,25 @@ namespace EmployeeEvaluation360
 				options.JsonSerializerOptions.WriteIndented = true;
 			});
 
-			//builder.Services.AddCors(options =>
-			//{
-			//	options.AddPolicy("AllowFrontend",
-			//		policy => policy
-			//			.WithOrigins("http://localhost:5173")
-			//			.AllowAnyHeader()
-			//			.AllowAnyMethod()
-			//			.AllowCredentials());
-			//});
-
 			builder.Services.AddCors(options =>
 			{
-				options.AddPolicy("AllowAll", policy =>
-				{
-					policy.AllowAnyOrigin()
-						  .AllowAnyMethod()
-						  .AllowAnyHeader();
-				});
+				options.AddPolicy("AllowFrontend",
+					policy => policy
+						.WithOrigins("http://localhost:5173")
+						.AllowAnyHeader()
+						.AllowAnyMethod()
+						.AllowCredentials());
 			});
+
+			//builder.Services.AddCors(options =>
+			//{
+			//	options.AddPolicy("AllowAll", policy =>
+			//	{
+			//		policy.AllowAnyOrigin()
+			//			  .AllowAnyMethod()
+			//			  .AllowAnyHeader();
+			//	});
+			//});
 
 			var app = builder.Build();
 
@@ -137,8 +137,8 @@ namespace EmployeeEvaluation360
 			app.UseAuthentication();
 			app.UseAuthorization();
 
-			//app.UseCors("AllowFrontend");
-			app.UseCors("AllowAll");
+			app.UseCors("AllowFrontend");
+			//app.UseCors("AllowAll");
 
 			app.MapControllers();
 

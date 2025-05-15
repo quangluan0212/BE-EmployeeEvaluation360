@@ -115,6 +115,7 @@ namespace EmployeeEvaluation360.Services
 					thanhViens = group.Select(dg => new ThanhVienDanhGiaCheoDto
 					{
 						MaDanhGia = dg.MaDanhGia,
+						MaNguoiDuocDanhGia = dg.NguoiDuocDanhGiaObj.MaNguoiDung,
 						HoTen = dg.NguoiDuocDanhGiaObj.NguoiDung.HoTen,
 						TrangThai = dg.TrangThai,
 						TenChucVu = _context.NGUOIDUNG_CHUCVU

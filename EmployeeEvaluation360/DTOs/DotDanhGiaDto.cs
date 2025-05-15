@@ -15,11 +15,24 @@ namespace EmployeeEvaluation360.DTOs
 		public int MaDotDanhGia { set; get; }
 		public string TenDot { set; get; } = string.Empty;
 	}
+
+	public class UpdateDotDanhGia
+	{
+		public int MaDotDanhGia { set; get; }
+		public string TenDot { set; get; } = string.Empty;
+		public DateTime NgayBatDau { set; get; }
+		[DateRange("NgayBatDau")]
+		public DateTime NgayKetThuc { set; get; }
+	}
 	
 	public class CreateDotDanhGiaDto() 
 	{
+
+		[Required(ErrorMessage = "Tên đợt đánh giá không được để trống")]
 		public string TenDot { set; get; } = string.Empty;
+		[Required(ErrorMessage = "Ngày bắt đầu không được để trống")]
 		public DateTime NgayBatDau { set; get; }
+		[Required(ErrorMessage = "Ngày kết thúc không được để trống")]
 		[DateRange("NgayBatDau")]
 		public DateTime NgayKetThuc { set; get; }
 	}
