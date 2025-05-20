@@ -49,7 +49,7 @@ namespace EmployeeEvaluation360.Controllers
 		[HttpGet]
 		[Route("danh-sach-nguoi-dung-chuc-vu")]
 		[Authorize(Roles = "Admin")]
-		public async Task<ActionResult> GetAllNguoiDungWithRole(int page = 1, int pageSize = 10,string? search = null)
+		public async Task<ActionResult> GetAllNguoiDungWithRole(int page = 1, int pageSize = 10, string? search = null)
 		{
 			var result = await _nguoiDungService.GetNguoiDungWithRolePagedAsync(page, pageSize, search);
 			return Ok(Success(result));

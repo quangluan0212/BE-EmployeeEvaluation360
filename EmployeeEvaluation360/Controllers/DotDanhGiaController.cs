@@ -7,7 +7,7 @@ namespace EmployeeEvaluation360.Controllers
 {
 	[ApiController]
 	[Route("api/[controller]")]
-	public class DotDanhGiaController :BaseController
+	public class DotDanhGiaController : BaseController
 	{
 		private readonly IDotDanhGiaService _service;
 		public DotDanhGiaController(IDotDanhGiaService dddService)

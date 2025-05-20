@@ -14,5 +14,6 @@ namespace EmployeeEvaluation360.Interfaces
 		Task<List<NguoiDungDto>> getListAdminActive();
 		Task<List<NhomVaThanhVienDto>> getNhomVaThanhVienCungNhomByMaNguoiDung(string maNguoiDung);
 		Task<string> GenDanhGia(int maDotDanhGia);
+
 	}
 }

@@ -23,6 +23,7 @@ namespace EmployeeEvaluation360.DTOs
 		public DateTime NgayBatDau { set; get; }
 		[DateRange("NgayBatDau")]
 		public DateTime NgayKetThuc { set; get; }
+		public List<int> mauDanhGias { set; get; } = new List<int>();
 	}
 	
 	public class CreateDotDanhGiaDto() 
@@ -35,6 +36,7 @@ namespace EmployeeEvaluation360.DTOs
 		[Required(ErrorMessage = "Ngày kết thúc không được để trống")]
 		[DateRange("NgayBatDau")]
 		public DateTime NgayKetThuc { set; get; }
+		public List<int> mauDanhGias { set; get; } = new List<int>();
 	}
 	public class DateRangeAttribute : ValidationAttribute
 	{

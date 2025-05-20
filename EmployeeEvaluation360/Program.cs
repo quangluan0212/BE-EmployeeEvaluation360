@@ -15,8 +15,6 @@ namespace EmployeeEvaluation360
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            // Add services to the container.
-
             builder.Services.AddControllers();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
@@ -60,6 +58,7 @@ namespace EmployeeEvaluation360
 			builder.Services.AddScoped<INhomService, NhomService>();
 			builder.Services.AddScoped<IDanhGiaService, DanhGiaService>();
 			builder.Services.AddScoped<IDotDanhGiaService, DotDanhGiaService>();
+			builder.Services.AddScoped<IMauDanhGiaService, MauDanhGiaService>();
 
 			builder.Services.AddAuthentication(options =>	
 			{
@@ -124,6 +123,8 @@ namespace EmployeeEvaluation360
 			//	});
 			//});
 
+			builder.Services.AddScoped<SeedData>();
+
 			var app = builder.Build();
 
             // Configure the HTTP request pipeline.
@@ -142,7 +143,13 @@ namespace EmployeeEvaluation360
 
 			app.MapControllers();
 
-            app.Run();
+			using (var scope = app.Services.CreateScope())
+			{
+				var seed = scope.ServiceProvider.GetRequiredService<SeedData>();
+				seed.EnsureAdminUser();
+			}
+
+			app.Run();
         }
     }
 }

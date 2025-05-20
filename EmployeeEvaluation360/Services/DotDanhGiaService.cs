@@ -16,6 +16,8 @@ namespace EmployeeEvaluation360.Services
 			_context = context;
 		}
 
+
+
 		public async Task<string>KetThucDotDanhGia(int maDotDanhGia)
 		{
 			var dotDanhGia = await _context.DOT_DANHGIA.FindAsync(maDotDanhGia);
@@ -42,17 +44,47 @@ namespace EmployeeEvaluation360.Services
 			{
 				return "Đợt đánh giá không tồn tại";
 			}
+
 			dotDanhGia.TenDot = updateDotDanhGia.TenDot;
 			dotDanhGia.ThoiGianBatDau = updateDotDanhGia.NgayBatDau;
 			dotDanhGia.ThoiGianKetThuc = updateDotDanhGia.NgayKetThuc;
-			var result = await _context.SaveChangesAsync();
-			if (result == 0)
+
+			try
 			{
-				return "Cập nhật thất bại";
-			}
-			else
-			{
+				var chiTietCu = _context.CHITIET_DOTDANHGIA
+					.Where(c => c.MaDotDanhGia == updateDotDanhGia.MaDotDanhGia);
+				_context.CHITIET_DOTDANHGIA.RemoveRange(chiTietCu);
+
+				foreach (var mau in updateDotDanhGia.mauDanhGias)
+				{
+					var mauDanhGia = await _context.MAUDANHGIA.FindAsync(mau);
+					if (mauDanhGia == null)
+					{
+						return $"Không tìm thấy mẫu đánh giá với mã: {mau}";
+					}
+
+					var chiTiet = new ChiTiet_DotDanhGia
+					{
+						MaDotDanhGia = updateDotDanhGia.MaDotDanhGia,
+						MaMau = mau,
+						LoaiNguoiDuocDanhGia = mauDanhGia.LoaiDanhGia
+					};
+
+					await _context.CHITIET_DOTDANHGIA.AddAsync(chiTiet);
+				}
+
+				var result = await _context.SaveChangesAsync();
+				if (result == 0)
+				{
+					return "Cập nhật thất bại";
+				}
+
 				return "Cập nhật thành công";
+			}
+			catch (Exception ex)
+			{
+				Console.WriteLine("Lỗi khi cập nhật đợt đánh giá: " + ex.Message);
+				return "Có lỗi xảy ra trong quá trình cập nhật";
 			}
 		}
 
@@ -91,11 +123,12 @@ namespace EmployeeEvaluation360.Services
 
 		public async Task<DotDanhGiaDto> CreateDotDanhGia(CreateDotDanhGiaDto danhGiaDto)
 		{
-			var currentDdd = GetDotDanhGiaActivesAsync();
+			var currentDdd = await GetDotDanhGiaActivesAsync();
 			if (currentDdd != null)
 			{
 				return null;
 			}
+
 			var dotDanhGia = new DotDanhGia
 			{
 				TenDot = danhGiaDto.TenDot,
@@ -103,17 +136,44 @@ namespace EmployeeEvaluation360.Services
 				ThoiGianKetThuc = danhGiaDto.NgayKetThuc,
 				TrangThai = "Active"
 			};
-			var result = await _context.DOT_DANHGIA.AddAsync(dotDanhGia);
-			if (result == null)
+
+			try
 			{
+				await _context.DOT_DANHGIA.AddAsync(dotDanhGia);
+				await _context.SaveChangesAsync();
+
+				foreach (var mau in danhGiaDto.mauDanhGias)
+				{
+					var mauDanhGia = await _context.MAUDANHGIA.FindAsync(mau);
+					if (mauDanhGia == null)
+					{
+						return null;
+					}
+
+					var chiTietDotDanhGia = new ChiTiet_DotDanhGia
+					{
+						MaDotDanhGia = dotDanhGia.MaDotDanhGia,
+						MaMau = mau,
+						LoaiNguoiDuocDanhGia = mauDanhGia.LoaiDanhGia
+					};
+
+					await _context.CHITIET_DOTDANHGIA.AddAsync(chiTietDotDanhGia);
+				}
+
+				await _context.SaveChangesAsync();
+
+				string gen = await GenDanhGia(dotDanhGia.MaDotDanhGia);
+				Console.WriteLine(gen);
+
+				return dotDanhGia.ToDto();
+			}
+			catch (Exception ex)
+			{
+				Console.WriteLine("Lỗi khi tạo DotDanhGia: " + ex.Message);
 				return null;
 			}
-
-			await _context.SaveChangesAsync();
-			string gen = await GenDanhGia(dotDanhGia.MaDotDanhGia);
-			Console.WriteLine(gen);
-			return dotDanhGia.ToDto();
 		}
+
 
 		public async Task<List<NguoiDungDto>> getNguoiDungActiveNotIncludeAdmin()
 		{

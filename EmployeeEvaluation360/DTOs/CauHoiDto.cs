@@ -6,6 +6,12 @@
 		public string NoiDung {  get; set; }
 		public int DiemToiDa { get; set; }
 	}
+
+	public class CreateCauHoiDto
+	{
+		public string NoiDung { get; set; }
+		public int DiemToiDa { get; set; }
+	}
 	public class CauHoiTraloiDto
 	{
 		public int MaCauHoi { get; set; }
