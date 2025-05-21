@@ -16,7 +16,78 @@ namespace EmployeeEvaluation360.Services
 			_context = context;
 		}
 
+		private async Task<string> CreateKetQuaDanhGiaByMaNguoiDung(int maDotDanhGia)
+		{
+			try
+			{
+				var dotDanhGia = await _context.DOT_DANHGIA.FindAsync(maDotDanhGia);
+				if (dotDanhGia == null)
+				{
+					return "Đợt đánh giá không tồn tại";
+				}
+				var danhGias = await _context.DANHGIA
+					.Include(d => d.NguoiDuocDanhGiaObj)
+					.Where(d => d.MaDotDanhGia == maDotDanhGia && d.TrangThai == "Đã đánh giá")
+					.ToListAsync();
+				if (!danhGias.Any())
+				{
+					return "Không có đánh giá nào cho người dùng này trong đợt đánh giá hiện tại.";
+				}
 
+				var groupedDanhGias = danhGias
+					.GroupBy(d => d.NguoiDuocDanhGiaObj.MaNguoiDung)
+					.Select(g => new
+					{
+						MaNguoiDung = g.Key,
+						HeSoValues = g.Select(d => d.HeSo).Distinct().ToList(),
+						Evaluation = g
+					})
+					.Where(g => g.HeSoValues.Contains(1) && g.HeSoValues.Contains(2) && g.HeSoValues.Contains(3)).ToList();
+				if (!groupedDanhGias.Any())
+				{
+					return "Không có người dùng nào có đủ cả ba loại đánh giá (HeSo 1, 2, 3).";
+				}
+				var results = new List<string>();
+				foreach (var item in groupedDanhGias)
+				{
+					var existingKetQua = await _context.KETQUA_DANHGIA
+						.FirstOrDefaultAsync(k => k.MaNguoiDung == item.MaNguoiDung && k.ThoiGianTinh == dotDanhGia.ThoiGianKetThuc);
+					if (existingKetQua != null)
+					{
+
+						results.Add($"Kết quả đánh giá của ID : {item.MaNguoiDung} đã tồn tại");
+						continue;
+					}
+					var tbDg1 = item.Evaluation.Where(d => d.HeSo == 1).Select(d => d.Diem).Average();
+					var tbDg2 = item.Evaluation.Where(d => d.HeSo == 2).Select(d => d.Diem).Average();
+					var tbDg3 = item.Evaluation.Where(d => d.HeSo == 3).Select(d => d.Diem).Average();
+
+					var finalScore = (tbDg1 + (tbDg2 * 2) + (tbDg3 * 3)) / 6;
+
+					var ketQuaDanhGia = new KetQua_DanhGia
+					{
+						MaNguoiDung = item.MaNguoiDung,
+						DiemTongKet = finalScore,
+						ThoiGianTinh = dotDanhGia.ThoiGianKetThuc
+					};
+					await _context.KETQUA_DANHGIA.AddAsync(ketQuaDanhGia);
+
+					results.Add($"Tạo kết quả đánh giá cho ID: {item.MaNguoiDung} với điểm tổng kết {finalScore:F2}.");
+				}
+				var saveResult = await _context.SaveChangesAsync();
+				if (saveResult == 0 && results.All(r => r.Contains("đã tồn tại")))
+				{
+					return "Không có kết quả đánh giá mới được tạo vì tất cả đã tồn tại.";
+				}
+				return $"Kết quả tính toán:\n{string.Join("\n", results)}";
+			}
+			catch (Exception ex)
+			{
+				Console.WriteLine($"Lỗi khi tính kết quả đánh giá: {ex.Message}\nStackTrace: {ex.StackTrace}");
+				return $"Có lỗi xảy ra khi tính kết quả đánh giá: {ex.Message}";
+			}
+
+		}		
 
 		public async Task<string>KetThucDotDanhGia(int maDotDanhGia)
 		{
@@ -33,7 +104,8 @@ namespace EmployeeEvaluation360.Services
 			}
 			else
 			{
-				return "Cập nhật thành công";
+				var tinhKetQuaDanhGia  = await CreateKetQuaDanhGiaByMaNguoiDung(maDotDanhGia);
+				return tinhKetQuaDanhGia;
 			}
 		}
 

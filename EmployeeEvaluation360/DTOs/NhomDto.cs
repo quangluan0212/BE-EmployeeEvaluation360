@@ -49,15 +49,17 @@ namespace EmployeeEvaluation360.DTOs
 	public class NhomVaThanhVienDto
 	{
 		public int MaNhom { get; set; }
-		public string TenNhom { get; set; }
-		public List<ThanhVienDto> ThanhVien { get; set; }
+		public string TenNhom { get; set; } = string.Empty;
+		public List<ThanhVienDto> ThanhVien { get; set; } = new List<ThanhVienDto>();
 	}
 
 	public class ThanhVienDto
 	{
 		public int MaNhomNguoiDung { get; set; }
-		public string MaNguoiDung { get; set; }
-		public string HoTen { get; set; }
-		public string ChucVu { get; set; }
+		public string MaNguoiDung { get; set; } = string.Empty;
+		public string HoTen { get; set; } = string.Empty;
+		public string SoDienThoai { get; set; } = string.Empty;
+		public string Email { get; set; } = string.Empty;
+		public string ChucVu { get; set; } = string.Empty;
 	}
 }

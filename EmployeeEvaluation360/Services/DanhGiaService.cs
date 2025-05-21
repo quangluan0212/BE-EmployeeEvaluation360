@@ -79,8 +79,14 @@ namespace EmployeeEvaluation360.Services
 
 		public async Task<List<AdminGetDanhGiaDto>> AdminGetListDanhGiaAsync(string maNguoiDung)
 		{
+			var currentDotDanhGia = await _context.DOT_DANHGIA
+				.Where(ddg => ddg.TrangThai == "Active")
+				.FirstOrDefaultAsync();
+			if (currentDotDanhGia == null)
+				throw new InvalidOperationException("Không tìm thấy đợt đánh giá hiện tại.");
+
 			var danhGias = await _context.DANHGIA
-				.Where(dg => dg.NguoiDanhGia == maNguoiDung)
+				.Where(dg => dg.NguoiDanhGia == maNguoiDung && dg.MaDotDanhGia == currentDotDanhGia.MaDotDanhGia)
 				.Include(dg => dg.NguoiDanhGiaObj)
 				.Include(dg => dg.NguoiDuocDanhGiaObj)
 				.ToListAsync();
@@ -99,8 +105,14 @@ namespace EmployeeEvaluation360.Services
 
 		public async Task<List<NhanVienGetDanhGiaDto>> NhanVienGetDanhGiaAsync(string maNguoiDung)
 		{
+			var currentDotDanhGia = await _context.DOT_DANHGIA
+			.Where(ddg => ddg.TrangThai == "Active")
+			.FirstOrDefaultAsync();
+			if (currentDotDanhGia == null)
+				throw new InvalidOperationException("Không tìm thấy đợt đánh giá hiện tại.");
+
 			var danhGias = await _context.DANHGIA
-				.Where(dg => dg.NguoiDanhGia == maNguoiDung)
+				.Where(dg => dg.NguoiDanhGia == maNguoiDung && dg.MaDotDanhGia == currentDotDanhGia.MaDotDanhGia)
 				.Include(dg => dg.NguoiDuocDanhGiaObj)
 					.ThenInclude(nd => nd.NguoiDung)
 				.Include(dg => dg.NguoiDuocDanhGiaObj)

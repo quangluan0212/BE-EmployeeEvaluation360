@@ -187,6 +187,21 @@ namespace EmployeeEvaluation360.Controllers
 				return NotFound(Error<string>("Không tìm thấy admin nào !!!"));
 			return Ok(Success(listAdmin));
 		}
- 
+
+		[HttpPut("nguoi-dung-dat-lai-mat-khau")]
+		[Authorize]
+		public async Task<ActionResult> ResetPassword(string email, string newPassword)
+		{
+			if (!ModelState.IsValid)
+			{
+				return BadRequest(ModelState);
+			}
+			var result = await _nguoiDungService.ResetPasswordAsync(email, newPassword);
+			if (!result)
+			{
+				return BadRequest(Error<string>("Đổi mật khẩu thất bại"));
+			}
+			return Ok(Success<string>("Đổi mật khẩu thành công"));
+		}
 	}
 }

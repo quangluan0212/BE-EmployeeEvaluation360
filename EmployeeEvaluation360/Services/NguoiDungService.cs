@@ -229,7 +229,8 @@ namespace EmployeeEvaluation360.Services
 			nguoiDung.MatKhau = await HashPasswordAsync(newPassword);
 			await _context.SaveChangesAsync();
 			return true;
-		}
+		}	
+
 
 		public async Task<bool> ResetPasswordAsync(string maNguoiDung, string newPassword)
 		{

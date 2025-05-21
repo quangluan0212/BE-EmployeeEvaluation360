@@ -136,7 +136,7 @@ namespace EmployeeEvaluation360.Controllers
 			return Ok(Success(result));
 		}
 
-		[HttpGet("danh-sach-nhom-va-thanh-vien")]
+		[HttpGet("get-danh-sach-nhom-by-ma-nguoi-dung")]
 		public async Task<IActionResult> GetDanhSachNhomVaThanhVien([FromQuery] string maNguoiDung)
 		{
 			if (string.IsNullOrEmpty(maNguoiDung))

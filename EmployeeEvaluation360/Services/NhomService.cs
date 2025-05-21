@@ -4,7 +4,6 @@ using EmployeeEvaluation360.Helppers;
 using EmployeeEvaluation360.Interfaces;
 using EmployeeEvaluation360.Mappers;
 using EmployeeEvaluation360.Models;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 
 namespace EmployeeEvaluation360.Services
@@ -280,6 +279,8 @@ namespace EmployeeEvaluation360.Services
 						MaNhomNguoiDung = x.MaNhomNguoiDung,
 						MaNguoiDung = x.MaNguoiDung,
 						HoTen = x.NguoiDung.HoTen,
+						SoDienThoai = x.NguoiDung.DienThoai,
+						Email = x.NguoiDung.Email,
 						ChucVu = x.VaiTro
 					})
 					.ToListAsync();
