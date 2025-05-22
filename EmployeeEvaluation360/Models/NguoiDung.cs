@@ -49,6 +49,7 @@ namespace EmployeeEvaluation360.Models
 
 		[Required]
 		[Column("CapBac")]
+		[Range(0, 5, ErrorMessage = "CapBac must be between 0 and 5.")]
 		public int CapBac { get; set; }
 
 		[Required]

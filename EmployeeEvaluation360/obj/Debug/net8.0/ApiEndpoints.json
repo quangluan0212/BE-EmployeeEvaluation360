@@ -1,0 +1,999 @@
+[
+  {
+    "ContainingType": "EmployeeEvaluation360.Controllers.AuthController",
+    "Method": "SendResetEmail",
+    "RelativePath": "api/Auth/send-reset-email",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "EmployeeEvaluation360.DTOs.ForgotPasswordRequestDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "EmployeeEvaluation360.Controllers.AuthController",
+    "Method": "UserResetPassword",
+    "RelativePath": "api/Auth/user-reset-password",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "EmployeeEvaluation360.DTOs.ResetPasswordRequestDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "EmployeeEvaluation360.Controllers.AuthController",
+    "Method": "VerifyCaptcha",
+    "RelativePath": "api/Auth/verify-captcha",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "EmployeeEvaluation360.DTOs.VerifyCaptchaRequestDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "EmployeeEvaluation360.Controllers.ChucVuController",
+    "Method": "UpdateChucVu",
+    "RelativePath": "api/ChucVu/cap-nhat-chuc-vu",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "chucVuDto",
+        "Type": "EmployeeEvaluation360.DTOs.ChucVuUpdateDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "EmployeeEvaluation360.Models.ChucVu",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "EmployeeEvaluation360.Controllers.ChucVuController",
+    "Method": "GetChucVu",
+    "RelativePath": "api/ChucVu/chi-tiet-chuc-vu",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "EmployeeEvaluation360.Models.ChucVu",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "EmployeeEvaluation360.Controllers.ChucVuController",
+    "Method": "GetChucVus",
+    "RelativePath": "api/ChucVu/danh-sach-chuc-vu",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "EmployeeEvaluation360.Controllers.ChucVuController",
+    "Method": "GetChucVusPaged",
+    "RelativePath": "api/ChucVu/danh-sach-chuc-vu-paged",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "page",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "pageSize",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "search",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "EmployeeEvaluation360.Controllers.ChucVuController",
+    "Method": "CreateChucVu",
+    "RelativePath": "api/ChucVu/them-chuc-vu",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "chucVuDto",
+        "Type": "EmployeeEvaluation360.DTOs.ChucVuCreateDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "EmployeeEvaluation360.Models.ChucVu",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "EmployeeEvaluation360.Controllers.ChucVuController",
+    "Method": "DeleteChucVu",
+    "RelativePath": "api/ChucVu/xoa-chuc-vu",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "EmployeeEvaluation360.Controllers.DanhGiaController",
+    "Method": "AdminGetListDanhGiaLeader",
+    "RelativePath": "api/DanhGia/admin-danh-sach-danh-gia-leader",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "maNguoiDung",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "EmployeeEvaluation360.Controllers.DanhGiaController",
+    "Method": "LayCauTraLoi",
+    "RelativePath": "api/DanhGia/get-danh-gia-by-id/{maDanhGia}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "maDanhGia",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "EmployeeEvaluation360.Controllers.DanhGiaController",
+    "Method": "DanhGia",
+    "RelativePath": "api/DanhGia/get-form-danh-gia",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "maDanhGia",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "EmployeeEvaluation360.Controllers.DanhGiaController",
+    "Method": "SubmitDanhGia",
+    "RelativePath": "api/DanhGia/submit-danh-gia",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "danhGiaDTO",
+        "Type": "EmployeeEvaluation360.DTOs.DanhGiaTraLoiDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "EmployeeEvaluation360.Controllers.DanhGiaController",
+    "Method": "UserGetListDanhGiaTeam",
+    "RelativePath": "api/DanhGia/user-danh-sach-danh-gia-team",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "maNguoiDung",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "EmployeeEvaluation360.Controllers.DotDanhGiaController",
+    "Method": "getDanhSachDotDanhGia",
+    "RelativePath": "api/DotDanhGia/admin-get-danh-sach-dot-danh-gia",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "EmployeeEvaluation360.Controllers.DotDanhGiaController",
+    "Method": "KetThucDotDanhGia",
+    "RelativePath": "api/DotDanhGia/admin-ket-thuc-dot-danh-gia",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "maDotDanhGia",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "EmployeeEvaluation360.Controllers.DotDanhGiaController",
+    "Method": "UpdateDotDanhGia",
+    "RelativePath": "api/DotDanhGia/admin-update-dot-danh-gia",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "updateDotDanhGia",
+        "Type": "EmployeeEvaluation360.DTOs.UpdateDotDanhGia",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "EmployeeEvaluation360.Controllers.DotDanhGiaController",
+    "Method": "getDotDanhGiaHienTai",
+    "RelativePath": "api/DotDanhGia/dot-danh-gia-hien-tai",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "EmployeeEvaluation360.Controllers.DotDanhGiaController",
+    "Method": "createDotDanhGia",
+    "RelativePath": "api/DotDanhGia/them-dot-danh-gia",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "createDotDanhGiaDto",
+        "Type": "EmployeeEvaluation360.DTOs.CreateDotDanhGiaDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "EmployeeEvaluation360.Controllers.DuAnController",
+    "Method": "UpdateDuAn",
+    "RelativePath": "api/DuAn/cap-nhat-du-an",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "maDuAn",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "updateDto",
+        "Type": "EmployeeEvaluation360.DTOs.UpdateDuAnDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "EmployeeEvaluation360.Controllers.DuAnController",
+    "Method": "GetDuAnById",
+    "RelativePath": "api/DuAn/chi-tiet-du-an",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "maDuAn",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "EmployeeEvaluation360.Controllers.DuAnController",
+    "Method": "GetDanhSachDuAn",
+    "RelativePath": "api/DuAn/danh-sach-du-an",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "page",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "pageSize",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "search",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "EmployeeEvaluation360.Controllers.DuAnController",
+    "Method": "GetDuAnActive",
+    "RelativePath": "api/DuAn/du-an-active",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "EmployeeEvaluation360.Controllers.DuAnController",
+    "Method": "GetSimpleDanhSachDuAn",
+    "RelativePath": "api/DuAn/simple-danh-sach-du-an",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "EmployeeEvaluation360.Controllers.DuAnController",
+    "Method": "ThemDuAn",
+    "RelativePath": "api/DuAn/them-du-an",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "createDuAnDto",
+        "Type": "EmployeeEvaluation360.DTOs.CreateDuAnDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "EmployeeEvaluation360.Controllers.DuAnController",
+    "Method": "DeleteDuAn",
+    "RelativePath": "api/DuAn/xoa-du-an",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "maDuAn",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "EmployeeEvaluation360.Controllers.KetQuaDanhGiaController",
+    "Method": "GetBadKetQuaDanhGiaPagedResult",
+    "RelativePath": "api/KetQuaDanhGia/GetBadKetQuaDanhGia",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "page",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "pageSize",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "search",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "EmployeeEvaluation360.Controllers.KetQuaDanhGiaController",
+    "Method": "GetCurrentKetQuaDanhGiaPagedResult",
+    "RelativePath": "api/KetQuaDanhGia/GetCurrentKetQuaDanhGia",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "page",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "pageSize",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "search",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "EmployeeEvaluation360.Controllers.KetQuaDanhGiaController",
+    "Method": "GetGoodKetQuaDanhGiaPagedResult",
+    "RelativePath": "api/KetQuaDanhGia/GetGoodKetQuaDanhGia",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "page",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "pageSize",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "search",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "EmployeeEvaluation360.Controllers.KetQuaDanhGiaController",
+    "Method": "GetKetQuaDanhGiaPagedResult",
+    "RelativePath": "api/KetQuaDanhGia/GetKetQuaDanhGia",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "page",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "pageSize",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "search",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "EmployeeEvaluation360.Controllers.MauDanhGiaController",
+    "Method": "GetAll",
+    "RelativePath": "api/MauDanhGia/admin-danh-sach-mau-danh-gia",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "page",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "pageSize",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "search",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "EmployeeEvaluation360.Controllers.MauDanhGiaController",
+    "Method": "GetAllActive",
+    "RelativePath": "api/MauDanhGia/admin-danh-sach-mau-danh-gia-active",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "EmployeeEvaluation360.Controllers.MauDanhGiaController",
+    "Method": "GetMauDanhGiaByMaDotDanhGiaAsync",
+    "RelativePath": "api/MauDanhGia/admin-get-danh-sach-mau-danh-gia-by-mddg",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "MaDotDanhGia",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "EmployeeEvaluation360.Controllers.MauDanhGiaController",
+    "Method": "CreateMauDanhGia",
+    "RelativePath": "api/MauDanhGia/tao-mau-danh-gia",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "mauDanhGiaDto",
+        "Type": "EmployeeEvaluation360.DTOs.CreateMauDanhGiaDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "EmployeeEvaluation360.Controllers.MauDanhGiaController",
+    "Method": "GetMauDanhGiaById",
+    "RelativePath": "api/MauDanhGia/thong-tin-mau-danh-gia/{maMau}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "maMau",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "EmployeeEvaluation360.Controllers.NguoiDungController",
+    "Method": "AdminUpdateNguoiDung",
+    "RelativePath": "api/NguoiDung/admin-cap-nhat-thong-tin-nguoi-dung",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "maNguoiDung",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "updateDto",
+        "Type": "EmployeeEvaluation360.DTOs.AdminUpdateNguoiDungDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "EmployeeEvaluation360.Controllers.NguoiDungController",
+    "Method": "GetAllNguoiDung",
+    "RelativePath": "api/NguoiDung/admin-danh-sach-nguoi-dung",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "page",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "pageSize",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "EmployeeEvaluation360.Controllers.NguoiDungController",
+    "Method": "ChiTietNguoiDung",
+    "RelativePath": "api/NguoiDung/chi-tiet-nguoi-dung/{maNguoiDung}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "maNguoiDung",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "EmployeeEvaluation360.Controllers.NguoiDungController",
+    "Method": "Login",
+    "RelativePath": "api/NguoiDung/dang-nhap",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "loginDto",
+        "Type": "EmployeeEvaluation360.DTOs.LoginDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "EmployeeEvaluation360.Controllers.NguoiDungController",
+    "Method": "GetAdminActive",
+    "RelativePath": "api/NguoiDung/danh-sach-admin-active",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "EmployeeEvaluation360.Controllers.NguoiDungController",
+    "Method": "GetAllNguoiDungWithRole",
+    "RelativePath": "api/NguoiDung/danh-sach-nguoi-dung-chuc-vu",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "page",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "pageSize",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "search",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "EmployeeEvaluation360.Controllers.NguoiDungController",
+    "Method": "ChangePassword",
+    "RelativePath": "api/NguoiDung/doi-mat-khau",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "maNguoiDung",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "changePasswordDto",
+        "Type": "EmployeeEvaluation360.DTOs.ChangePasswordDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "EmployeeEvaluation360.Controllers.NguoiDungController",
+    "Method": "ResetPassword",
+    "RelativePath": "api/NguoiDung/nguoi-dung-dat-lai-mat-khau",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "email",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "newPassword",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "EmployeeEvaluation360.Controllers.NguoiDungController",
+    "Method": "AddChucVuToNguoiDung",
+    "RelativePath": "api/NguoiDung/them-chuc-vu",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "addChucVuDto",
+        "Type": "EmployeeEvaluation360.DTOs.AddChucVuDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "EmployeeEvaluation360.Controllers.NguoiDungController",
+    "Method": "CreateNguoiDung",
+    "RelativePath": "api/NguoiDung/them-nguoi-dung",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "nguoiDung",
+        "Type": "EmployeeEvaluation360.DTOs.CreateNguoiDungDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "EmployeeEvaluation360.Controllers.NguoiDungController",
+    "Method": "UpdateNguoiDung",
+    "RelativePath": "api/NguoiDung/user-cap-nhat-thong-tin-nguoi-dung",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "maNguoiDung",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "updateDto",
+        "Type": "EmployeeEvaluation360.DTOs.UpdateNguoiDungDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "EmployeeEvaluation360.Controllers.NhomController",
+    "Method": "UpdateNhom",
+    "RelativePath": "api/Nhom/cap-nhat-nhom",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "maNhom",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "updateDto",
+        "Type": "EmployeeEvaluation360.DTOs.UpdateNhomDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "EmployeeEvaluation360.Controllers.NhomController",
+    "Method": "GetDanhSachNhom",
+    "RelativePath": "api/Nhom/danh-sach-nhom",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "page",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "pageSize",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "search",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "EmployeeEvaluation360.Controllers.NhomController",
+    "Method": "GetAllNhomByMaNguoiDung",
+    "RelativePath": "api/Nhom/danh-sach-nhom-theo-nguoi-dung",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "maNguoiDung",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "EmployeeEvaluation360.Controllers.NhomController",
+    "Method": "GetDanhSachThanhVienNhom",
+    "RelativePath": "api/Nhom/danh-sach-thanh-vien-nhom",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "maNhom",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "page",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "pageSize",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "search",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "EmployeeEvaluation360.Controllers.NhomController",
+    "Method": "GetDanhSachNhomVaThanhVien",
+    "RelativePath": "api/Nhom/get-danh-sach-nhom-by-ma-nguoi-dung",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "maNguoiDung",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "EmployeeEvaluation360.Controllers.NhomController",
+    "Method": "ThemNhanVienVaoNhom",
+    "RelativePath": "api/Nhom/them-nhan-vien-vao-nhom",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "addDto",
+        "Type": "EmployeeEvaluation360.DTOs.ThemNhanVienVaoNhomDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "EmployeeEvaluation360.Controllers.NhomController",
+    "Method": "CreateNhom",
+    "RelativePath": "api/Nhom/them-nhom",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "nhom",
+        "Type": "EmployeeEvaluation360.DTOs.CreateNhomDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "EmployeeEvaluation360.Controllers.NhomController",
+    "Method": "DeleteNhom",
+    "RelativePath": "api/Nhom/xoa-nhom",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "maNhom",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  }
+]

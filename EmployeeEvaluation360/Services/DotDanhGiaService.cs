@@ -96,6 +96,7 @@ namespace EmployeeEvaluation360.Services
 			{
 				return "Đợt đánh giá không tồn tại";
 			}
+			dotDanhGia.ThoiGianKetThuc = DateTime.Now;
 			dotDanhGia.TrangThai = "Inactive";
 			var result = await _context.SaveChangesAsync();
 			if (result == 0)
