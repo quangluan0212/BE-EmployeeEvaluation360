@@ -13,12 +13,13 @@ namespace EmployeeEvaluation360.Services
 		{
 			_context = context;
 		}
-		public async Task<PagedResult<KetQua_DanhGiaChiTietDto>> GetCurrent(int page = 1, int pageSize = 10, string? search = null)
+		public async Task<PagedResult<KetQua_DanhGiaChiTietDto>> GetLatest(int page = 1, int pageSize = 10, string? search = null)
 		{
 			page = page < 1 ? 1 : page;
 			pageSize = pageSize < 1 ? 10 : pageSize;
 
 			var query = _context.KETQUA_DANHGIA
+				.Include(kq => kq.DotDanhGia)
 				.Join(_context.NGUOIDUNG,
 					kq => kq.MaNguoiDung,
 					nd => nd.MaNguoiDung,
@@ -26,6 +27,7 @@ namespace EmployeeEvaluation360.Services
 				.AsQueryable();
 
 			var latestResults = _context.KETQUA_DANHGIA
+				.Include(x => x.NguoiDung)
 				.GroupBy(x => x.MaNguoiDung)
 				.Select(g => new { MaNguoiDung = g.Key, MaxThoiGianTinh = g.Max(x => x.ThoiGianTinh) });
 
@@ -50,10 +52,14 @@ namespace EmployeeEvaluation360.Services
 				.Take(pageSize)
 				.Select(x => new KetQua_DanhGiaChiTietDto
 				{
+					MaKetQuaDanhGia = x.KetQua.MaKetQua,
 					MaNguoiDung = x.KetQua.MaNguoiDung,
 					HoTen = x.NguoiDung.HoTen ?? string.Empty,
 					DiemTongKet = x.KetQua.DiemTongKet,
-					ThoiGianTinh = x.KetQua.ThoiGianTinh
+					ThoiGianTinh = x.KetQua.ThoiGianTinh,
+					MaDotDanhGia = x.KetQua.MaDotDanhGia,
+					TenDotDanhGia = x.KetQua.DotDanhGia.TenDot ?? string.Empty
+
 				})
 				.ToListAsync();
 
@@ -73,6 +79,7 @@ namespace EmployeeEvaluation360.Services
 			pageSize = pageSize < 1 ? 10 : pageSize;
 
 			var query = _context.KETQUA_DANHGIA
+				.Include(kq => kq.DotDanhGia)
 				.Join(_context.NGUOIDUNG,
 					kq => kq.MaNguoiDung,
 					nd => nd.MaNguoiDung,
@@ -87,7 +94,7 @@ namespace EmployeeEvaluation360.Services
 				.Where(x => latestResults
 					.Any(lr => lr.MaNguoiDung == x.KetQua.MaNguoiDung && lr.MaxThoiGianTinh == x.KetQua.ThoiGianTinh));
 
-			query = query.Where(x => x.KetQua.DiemTongKet > 80);
+			query = query.Where(x => x.KetQua.DiemTongKet >= 90);
 
 			if (!string.IsNullOrEmpty(search))
 			{
@@ -106,10 +113,13 @@ namespace EmployeeEvaluation360.Services
 				.Take(pageSize)
 				.Select(x => new KetQua_DanhGiaChiTietDto
 				{
+					MaKetQuaDanhGia = x.KetQua.MaKetQua,
 					MaNguoiDung = x.KetQua.MaNguoiDung,
 					HoTen = x.NguoiDung.HoTen ?? string.Empty,
 					DiemTongKet = x.KetQua.DiemTongKet,
-					ThoiGianTinh = x.KetQua.ThoiGianTinh
+					ThoiGianTinh = x.KetQua.ThoiGianTinh,
+					MaDotDanhGia = x.KetQua.MaDotDanhGia,
+					TenDotDanhGia = x.KetQua.DotDanhGia.TenDot ?? string.Empty
 				})
 				.ToListAsync();
 
@@ -129,6 +139,7 @@ namespace EmployeeEvaluation360.Services
 			pageSize = pageSize < 1 ? 10 : pageSize;
 
 			var query = _context.KETQUA_DANHGIA
+				.Include(kq => kq.DotDanhGia)
 				.Join(_context.NGUOIDUNG,
 					kq => kq.MaNguoiDung,
 					nd => nd.MaNguoiDung,
@@ -143,7 +154,7 @@ namespace EmployeeEvaluation360.Services
 				.Where(x => latestResults
 					.Any(lr => lr.MaNguoiDung == x.KetQua.MaNguoiDung && lr.MaxThoiGianTinh == x.KetQua.ThoiGianTinh));
 
-			query = query.Where(x => x.KetQua.DiemTongKet < 40);
+			query = query.Where(x => x.KetQua.DiemTongKet <= 40);
 
 			if (!string.IsNullOrEmpty(search))
 			{
@@ -162,10 +173,13 @@ namespace EmployeeEvaluation360.Services
 				.Take(pageSize)
 				.Select(x => new KetQua_DanhGiaChiTietDto
 				{
+					MaKetQuaDanhGia = x.KetQua.MaKetQua,
 					MaNguoiDung = x.KetQua.MaNguoiDung,
 					HoTen = x.NguoiDung.HoTen ?? string.Empty,
 					DiemTongKet = x.KetQua.DiemTongKet,
-					ThoiGianTinh = x.KetQua.ThoiGianTinh
+					ThoiGianTinh = x.KetQua.ThoiGianTinh,
+					MaDotDanhGia = x.KetQua.MaDotDanhGia,
+					TenDotDanhGia = x.KetQua.DotDanhGia.TenDot ?? string.Empty
 				})
 				.ToListAsync();
 
@@ -185,6 +199,7 @@ namespace EmployeeEvaluation360.Services
 			pageSize = pageSize < 1 ? 10 : pageSize;
 
 			var query = _context.KETQUA_DANHGIA
+				.Include(kq => kq.DotDanhGia)
 				.Join(_context.NGUOIDUNG,
 					kq => kq.MaNguoiDung,
 					nd => nd.MaNguoiDung,
@@ -208,10 +223,13 @@ namespace EmployeeEvaluation360.Services
 				.Take(pageSize)
 				.Select(x => new KetQua_DanhGiaChiTietDto
 				{
+					MaKetQuaDanhGia = x.KetQua.MaKetQua,
 					MaNguoiDung = x.KetQua.MaNguoiDung,
 					HoTen = x.NguoiDung.HoTen ?? string.Empty,
 					DiemTongKet = x.KetQua.DiemTongKet,
-					ThoiGianTinh = x.KetQua.ThoiGianTinh
+					ThoiGianTinh = x.KetQua.ThoiGianTinh,
+					MaDotDanhGia = x.KetQua.MaDotDanhGia,
+					TenDotDanhGia = x.KetQua.DotDanhGia.TenDot ?? string.Empty
 				})
 				.ToListAsync();
 

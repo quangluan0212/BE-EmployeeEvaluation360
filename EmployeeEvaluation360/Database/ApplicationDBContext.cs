@@ -82,6 +82,10 @@ namespace EmployeeEvaluation360.Database
 					.WithMany(nd => nd.KetQuaDanhGias)
 					.HasForeignKey(kq => kq.MaNguoiDung)
 					.OnDelete(DeleteBehavior.Restrict);
+				entity.HasOne(kq => kq.DotDanhGia)
+					.WithMany(dd => dd.KetQuaDanhGias)
+					.HasForeignKey(kq => kq.MaDotDanhGia)
+					.OnDelete(DeleteBehavior.Restrict);
 			});
 
 			modelBuilder.Entity<DanhGia_CauHoi>(entity =>

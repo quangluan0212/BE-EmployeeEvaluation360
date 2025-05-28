@@ -29,6 +29,7 @@ namespace EmployeeEvaluation360.Models
 
 		public ICollection<ChiTiet_DotDanhGia> ChiTietDotDanhGias { get; set; }
 		public ICollection<DanhGia> DanhGias { get; set; }
+		public ICollection<KetQua_DanhGia> KetQuaDanhGias { get; set; }
 	}
 	[Table("CHITIET_DOTDANHGIA")]
 	public class ChiTiet_DotDanhGia

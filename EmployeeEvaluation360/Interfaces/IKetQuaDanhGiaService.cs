@@ -8,6 +8,6 @@ namespace EmployeeEvaluation360.Interfaces
 		Task<PagedResult<KetQua_DanhGiaChiTietDto>> GetAll(int page, int pageSize, string? search);
 		Task<PagedResult<KetQua_DanhGiaChiTietDto>> GetBadCurrent(int page, int pageSize, string? search);
 		Task<PagedResult<KetQua_DanhGiaChiTietDto>> GetGoodCurrent(int page, int pageSize, string? search);
-		Task<PagedResult<KetQua_DanhGiaChiTietDto>> GetCurrent(int page, int pageSize, string? search);
+		Task<PagedResult<KetQua_DanhGiaChiTietDto>> GetLatest(int page, int pageSize, string? search);
 	}
 }

@@ -12,7 +12,7 @@ namespace EmployeeEvaluation360.Controllers
 		{
 			_service = ketQuaDanhGiaService;
 		}
-		[HttpGet("GetKetQuaDanhGia")]
+		[HttpGet("get-all-ket-qua-danh-gia")]
 		public async Task<IActionResult> GetKetQuaDanhGiaPagedResult(int page = 1, int pageSize = 10, string? search = null)
 		{
 			try
@@ -26,12 +26,12 @@ namespace EmployeeEvaluation360.Controllers
 			}
 		}
 
-		[HttpGet("GetCurrentKetQuaDanhGia")]
+		[HttpGet("get-latest-ket-qua-danh-gia")]
 		public async Task<IActionResult> GetCurrentKetQuaDanhGiaPagedResult(int page = 1, int pageSize = 10, string? search = null)
 		{
 			try
 			{
-				var result = await _service.GetCurrent(page, pageSize, search);
+				var result = await _service.GetLatest(page, pageSize, search);
 				return Ok(result);
 			}
 			catch (Exception ex)
@@ -39,7 +39,7 @@ namespace EmployeeEvaluation360.Controllers
 				return BadRequest(new { message = ex.Message });
 			}
 		}
-		[HttpGet("GetGoodKetQuaDanhGia")]
+		[HttpGet("get-good-ket-qua-danh-gia")]
 		public async Task<IActionResult> GetGoodKetQuaDanhGiaPagedResult(int page = 1, int pageSize = 10, string? search = null)
 		{
 			try
@@ -52,7 +52,7 @@ namespace EmployeeEvaluation360.Controllers
 				return BadRequest(new { message = ex.Message });
 			}
 		}
-		[HttpGet("GetBadKetQuaDanhGia")]
+		[HttpGet("get-bad-ket-qua-danh-gia")]
 		public async Task<IActionResult> GetBadKetQuaDanhGiaPagedResult(int page = 1, int pageSize = 10, string? search = null)
 		{
 			try

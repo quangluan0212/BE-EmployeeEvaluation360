@@ -23,7 +23,14 @@ namespace EmployeeEvaluation360.Models
 		[Column("ThoiGianTinh", TypeName = "DATETIME")]
 		public DateTime ThoiGianTinh { get; set; }
 
+		[Required]
+		[Column("MaDotDanhGia")]
+		public int MaDotDanhGia { get; set; }
+
 		[ForeignKey("MaNguoiDung")]
 		public NguoiDung NguoiDung { get; set; }
+
+		[ForeignKey("MaDotDanhGia")]
+		public DotDanhGia DotDanhGia { get; set; }
 	}
 }

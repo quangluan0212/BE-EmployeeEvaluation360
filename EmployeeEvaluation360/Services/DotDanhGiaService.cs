@@ -68,7 +68,8 @@ namespace EmployeeEvaluation360.Services
 					{
 						MaNguoiDung = item.MaNguoiDung,
 						DiemTongKet = finalScore,
-						ThoiGianTinh = dotDanhGia.ThoiGianKetThuc
+						ThoiGianTinh = dotDanhGia.ThoiGianKetThuc,
+						MaDotDanhGia = maDotDanhGia,
 					};
 					await _context.KETQUA_DANHGIA.AddAsync(ketQuaDanhGia);
 
