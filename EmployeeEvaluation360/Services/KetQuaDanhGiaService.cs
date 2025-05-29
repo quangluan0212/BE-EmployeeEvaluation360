@@ -13,7 +13,7 @@ namespace EmployeeEvaluation360.Services
 		{
 			_context = context;
 		}
-		public async Task<PagedResult<KetQua_DanhGiaChiTietDto>> GetLatest(int page = 1, int pageSize = 10, string? search = null)
+		public async Task<PagedResult<KetQua_DanhGiaChiTietDto>> GetLatestPaged(int page = 1, int pageSize = 10, string? search = null)
 		{
 			page = page < 1 ? 1 : page;
 			pageSize = pageSize < 1 ? 10 : pageSize;
@@ -73,7 +73,45 @@ namespace EmployeeEvaluation360.Services
 			};
 		}
 
-		public async Task<PagedResult<KetQua_DanhGiaChiTietDto>> GetGoodCurrent(int page = 1,int pageSize = 10,string? search = null)
+		public async Task<List<KetQua_DanhGiaChiTietDto>> GetLatest()
+		{
+			var query = _context.KETQUA_DANHGIA
+				.Include(kq => kq.DotDanhGia)
+				.Join(_context.NGUOIDUNG,
+					kq => kq.MaNguoiDung,
+					nd => nd.MaNguoiDung,
+					(kq, nd) => new { KetQua = kq, NguoiDung = nd })
+				.AsQueryable();
+
+			var latestResults = _context.KETQUA_DANHGIA
+				.Include(x => x.NguoiDung)
+				.GroupBy(x => x.MaNguoiDung)
+				.Select(g => new { MaNguoiDung = g.Key, MaxThoiGianTinh = g.Max(x => x.ThoiGianTinh) });
+
+			query = query
+				.Where(x => latestResults
+					.Any(lr => lr.MaNguoiDung == x.KetQua.MaNguoiDung && lr.MaxThoiGianTinh == x.KetQua.ThoiGianTinh));
+
+			var results = await query
+				.OrderByDescending(x => x.KetQua.ThoiGianTinh)
+				.Select(x => new KetQua_DanhGiaChiTietDto
+				{
+					MaKetQuaDanhGia = x.KetQua.MaKetQua,
+					MaNguoiDung = x.KetQua.MaNguoiDung,
+					HoTen = x.NguoiDung.HoTen ?? string.Empty,
+					DiemTongKet = x.KetQua.DiemTongKet,
+					ThoiGianTinh = x.KetQua.ThoiGianTinh,
+					MaDotDanhGia = x.KetQua.MaDotDanhGia,
+					TenDotDanhGia = x.KetQua.DotDanhGia.TenDot ?? string.Empty
+
+				})
+				.ToListAsync();
+
+			return results;
+		}
+
+
+		public async Task<PagedResult<KetQua_DanhGiaChiTietDto>> GetGoodCurrentPaged(int page = 1,int pageSize = 10,string? search = null)
 		{
 			page = page < 1 ? 1 : page;
 			pageSize = pageSize < 1 ? 10 : pageSize;
@@ -133,7 +171,47 @@ namespace EmployeeEvaluation360.Services
 			};
 		}
 
-		public async Task<PagedResult<KetQua_DanhGiaChiTietDto>> GetBadCurrent(int page = 1,int pageSize = 10,string? search = null)
+		public async Task<List<KetQua_DanhGiaChiTietDto>> GetGoodCurrent()
+		{
+
+			var query = _context.KETQUA_DANHGIA
+				.Include(kq => kq.DotDanhGia)
+				.Join(_context.NGUOIDUNG,
+					kq => kq.MaNguoiDung,
+					nd => nd.MaNguoiDung,
+					(kq, nd) => new { KetQua = kq, NguoiDung = nd })
+				.AsQueryable();
+
+			var latestResults = _context.KETQUA_DANHGIA
+				.GroupBy(x => x.MaNguoiDung)
+				.Select(g => new { MaNguoiDung = g.Key, MaxThoiGianTinh = g.Max(x => x.ThoiGianTinh) });
+
+			query = query
+				.Where(x => latestResults
+					.Any(lr => lr.MaNguoiDung == x.KetQua.MaNguoiDung && lr.MaxThoiGianTinh == x.KetQua.ThoiGianTinh));
+
+			query = query.Where(x => x.KetQua.DiemTongKet >= 90);		
+
+		
+			var results = await query
+				.OrderByDescending(x => x.KetQua.ThoiGianTinh)
+				.Select(x => new KetQua_DanhGiaChiTietDto
+				{
+					MaKetQuaDanhGia = x.KetQua.MaKetQua,
+					MaNguoiDung = x.KetQua.MaNguoiDung,
+					HoTen = x.NguoiDung.HoTen ?? string.Empty,
+					DiemTongKet = x.KetQua.DiemTongKet,
+					ThoiGianTinh = x.KetQua.ThoiGianTinh,
+					MaDotDanhGia = x.KetQua.MaDotDanhGia,
+					TenDotDanhGia = x.KetQua.DotDanhGia.TenDot ?? string.Empty
+				})
+				.ToListAsync();
+
+			return results;
+		}
+
+
+		public async Task<PagedResult<KetQua_DanhGiaChiTietDto>> GetBadCurrentPaged(int page = 1,int pageSize = 10,string? search = null)
 		{
 			page = page < 1 ? 1 : page;
 			pageSize = pageSize < 1 ? 10 : pageSize;
@@ -192,8 +270,48 @@ namespace EmployeeEvaluation360.Services
 				Items = results
 			};
 		}
+		public async Task<List<KetQua_DanhGiaChiTietDto>> GetBadCurrent()
+		{
+			
 
-		public async Task<PagedResult<KetQua_DanhGiaChiTietDto>> GetAll(int page = 1,int pageSize = 10,string? search = null)
+			var query = _context.KETQUA_DANHGIA
+				.Include(kq => kq.DotDanhGia)
+				.Join(_context.NGUOIDUNG,
+					kq => kq.MaNguoiDung,
+					nd => nd.MaNguoiDung,
+					(kq, nd) => new { KetQua = kq, NguoiDung = nd })
+				.AsQueryable();
+
+			var latestResults = _context.KETQUA_DANHGIA
+				.GroupBy(x => x.MaNguoiDung)
+				.Select(g => new { MaNguoiDung = g.Key, MaxThoiGianTinh = g.Max(x => x.ThoiGianTinh) });
+
+			query = query
+				.Where(x => latestResults
+					.Any(lr => lr.MaNguoiDung == x.KetQua.MaNguoiDung && lr.MaxThoiGianTinh == x.KetQua.ThoiGianTinh));
+
+			query = query.Where(x => x.KetQua.DiemTongKet <= 40);
+
+
+			var results = await query
+				.OrderByDescending(x => x.KetQua.ThoiGianTinh)
+				.Select(x => new KetQua_DanhGiaChiTietDto
+				{
+					MaKetQuaDanhGia = x.KetQua.MaKetQua,
+					MaNguoiDung = x.KetQua.MaNguoiDung,
+					HoTen = x.NguoiDung.HoTen ?? string.Empty,
+					DiemTongKet = x.KetQua.DiemTongKet,
+					ThoiGianTinh = x.KetQua.ThoiGianTinh,
+					MaDotDanhGia = x.KetQua.MaDotDanhGia,
+					TenDotDanhGia = x.KetQua.DotDanhGia.TenDot ?? string.Empty
+				})
+				.ToListAsync();
+
+			return results;
+		}
+
+
+		public async Task<PagedResult<KetQua_DanhGiaChiTietDto>> GetAllPaged(int page = 1,int pageSize = 10,string? search = null)
 		{
 			page = page < 1 ? 1 : page;
 			pageSize = pageSize < 1 ? 10 : pageSize;
@@ -241,6 +359,34 @@ namespace EmployeeEvaluation360.Services
 				TotalPages = totalPages,
 				Items = results
 			};
+		}
+
+		public async Task<List<KetQua_DanhGiaChiTietDto>> GetAll()
+		{
+
+			var query = _context.KETQUA_DANHGIA
+				.Include(kq => kq.DotDanhGia)
+				.Join(_context.NGUOIDUNG,
+					kq => kq.MaNguoiDung,
+					nd => nd.MaNguoiDung,
+					(kq, nd) => new { KetQua = kq, NguoiDung = nd })
+				.AsQueryable();
+
+
+			var results = await query
+				.Select(x => new KetQua_DanhGiaChiTietDto
+				{
+					MaKetQuaDanhGia = x.KetQua.MaKetQua,
+					MaNguoiDung = x.KetQua.MaNguoiDung,
+					HoTen = x.NguoiDung.HoTen ?? string.Empty,
+					DiemTongKet = x.KetQua.DiemTongKet,
+					ThoiGianTinh = x.KetQua.ThoiGianTinh,
+					MaDotDanhGia = x.KetQua.MaDotDanhGia,
+					TenDotDanhGia = x.KetQua.DotDanhGia.TenDot ?? string.Empty
+				})
+				.ToListAsync();
+
+			return results;
 		}
 	}
 }
