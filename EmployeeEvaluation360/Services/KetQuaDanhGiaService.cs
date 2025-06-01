@@ -13,7 +13,7 @@ namespace EmployeeEvaluation360.Services
 		{
 			_context = context;
 		}
-		public async Task<PagedResult<KetQua_DanhGiaChiTietDto>> GetLatestPaged(int page = 1, int pageSize = 10, string? search = null)
+		public async Task<PagedResult<KetQua_DanhGiaChiTietDto>> GetLatestPaged(int page = 1, int pageSize = 10, string? search = null, int? year = 2025)
 		{
 			page = page < 1 ? 1 : page;
 			pageSize = pageSize < 1 ? 10 : pageSize;
@@ -26,14 +26,10 @@ namespace EmployeeEvaluation360.Services
 					(kq, nd) => new { KetQua = kq, NguoiDung = nd })
 				.AsQueryable();
 
-			var latestResults = _context.KETQUA_DANHGIA
-				.Include(x => x.NguoiDung)
-				.GroupBy(x => x.MaNguoiDung)
-				.Select(g => new { MaNguoiDung = g.Key, MaxThoiGianTinh = g.Max(x => x.ThoiGianTinh) });
-
-			query = query
-				.Where(x => latestResults
-					.Any(lr => lr.MaNguoiDung == x.KetQua.MaNguoiDung && lr.MaxThoiGianTinh == x.KetQua.ThoiGianTinh));
+			if (year.HasValue)
+			{
+				query = query.Where(x => x.KetQua.ThoiGianTinh.Year == year.Value);
+			}
 
 			if (!string.IsNullOrEmpty(search))
 			{
@@ -41,9 +37,7 @@ namespace EmployeeEvaluation360.Services
 			}
 
 			var totalRecords = await query.CountAsync();
-
 			var totalPages = (int)Math.Ceiling((double)totalRecords / pageSize);
-
 			page = page > totalPages && totalPages > 0 ? totalPages : page;
 
 			var results = await query
@@ -52,14 +46,12 @@ namespace EmployeeEvaluation360.Services
 				.Take(pageSize)
 				.Select(x => new KetQua_DanhGiaChiTietDto
 				{
-					MaKetQuaDanhGia = x.KetQua.MaKetQua,
 					MaNguoiDung = x.KetQua.MaNguoiDung,
 					HoTen = x.NguoiDung.HoTen ?? string.Empty,
 					DiemTongKet = x.KetQua.DiemTongKet,
 					ThoiGianTinh = x.KetQua.ThoiGianTinh,
 					MaDotDanhGia = x.KetQua.MaDotDanhGia,
-					TenDotDanhGia = x.KetQua.DotDanhGia.TenDot ?? string.Empty
-
+					TenDotDanhGia = x.KetQua.DotDanhGia != null ? x.KetQua.DotDanhGia.TenDot ?? string.Empty : string.Empty
 				})
 				.ToListAsync();
 
@@ -109,7 +101,6 @@ namespace EmployeeEvaluation360.Services
 
 			return results;
 		}
-
 
 		public async Task<PagedResult<KetQua_DanhGiaChiTietDto>> GetGoodCurrentPaged(int page = 1,int pageSize = 10,string? search = null)
 		{

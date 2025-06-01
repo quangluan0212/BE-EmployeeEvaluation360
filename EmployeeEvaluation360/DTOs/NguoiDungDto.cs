@@ -32,6 +32,17 @@ namespace EmployeeEvaluation360.DTOs
 		public string TrangThai { get; set; }
 	}
 
+	public class NguoiDungKhongNhomDto
+	{
+		public string MaNguoiDung { get; set; } = string.Empty;
+
+		public string HoTen { get; set; } = string.Empty;
+
+		public int SoDuAn { get; set; }
+
+		public string ChucVu { get; set; } = string.Empty;
+	}
+
 	public class BaseNguoiDungDto 
 	{
 	}
@@ -145,7 +156,5 @@ namespace EmployeeEvaluation360.DTOs
 		public string MaNguoiDung { get; set; } = string.Empty;
 		public string Hoten { get; set; } = string.Empty;
 		public string TenNhom { get; set; } = string.Empty;
-		
-
 	}
 }

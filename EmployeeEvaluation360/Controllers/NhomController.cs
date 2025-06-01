@@ -15,6 +15,29 @@ namespace EmployeeEvaluation360.Controllers
 		{
 			_nhomService = nhomService;
 		}
+
+		[HttpDelete("xoa-thanh-vien-khoi-nhom")]
+		public async Task<IActionResult> XoaThanhVienKhoiNhom(int maNhom, string maNguoiDung)
+		{
+			if (string.IsNullOrEmpty(maNguoiDung))
+			{
+				return BadRequest(Error<string>("Mã người dùng không được để trống."));
+			}
+			var isDeleted = await _nhomService.XoaThanhVien(maNhom, maNguoiDung);
+			if (!isDeleted)
+			{
+				return BadRequest(Error<string>("Có lỗi khi xóa thành viên khỏi nhóm!"));
+			}
+			return Ok(Success<string>("Thành viên đã được xóa khỏi nhóm thành công."));
+		}
+
+		[HttpGet("danh-sach-nguoi-dung-khong-co-trong-nhom")]
+		public async Task<IActionResult> GetDanhSachNguoiDungKhongCoTrongNhom(int maNhom)
+		{
+			var result = await _nhomService.LayDanhSachNguoiDungKhongCoTrongNhomAsync(maNhom);
+			return Ok(Success(result));
+		}
+
 		[HttpGet("danh-sach-nhom")]
 		public async Task<IActionResult> GetDanhSachNhom(int page = 1, int pageSize = 10, string? search = null)
 		{
@@ -86,7 +109,7 @@ namespace EmployeeEvaluation360.Controllers
 			return Ok(Success<string>("Nhóm đã được xóa thành công."));
 		}
 
-		[HttpPost("them-nhan-vien-vao-nhom")]
+		[HttpPost("them-thanh-vien-vao-nhom")]
 		public async Task<IActionResult> ThemNhanVienVaoNhom([FromBody] ThemNhanVienVaoNhomDto addDto)
 		{
 			if (!ModelState.IsValid)

@@ -15,7 +15,51 @@ namespace EmployeeEvaluation360.Services
 		{
 			_context = context;
 		}
+		public async Task<bool> XoaThanhVien(int maNhom, string maNguoiDung)
+		{
+			var nhomNguoiDung = await _context.NHOM_NGUOIDUNG
+				.FirstOrDefaultAsync(x => x.MaNhom == maNhom && x.MaNguoiDung == maNguoiDung);
+			if (nhomNguoiDung == null)
+			{
+				return false;
+			}
+			var result = await _context.NHOM_NGUOIDUNG
+				.Where(x => x.MaNhom == maNhom && x.MaNguoiDung == maNguoiDung)
+				.ExecuteDeleteAsync();
+			if (result <= 0)
+			{
+				return false;
+			}
+			return true;
+		}
+		public async Task<List<NguoiDungKhongNhomDto>> LayDanhSachNguoiDungKhongCoTrongNhomAsync(int maNhom)
+		{
+			try
+			{
+				var usersNotInGroup = await _context.NGUOIDUNG
+					.Where(nd => nd.TrangThai == "Active" &&
+								 !nd.NguoiDungChucVus.Any(r => r.ChucVu.TenChucVu == "Admin") &&
+								 !nd.NhomNguoiDungs.Any(nnd => nnd.MaNhom == maNhom))
+					.Select(nd => new NguoiDungKhongNhomDto
+					{
+						MaNguoiDung = nd.MaNguoiDung,
+						HoTen = nd.HoTen ?? string.Empty,
+						SoDuAn = nd.NhomNguoiDungs != null ? nd.NhomNguoiDungs.Count : 0,
+						ChucVu = nd.NguoiDungChucVus
+							.Select(c => c.ChucVu.TenChucVu)
+							.Where(cv => cv != null)
+							.FirstOrDefault() ?? string.Empty
+					})
+					.ToListAsync();
 
+				return usersNotInGroup;
+			}
+			catch (Exception ex)
+			{
+				Console.WriteLine($"Lỗi khi lấy danh sách người dùng không thuộc nhóm {maNhom}: {ex.Message}\nStackTrace: {ex.StackTrace}");
+				throw;
+			}
+		}
 		public Task<bool> DeleteNhomAsync(int maNhom)
 		{
 			var nhom = _context.NHOM.FirstOrDefault(x => x.MaNhom == maNhom);

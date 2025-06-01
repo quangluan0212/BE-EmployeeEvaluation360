@@ -6,7 +6,7 @@ namespace EmployeeEvaluation360.Controllers
 {
 	[Route("api/[controller]")]
 	[ApiController]
-	[Authorize]
+	//[Authorize]
 	public class KetQuaDanhGiaController : BaseController
 	{
 		private readonly IKetQuaDanhGiaService _service;
@@ -30,13 +30,13 @@ namespace EmployeeEvaluation360.Controllers
 			}
 		}
 
-		[Authorize(Roles = "Admin")]
+		//[Authorize(Roles = "Admin")]
 		[HttpGet("get-latest-ket-qua-danh-gia-paged")]
-		public async Task<IActionResult> GetCurrentKetQuaDanhGiaPagedResult(int page = 1, int pageSize = 10, string? search = null)
+		public async Task<IActionResult> GetCurrentKetQuaDanhGiaPagedResult(int page = 1, int pageSize = 10, string? search = null, int? year = null)
 		{
 			try
 			{
-				var result = await _service.GetLatestPaged(page, pageSize, search);
+				var result = await _service.GetLatestPaged(page, pageSize, search, year);
 				return Ok(Success(result));
 			}
 			catch (Exception ex)
