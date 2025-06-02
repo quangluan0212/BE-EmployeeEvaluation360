@@ -16,6 +16,20 @@ namespace EmployeeEvaluation360.Services
 			_context = context;
 		}
 
+		public async Task<List<DotDanhGiaDto>> getDotDanhGiaByYear(int? year = null)
+		{
+			if(!year.HasValue)
+			{
+				var result = await _context.DOT_DANHGIA
+				.Where(d => d.ThoiGianBatDau.Year == DateTime.Now.Year || d.ThoiGianKetThuc.Year == DateTime.Now.Year)
+				.ToListAsync();
+				return result.Select(d => d.ToDto()).ToList();
+			}
+			var dotDanhGias = await _context.DOT_DANHGIA
+				.Where(d => d.ThoiGianBatDau.Year == year || d.ThoiGianKetThuc.Year == year)
+				.ToListAsync();
+			return dotDanhGias.Select(d => d.ToDto()).ToList();
+		}
 		private async Task<string> CreateKetQuaDanhGiaByMaNguoiDung(int maDotDanhGia)
 		{
 			try

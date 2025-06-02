@@ -15,6 +15,20 @@ namespace EmployeeEvaluation360.Controllers
 			_service = dddService;
 		}
 
+		[HttpGet("get-danh-sach-dot-danh-gia-theo-nam")]
+		public async Task<IActionResult> getDanhSachDotDanhGiaTheoNam(int? year)
+		{
+			var ddd = await _service.getDotDanhGiaByYear(year);
+			if (ddd == null)
+			{
+				return BadRequest(Error<string>("Lỗi khi lấy danh sách đợt đánh giá theo năm !!!"));
+			}
+			else
+			{
+				return Ok(Success(ddd));
+			}
+		}
+
 		[HttpPut("admin-update-dot-danh-gia")]
 		[Authorize(Roles = "Admin")]
 		public async Task<IActionResult> UpdateDotDanhGia(UpdateDotDanhGia updateDotDanhGia)

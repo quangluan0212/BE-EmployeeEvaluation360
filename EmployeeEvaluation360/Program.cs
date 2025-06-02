@@ -61,6 +61,7 @@ namespace EmployeeEvaluation360
 			builder.Services.AddScoped<IMauDanhGiaService, MauDanhGiaService>();
 			builder.Services.AddScoped<IMailService, MailService>();
 			builder.Services.AddScoped<IKetQuaDanhGiaService, KetQuaDanhGiaService>();
+
 			builder.Services.AddMemoryCache();
 
 
