@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Security.Claims;
+using Microsoft.AspNetCore.DataProtection;
 
 namespace EmployeeEvaluation360
 {
@@ -108,6 +109,9 @@ namespace EmployeeEvaluation360
 				options.JsonSerializerOptions.WriteIndented = true;
 			});
 
+			builder.Services.AddDataProtection()
+				.PersistKeysToFileSystem(new DirectoryInfo("/root/.aspnet/DataProtection-Keys"));
+
 			builder.Services.AddCors(options =>
 			{
 				options.AddPolicy("AllowFrontend",
@@ -132,14 +136,19 @@ namespace EmployeeEvaluation360
 
 			var app = builder.Build();
 
-            // Configure the HTTP request pipeline.
-            if (app.Environment.IsDevelopment())
-            {
-                app.UseSwagger();
-                app.UseSwaggerUI();
-            }
+			// Configure the HTTP request pipeline.
+			if (app.Environment.IsDevelopment())
+			{
+				app.UseSwagger();
+				app.UseSwaggerUI();
+				
+			}
+			else // redirect HTTPS khi KHÔNG phải môi trường dev
+			{
+				app.UseHttpsRedirection();
+			}
 
-            app.UseHttpsRedirection();
+
 			app.UseAuthentication();
 			app.UseAuthorization();
 

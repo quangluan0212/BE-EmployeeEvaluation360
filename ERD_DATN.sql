@@ -1,10 +1,28 @@
 ﻿-- 0. Nếu chưa có thì tạo database
-use master
-Drop database [VietAn360_DB];
-go
+-- use master
+-- Drop database [VietAn360_DB];
+-- go
+-- EXEC sp_addrolemember 'db_owner', 'sa';
+-- GO
+-- IF DB_ID(N'VietAn360_DB') IS NULL
+--     CREATE DATABASE [VietAn360_DB];
+-- GO
+USE master;
+GO
 
-IF DB_ID(N'VietAn360_DB') IS NULL
-    CREATE DATABASE [VietAn360_DB];
+PRINT 'Server name: ' + @@SERVERNAME;
+PRINT 'Current database: ' + DB_NAME();
+PRINT 'User: ' + USER_NAME();
+
+IF NOT EXISTS (SELECT name FROM sys.databases WHERE name = 'VietAn360_DB')
+    BEGIN
+        CREATE DATABASE VietAn360_DB;
+        PRINT 'Database VietAn360_DB created';
+    END
+ELSE
+    BEGIN
+        PRINT 'Database VietAn360_DB already exists';
+    END
 GO
 
 USE [VietAn360_DB];

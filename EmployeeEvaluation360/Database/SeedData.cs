@@ -50,7 +50,7 @@ namespace EmployeeEvaluation360.Database
 		private string GenerateMaNguoiDung(DateTime ngayVaoCongTy)
 		{
 			string year = ngayVaoCongTy.Year.ToString();
-			string prefix = $"{year}NV";
+			string prefix = $"{year}NV000";
 			string MaNguoiDung = $"{prefix}{"1"}";
 			return MaNguoiDung;
 		}
