@@ -125,6 +125,53 @@ namespace EmployeeEvaluation360.Services
 			};
 		}
 
+		public async Task<ProfileNguoiDungDto> GetProfileAsync(string maNguoiDung)
+		{
+			if (string.IsNullOrWhiteSpace(maNguoiDung))
+			{
+				return null;
+			}
+
+			if (!await NguoiDungExistsAsync(maNguoiDung))
+			{
+				return null;
+			}
+
+			try
+			{
+				var nguoiDung = await _context.NGUOIDUNG
+					.Include(nd => nd.NguoiDungChucVus)
+						.ThenInclude(ndcv => ndcv.ChucVu)
+					.AsNoTracking()
+					.FirstOrDefaultAsync(nd => nd.MaNguoiDung == maNguoiDung);
+
+				if (nguoiDung == null)
+				{
+					return null; 
+				}
+
+				var chucVuActive = nguoiDung.NguoiDungChucVus
+					.FirstOrDefault(c => c.TrangThai == "Active");
+
+				var result = new ProfileNguoiDungDto
+				{
+					MaNguoiDung = nguoiDung.MaNguoiDung,
+					HoTen = nguoiDung.HoTen ?? string.Empty,
+					Email = nguoiDung.Email ?? string.Empty,
+					DienThoai = nguoiDung.DienThoai ?? string.Empty,
+					NgayVaoCongTy = nguoiDung.NgayVaoCongTy,
+					ChucVu = chucVuActive != null ? chucVuActive.ChucVu.TenChucVu ?? string.Empty : string.Empty,
+					CapBac = chucVuActive?.CapBac ?? 0
+				};
+
+				return result;
+			}
+			catch (Exception ex)
+			{
+				Console.WriteLine($"Lỗi khi lấy hồ sơ người dùng {maNguoiDung}: {ex.Message}\nStackTrace: {ex.StackTrace}");
+				return null;
+			}
+		}
 
 		public async Task<NguoiDung> GetNguoiDungByIdAsync(string maNguoiDung)
 		{

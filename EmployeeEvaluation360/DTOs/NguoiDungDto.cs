@@ -17,6 +17,23 @@ namespace EmployeeEvaluation360.DTOs
 		public string TrangThai { get; set; }
 	}
 
+
+	public class ProfileNguoiDungDto
+	{
+		public string MaNguoiDung { get; set; }
+
+		public string HoTen { get; set; }
+
+		public string Email { get; set; }
+
+		public string DienThoai { get; set; }
+
+		public DateTime? NgayVaoCongTy { get; set; }
+		public string ChucVu { get; set; } = string.Empty;
+		public int CapBac { get; set; }
+	}
+
+
 	public class DanhSachNguoiDungDto
 	{
 		public string MaNguoiDung { get; set; }

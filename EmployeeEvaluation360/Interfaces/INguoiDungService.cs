@@ -9,7 +9,7 @@ namespace EmployeeEvaluation360.Interfaces
 		Task<NguoiDung> AdminUpdateNguoiDungAsync(string maNguoiDung, AdminUpdateNguoiDungDto updateDto);
 		Task<PagedResult<DanhSachNguoiDungDto>> GetNguoiDungWithRolePagedAsync(int page, int pageSize, string? search);
 		Task<PagedResult<NguoiDung>> GetNguoiDungPagedAsync(int page, int pageSize);
-
+		Task<ProfileNguoiDungDto> GetProfileAsync(string maNguoiDung);
 		Task<NguoiDung> GetNguoiDungByIdAsync(string maNguoiDung);
 
 		Task<NguoiDung> GetNguoiDungByEmailAsync(string email);

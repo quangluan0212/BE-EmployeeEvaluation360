@@ -88,12 +88,12 @@ namespace EmployeeEvaluation360.Controllers
 		[Authorize]
 		public async Task<ActionResult> ChiTietNguoiDung(string maNguoiDung)
 		{
-			var nguoiDung = await _nguoiDungService.GetNguoiDungByIdAsync(maNguoiDung);
+			var nguoiDung = await _nguoiDungService.GetProfileAsync(maNguoiDung);
 			if (nguoiDung == null)
 			{
 				return NotFound(Error<string>("Không tìm thấy người dùng"));
 			}
-			return Ok(Success(nguoiDung.ChiTietNguoiDungDto()));
+			return Ok(Success(nguoiDung));
 		}
 
 		[HttpPost("them-chuc-vu")]
