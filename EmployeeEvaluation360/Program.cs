@@ -140,11 +140,12 @@ namespace EmployeeEvaluation360
 			if (app.Environment.IsDevelopment())
 			{
 				app.UseSwagger();
-				app.UseSwaggerUI();
-				
+				app.UseSwaggerUI();				
 			}
 			else // redirect HTTPS khi KHÔNG phải môi trường dev
 			{
+				app.UseSwagger();
+    			app.UseSwaggerUI();
 				app.UseHttpsRedirection();
 			}
 

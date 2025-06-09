@@ -11,9 +11,11 @@ namespace EmployeeEvaluation360.Services
 	public class NhomService : INhomService
 	{
 		private readonly ApplicationDBContext _context;
-		public NhomService(ApplicationDBContext context)
+		private readonly IMailService _mailService;
+		public NhomService(ApplicationDBContext context, IMailService mailService)
 		{
 			_context = context;
+			_mailService = mailService;
 		}
 		public async Task<bool> XoaThanhVien(int maNhom, string maNguoiDung)
 		{
@@ -198,29 +200,62 @@ namespace EmployeeEvaluation360.Services
 			}
 		}
 
-
 		public async Task<List<Nhom_NguoiDung>> ThemNhanVienVaoNhom(ThemNhanVienVaoNhomDto addDto)
 		{
+			// Kiểm tra nhóm tồn tại
 			var nhom = await _context.NHOM.FindAsync(addDto.MaNhom);
 			if (nhom == null)
 			{
 				return null;
 			}
 
-			var listData = new List<Nhom_NguoiDung>();
-
-			foreach (var maNguoiDung in addDto.MaNguoiDung)
+			// Tải dữ liệu hàng loạt
+			var maNguoiDungList = addDto.MaNguoiDung?.Distinct().ToList() ?? new List<string>();
+			if (!maNguoiDungList.Any())
 			{
-				var chucVu = await _context.NGUOIDUNG_CHUCVU
-					.Where(x => x.MaNguoiDung == maNguoiDung && x.TrangThai == "Active")
-					.Select(x => x.ChucVu.TenChucVu)
-					.FirstOrDefaultAsync();
+				return new List<Nhom_NguoiDung>();
+			}
 
-				if (chucVu == null)
+			// Lấy chức vụ Active của tất cả người dùng
+			var chucVus = await _context.NGUOIDUNG_CHUCVU
+				.Where(x => maNguoiDungList.Contains(x.MaNguoiDung) && x.TrangThai == "Active")
+				.Include(x => x.ChucVu)
+				.ToDictionaryAsync(
+					x => x.MaNguoiDung,
+					x => x.ChucVu?.TenChucVu);
+
+			// Kiểm tra người dùng đã tồn tại trong nhóm
+			var existingUsers = await _context.NHOM_NGUOIDUNG
+				.Where(x => x.MaNhom == addDto.MaNhom && maNguoiDungList.Contains(x.MaNguoiDung))
+				.Select(x => x.MaNguoiDung)
+				.ToListAsync();
+
+			// Lấy thông tin người dùng (Email, HoTen)
+			var users = await _context.NGUOIDUNG
+				.Where(u => maNguoiDungList.Contains(u.MaNguoiDung))
+				.Select(u => new { u.MaNguoiDung, u.Email, u.HoTen })
+				.ToDictionaryAsync(
+					u => u.MaNguoiDung,
+					u => new { u.Email, u.HoTen });
+
+			var listData = new List<Nhom_NguoiDung>();
+			var emailTasks = new List<Task>();
+
+			foreach (var maNguoiDung in maNguoiDungList)
+			{
+				// Kiểm tra chức vụ
+				if (!chucVus.TryGetValue(maNguoiDung, out var chucVu) || string.IsNullOrEmpty(chucVu))
 				{
 					continue;
 				}
 
+				// Kiểm tra người dùng đã tồn tại trong nhóm
+				if (existingUsers.Contains(maNguoiDung))
+				{
+					return null;
+				}
+
+				// Thêm người dùng vào nhóm
 				var nhomNguoiDung = new Nhom_NguoiDung
 				{
 					MaNhom = addDto.MaNhom,
@@ -229,18 +264,34 @@ namespace EmployeeEvaluation360.Services
 					TrangThai = "Active"
 				};
 
-				var existingNhomNguoiDung = await _context.NHOM_NGUOIDUNG
-					.FirstOrDefaultAsync(x => x.MaNhom == addDto.MaNhom && x.MaNguoiDung == maNguoiDung);
-
-				if (existingNhomNguoiDung != null)
-				{
-					return null;
-				}
 				listData.Add(nhomNguoiDung);
-				await _context.NHOM_NGUOIDUNG.AddAsync(nhomNguoiDung);
+
+				// Gửi email thông báo
+				if (users.TryGetValue(maNguoiDung, out var user) && !string.IsNullOrWhiteSpace(user.Email))
+				{
+					var emailTask = _mailService.SendMailUserAddedGroup(
+						user.Email,
+						nhom.TenNhom,
+						nhom.MaNhom.ToString(),
+						user.HoTen,
+						maNguoiDung)
+						.ContinueWith(t =>
+						{
+							Console.WriteLine($"Kết quả gửi email cho {user.Email}: {t.Result}");
+						});
+					emailTasks.Add(emailTask);
+				}
 			}
 
-			await _context.SaveChangesAsync();
+			if (listData.Any())
+			{
+				// Thêm tất cả bản ghi vào database cùng lúc
+				await _context.NHOM_NGUOIDUNG.AddRangeAsync(listData);
+				await _context.SaveChangesAsync();
+				// Chờ tất cả email được gửi
+				await Task.WhenAll(emailTasks);
+			}
+
 			return listData;
 		}
 

@@ -28,6 +28,7 @@ namespace EmployeeEvaluation360.Services
 				return new List<KetQua_DanhGiaDto>();
 			}
 			var listKetQuaDanhGia = _context.KETQUA_DANHGIA
+					.Include(qkdg => qkdg.DotDanhGia)
 					.Where(x => x.MaNguoiDung == maNguoiDung)
 					.AsQueryable();
 
@@ -42,7 +43,8 @@ namespace EmployeeEvaluation360.Services
 					MaNguoiDung = x.MaNguoiDung,
 					DiemTongKet = x.DiemTongKet,
 					ThoiGianTinh =x.ThoiGianTinh,
-					MaDotDanhGia = x.MaDotDanhGia
+					MaDotDanhGia = x.MaDotDanhGia,
+					TenDotDanhGia = x.DotDanhGia.TenDot ?? string.Empty
 				}).ToListAsync();
 
 			return  result;

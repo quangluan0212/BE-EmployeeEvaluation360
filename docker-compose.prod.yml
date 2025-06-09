@@ -1,16 +1,11 @@
 services:
   employeeevaluation360:
-    image: ${DOCKER_REGISTRY-}employeeevaluation360
-    build:
-      context: .
-      dockerfile: EmployeeEvaluation360/Dockerfile
-      args:
-        BUILD_CONFIGURATION: Release
+    image: quangluan0212/vietan360-backend:latest
     environment:
       - ASPNETCORE_ENVIRONMENT=Production
       - ASPNETCORE_HTTP_PORTS=8080
       - ASPNETCORE_HTTPS_PORTS=8081
-      - ConnectionStrings__DefaultConnection=Server=sqlserver;Database=VietAn360_DB;User Id=sa;Password=YourStrong!Passw0rd;TrustServerCertificate=True
+      - ConnectionStrings__DefaultConnection=Server=sqlserver,1433;Database=VietAn360_DB;User Id=sa;Password=YourStrong!Passw0rd;TrustServerCertificate=True
       - JWT__SigningKey=sdgfijjh3466iu345g87g08c24g7204gr803g30587ghh35807fg39074fvg80493745gf082b507807g807fgf
       - SmtpSettings__Password=avas qjum nlly akdo
       - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/aspnetapp.pfx
@@ -19,8 +14,8 @@ services:
       - "8080:8080"
       - "8081:8081"
     volumes:
-      - ./keys:/root/.aspnet/DataProtection-Keys
-      - ${USERPROFILE}/.aspnet/https:/https:ro
+      - ./keys:/root/.aspnet/DataProtection-Keys:ro
+      - C:/Users/LE QUANG LUAN/.aspnet/https:/https:ro
     depends_on:
       sqlserver:
         condition: service_healthy
@@ -28,6 +23,14 @@ services:
         condition: service_completed_successfully
     networks:
       - app-network
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 512m
+        reservations:
+          cpus: '0.25'
+          memory: 256m
 
   sqlserver:
     image: mcr.microsoft.com/mssql/server:2019-latest
@@ -46,18 +49,27 @@ services:
       start_period: 10s
     networks:
       - app-network
+    deploy:
+      resources:
+        limits:
+          cpus: '1.0'
+          memory: 2g
+        reservations:
+          cpus: '0.5'
+          memory: 1g
 
   sqlserver-init:
-    image: mcr.microsoft.com/mssql-tools
+    image: quangluan0212/vietan360-sqlserver-init:latest
     depends_on:
       sqlserver:
         condition: service_healthy
-    volumes:
-      - ./ERD_DATN.sql:/ERD_DATN.sql
-      - ./init-db.sh:/init-db.sh:ro
-    command: ["bash", "/init-db.sh"]
     networks:
       - app-network
+    deploy:
+      resources:
+        limits:
+          cpus: '0.25'
+          memory: 256m
 
 networks:
   app-network:

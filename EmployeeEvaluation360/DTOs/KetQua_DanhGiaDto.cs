@@ -6,6 +6,7 @@
 		public decimal DiemTongKet { get; set; }
 		public DateTime ThoiGianTinh { get; set; } = DateTime.Now;
 		public int MaDotDanhGia { get; set; }
+		public string TenDotDanhGia { get; set; } = string.Empty;
 	}
 	public class KetQua_DanhGiaChiTietDto
 	{
