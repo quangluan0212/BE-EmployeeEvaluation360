@@ -1,5 +1,6 @@
 ﻿using EmployeeEvaluation360.Database;
 using EmployeeEvaluation360.DTOs;
+using EmployeeEvaluation360.Helppers;
 using EmployeeEvaluation360.Interfaces;
 using EmployeeEvaluation360.Models;
 using Microsoft.EntityFrameworkCore;
@@ -12,6 +13,389 @@ namespace EmployeeEvaluation360.Services
 		public DanhGiaService(ApplicationDBContext applicationDBContext)
 		{
 			_context = applicationDBContext;
+		}
+
+		private async Task<int> GetLatestMaDotDanhGia()
+		{
+			// Tìm DotDanhGia gần nhất dựa trên ThoiGianKetThuc
+			var latestDotDanhGia = await _context.DOT_DANHGIA
+				.Where(dd => dd.TrangThai == "Inactive")
+				.OrderByDescending(dd => dd.ThoiGianKetThuc)
+				.Select(dd => dd.MaDotDanhGia)
+				.FirstOrDefaultAsync();
+
+			return latestDotDanhGia;
+		}
+
+		public async Task<List<NguoiThieuDanhGiaDto>> GetDanhSachNguoiThieuDanhGiaAsync(int? maDotDanhGia = null)
+		{
+			// Xác định MaDotDanhGia sẽ sử dụng
+			int selectedMaDotDanhGia = maDotDanhGia ?? await GetLatestMaDotDanhGia();
+
+			if (selectedMaDotDanhGia == 0) // Không tìm thấy DotDanhGia phù hợp
+			{
+				new List<NguoiThieuDanhGiaDto>();
+			}
+			try
+			{
+				// Truy vấn người dùng có đánh giá chưa hoàn thành
+				var query = _context.DANHGIA
+					.Where(dg => dg.MaDotDanhGia == selectedMaDotDanhGia
+								 && dg.TrangThai == "Chưa đánh giá"
+								 && dg.NguoiDanhGiaObj != null
+								 && dg.NguoiDanhGiaObj.TrangThai == "Active")
+					.Select(dg => new
+					{
+						nd = dg.NguoiDanhGiaObj!,
+						chucVu = dg.NguoiDanhGiaObj.NguoiDungChucVus
+							.Where(c => c.TrangThai == "Active")
+							.Select(c => c.ChucVu.TenChucVu)
+							.FirstOrDefault()
+					})
+					.GroupBy(x => new { x.nd.MaNguoiDung, x.nd.HoTen, TenChucVu = x.chucVu ?? "" })
+					.Select(g => new
+					{
+						g.Key.MaNguoiDung,
+						g.Key.HoTen,
+						g.Key.TenChucVu,
+						SoDanhGiaConThieu = g.Count()
+					});
+
+				var results = await query
+					.OrderBy(x => x.MaNguoiDung)
+					.Select(x => new NguoiThieuDanhGiaDto
+					{
+						MaNguoiDung = x.MaNguoiDung,
+						HoTen = x.HoTen ?? string.Empty,
+						TenChucVu = x.TenChucVu ?? string.Empty,
+						SoDanhGiaConThieu = x.SoDanhGiaConThieu
+					})
+					.ToListAsync();
+
+				return results;
+			}
+			catch (Exception ex)
+			{
+				Console.WriteLine($"Lỗi khi lấy danh sách người thiếu đánh giá: {ex.Message}\nStackTrace: {ex.StackTrace}");
+				return new List<NguoiThieuDanhGiaDto>();
+			}
+		}
+
+		public async Task<PagedResult<NguoiThieuDanhGiaDto>> GetDanhSachNguoiThieuDanhGiaPagedAsync(int page = 1, int pageSize = 10, string? search = null, int? maDotDanhGia = null)
+		{
+			page = page < 1 ? 1 : page;
+			pageSize = pageSize < 1 ? 10 : pageSize;
+
+			// Xác định MaDotDanhGia sẽ sử dụng
+			int selectedMaDotDanhGia = maDotDanhGia ?? await GetLatestMaDotDanhGia();
+
+			if (selectedMaDotDanhGia == 0) // Không tìm thấy DotDanhGia phù hợp
+			{
+				return new PagedResult<NguoiThieuDanhGiaDto>
+				{
+					CurrentPage = page,
+					PageSize = pageSize,
+					TotalCount = 0,
+					TotalPages = 0,
+					Items = new List<NguoiThieuDanhGiaDto>()
+				};
+			}
+
+			try
+			{
+				// Truy vấn người dùng có đánh giá chưa hoàn thành
+				var query = _context.DANHGIA
+					.Where(dg => dg.MaDotDanhGia == selectedMaDotDanhGia
+								 && dg.TrangThai == "Chưa đánh giá"
+								 && dg.NguoiDanhGiaObj != null
+								 && dg.NguoiDanhGiaObj.TrangThai == "Active")
+					.Select(dg => new
+					{
+						nd = dg.NguoiDanhGiaObj!,
+						chucVu = dg.NguoiDanhGiaObj.NguoiDungChucVus
+							.Where(c => c.TrangThai == "Active")
+							.Select(c => c.ChucVu.TenChucVu)
+							.FirstOrDefault()
+					})
+					.GroupBy(x => new { x.nd.MaNguoiDung, x.nd.HoTen, TenChucVu = x.chucVu ?? "" })
+					.Select(g => new
+					{
+						g.Key.MaNguoiDung,
+						g.Key.HoTen,
+						g.Key.TenChucVu,
+						SoDanhGiaConThieu = g.Count()
+					});
+
+
+				// Áp dụng tìm kiếm theo HoTen nếu có
+				if (!string.IsNullOrEmpty(search))
+				{
+					query = query.Where(x => EF.Functions.Like(x.HoTen, $"%{search}%"));
+				}
+
+				var totalRecords = await query.CountAsync();
+				var totalPages = (int)Math.Ceiling((double)totalRecords / pageSize);
+				page = page > totalPages && totalPages > 0 ? totalPages : page;
+
+				var results = await query
+					.OrderBy(x => x.HoTen) // Sắp xếp theo HoTen để dễ đọc
+					.Skip((page - 1) * pageSize)
+					.Take(pageSize)
+					.Select(x => new NguoiThieuDanhGiaDto
+					{
+						MaNguoiDung = x.MaNguoiDung,
+						HoTen = x.HoTen ?? string.Empty,
+						TenChucVu = x.TenChucVu ?? string.Empty,
+						SoDanhGiaConThieu = x.SoDanhGiaConThieu
+					})
+					.ToListAsync();
+
+				return new PagedResult<NguoiThieuDanhGiaDto>
+				{
+					CurrentPage = page,
+					PageSize = pageSize,
+					TotalCount = totalRecords,
+					TotalPages = totalPages,
+					Items = results
+				};
+			}
+			catch (Exception ex)
+			{
+				Console.WriteLine($"Lỗi khi lấy danh sách người thiếu đánh giá: {ex.Message}\nStackTrace: {ex.StackTrace}");
+				return new PagedResult<NguoiThieuDanhGiaDto>
+				{
+					CurrentPage = page,
+					PageSize = pageSize,
+					TotalCount = 0,
+					TotalPages = 0,
+					Items = new List<NguoiThieuDanhGiaDto>()
+				};
+			}
+		}
+
+		public async Task<PagedResult<DanhGiaDto>> NhanVienGetAllDanhGiaCheoAsync(int page, int pageSize, string? search)
+		{
+			page = page < 1 ? 1 : page;
+			pageSize = pageSize < 1 ? 10 : pageSize;
+
+			try
+			{
+				var query = _context.DANHGIA.Where(dg => (dg.HeSo == 1 || dg.HeSo == 3) && dg.TrangThai == "Đã đánh giá").AsQueryable();
+
+				var totalCount = await query.CountAsync();
+				var totalPages = (int)Math.Ceiling((double)totalCount / pageSize);
+
+				if (!string.IsNullOrEmpty(search))
+				{
+					query = query.Where(dg => (dg.NguoiDanhGiaObj != null && dg.NguoiDanhGiaObj.HoTen != null && dg.NguoiDanhGiaObj.HoTen.Contains(search)) ||
+											  (dg.NguoiDuocDanhGiaObj != null && dg.NguoiDuocDanhGiaObj.NguoiDung != null && dg.NguoiDuocDanhGiaObj.NguoiDung.HoTen != null && dg.NguoiDuocDanhGiaObj.NguoiDung.HoTen.Contains(search)));
+				}
+
+				var danhGiaList = await query
+					.Include(dg => dg.NguoiDanhGiaObj)
+					.Include(dg => dg.NguoiDuocDanhGiaObj)
+						.ThenInclude(nddg => nddg.NguoiDung)
+					.Include(dg => dg.DotDanhGia)
+					.Skip((page - 1) * pageSize)
+					.Take(pageSize)
+					.ToListAsync();
+
+				if (!danhGiaList.Any())
+				{
+					return new PagedResult<DanhGiaDto>
+					{
+						CurrentPage = page,
+						PageSize = pageSize,
+						TotalCount = 0,
+						TotalPages = 0,
+						Items = new List<DanhGiaDto>()
+					};
+				}
+
+				var listDanhGiaDto = danhGiaList.Select(dg => new DanhGiaDto
+				{
+					MaDanhGia = dg.MaDanhGia,
+					MaNguoiDanhGia = dg.NguoiDanhGia,
+					NguoiDanhGia = dg.NguoiDanhGiaObj?.HoTen ?? string.Empty,
+					maNguoiDuocDanhGia = dg.NguoiDuocDanhGiaObj?.MaNguoiDung ?? string.Empty,
+					NguoiDuocDanhGia = dg.NguoiDuocDanhGiaObj?.NguoiDung?.HoTen ?? string.Empty,
+					MaDotDanhGia = dg.MaDotDanhGia,
+					TenDotDanhGia = dg.DotDanhGia?.TenDot ?? string.Empty,
+					Diem = dg.Diem
+				}).ToList();
+
+				return new PagedResult<DanhGiaDto>
+				{
+					Items = listDanhGiaDto,
+					CurrentPage = page,
+					PageSize = pageSize,
+					TotalCount = totalCount,
+					TotalPages = totalPages
+				};
+			}
+			catch (Exception ex)
+			{
+				// Ghi log lỗi
+				Console.WriteLine($"Lỗi khi lấy danh sách đánh giá: {ex.Message}\nStackTrace: {ex.StackTrace}");
+				return new PagedResult<DanhGiaDto>
+				{
+					CurrentPage = page,
+					PageSize = pageSize,
+					TotalCount = 0,
+					TotalPages = 0,
+					Items = new List<DanhGiaDto>()
+				};
+			}
+		}
+
+		public async Task<PagedResult<DanhGiaDto>> AdminGetAllTuDanhGiaAsync(int page, int pageSize, string? search)
+		{
+			page = page < 1 ? 1 : page;
+			pageSize = pageSize < 1 ? 10 : pageSize;
+
+			try
+			{
+				var query = _context.DANHGIA.Where(dg => (dg.HeSo == 2 && dg.TrangThai == "Đã đánh giá")).AsQueryable();
+
+				var totalCount = await query.CountAsync();
+				var totalPages = (int)Math.Ceiling((double)totalCount / pageSize);
+
+				if (!string.IsNullOrEmpty(search))
+				{
+					query = query.Where(dg => (dg.NguoiDanhGiaObj != null && dg.NguoiDanhGiaObj.HoTen != null && dg.NguoiDanhGiaObj.HoTen.Contains(search)) ||
+											  (dg.NguoiDuocDanhGiaObj != null && dg.NguoiDuocDanhGiaObj.NguoiDung != null && dg.NguoiDuocDanhGiaObj.NguoiDung.HoTen != null && dg.NguoiDuocDanhGiaObj.NguoiDung.HoTen.Contains(search)));
+				}
+
+				var danhGiaList = await query
+					.Include(dg => dg.NguoiDanhGiaObj)
+					.Include(dg => dg.NguoiDuocDanhGiaObj)
+						.ThenInclude(nddg => nddg.NguoiDung)
+					.Include(dg => dg.DotDanhGia)
+					.Skip((page - 1) * pageSize)
+					.Take(pageSize)
+					.ToListAsync();
+
+				if (!danhGiaList.Any())
+				{
+					return new PagedResult<DanhGiaDto>
+					{
+						CurrentPage = page,
+						PageSize = pageSize,
+						TotalCount = 0,
+						TotalPages = 0,
+						Items = new List<DanhGiaDto>()
+					};
+				}
+
+				var listDanhGiaDto = danhGiaList.Select(dg => new DanhGiaDto
+				{
+					MaDanhGia = dg.MaDanhGia,
+					MaNguoiDanhGia = dg.NguoiDanhGia,
+					NguoiDanhGia = dg.NguoiDanhGiaObj?.HoTen ?? string.Empty,
+					maNguoiDuocDanhGia = dg.NguoiDuocDanhGiaObj?.MaNguoiDung ?? string.Empty,
+					NguoiDuocDanhGia = dg.NguoiDuocDanhGiaObj?.NguoiDung?.HoTen ?? string.Empty,
+					MaDotDanhGia = dg.MaDotDanhGia,
+					TenDotDanhGia = dg.DotDanhGia?.TenDot ?? string.Empty,
+					Diem = dg.Diem
+				}).ToList();
+
+				return new PagedResult<DanhGiaDto>
+				{
+					Items = listDanhGiaDto,
+					CurrentPage = page,
+					PageSize = pageSize,
+					TotalCount = totalCount,
+					TotalPages = totalPages
+				};
+			}
+			catch (Exception ex)
+			{
+				// Ghi log lỗi
+				Console.WriteLine($"Lỗi khi lấy danh sách đánh giá: {ex.Message}\nStackTrace: {ex.StackTrace}");
+				return new PagedResult<DanhGiaDto>
+				{
+					CurrentPage = page,
+					PageSize = pageSize,
+					TotalCount = 0,
+					TotalPages = 0,
+					Items = new List<DanhGiaDto>()
+				};
+			}
+		}
+
+		public async Task<PagedResult<DanhGiaDto>> AdminGetAllDanhGiaAsync(int page, int pageSize, string? search)
+		{
+			page = page < 1 ? 1 : page;
+			pageSize = pageSize < 1 ? 10 : pageSize;
+
+			try
+			{
+				var query = _context.DANHGIA.Where(dg => dg.TrangThai == "Đã đánh giá").AsQueryable();
+
+				var totalCount = await query.CountAsync();
+				var totalPages = (int)Math.Ceiling((double)totalCount / pageSize);
+
+				if (!string.IsNullOrEmpty(search))
+				{
+					query = query.Where(dg => (dg.NguoiDanhGiaObj != null && dg.NguoiDanhGiaObj.HoTen != null && dg.NguoiDanhGiaObj.HoTen.Contains(search)) ||
+											  (dg.NguoiDuocDanhGiaObj != null && dg.NguoiDuocDanhGiaObj.NguoiDung != null && dg.NguoiDuocDanhGiaObj.NguoiDung.HoTen != null && dg.NguoiDuocDanhGiaObj.NguoiDung.HoTen.Contains(search)));
+				}				
+
+				var danhGiaList = await query
+					.Include(dg => dg.NguoiDanhGiaObj)
+					.Include(dg => dg.NguoiDuocDanhGiaObj)
+						.ThenInclude(nddg => nddg.NguoiDung)
+					.Include(dg => dg.DotDanhGia)
+					.Skip((page - 1) * pageSize)
+					.Take(pageSize)
+					.ToListAsync();
+
+				if (!danhGiaList.Any())
+				{
+					return new PagedResult<DanhGiaDto>
+					{
+						CurrentPage = page,
+						PageSize = pageSize,
+						TotalCount = 0,
+						TotalPages = 0,
+						Items = new List<DanhGiaDto>()
+					};
+				}
+
+				var listDanhGiaDto = danhGiaList.Select(dg => new DanhGiaDto
+				{
+					MaDanhGia = dg.MaDanhGia,
+					MaNguoiDanhGia = dg.NguoiDanhGia,
+					NguoiDanhGia = dg.NguoiDanhGiaObj?.HoTen ?? string.Empty,
+					maNguoiDuocDanhGia = dg.NguoiDuocDanhGiaObj?.MaNguoiDung ?? string.Empty,
+					NguoiDuocDanhGia = dg.NguoiDuocDanhGiaObj?.NguoiDung?.HoTen ?? string.Empty,
+					MaDotDanhGia = dg.MaDotDanhGia,
+					TenDotDanhGia = dg.DotDanhGia?.TenDot ?? string.Empty,
+					Diem = dg.Diem
+				}).ToList();
+
+				return new PagedResult<DanhGiaDto>
+				{
+					Items = listDanhGiaDto,
+					CurrentPage = page,
+					PageSize = pageSize,
+					TotalCount = totalCount,
+					TotalPages = totalPages
+				};
+			}
+			catch (Exception ex)
+			{
+				// Ghi log lỗi
+				Console.WriteLine($"Lỗi khi lấy danh sách đánh giá: {ex.Message}\nStackTrace: {ex.StackTrace}");
+				return new PagedResult<DanhGiaDto>
+				{
+					CurrentPage = page,
+					PageSize = pageSize,
+					TotalCount = 0,
+					TotalPages = 0,
+					Items = new List<DanhGiaDto>()
+				};
+			}
 		}
 
 		public async Task<MauDanhGiaCauHoiTraLoiDto> GetCauTraLoiTheoMaDanhGiaAsync(int maDanhGia)

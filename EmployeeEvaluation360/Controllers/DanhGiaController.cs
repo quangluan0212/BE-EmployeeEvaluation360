@@ -15,6 +15,61 @@ namespace EmployeeEvaluation360.Controllers
 			_danhGiaService = danhGiaService;
 		}
 
+		[HttpGet("admin-get-all-danh-sach-chua-danh-gia")]
+		public async Task<IActionResult> AdminGetDanhSachDanhGia([FromQuery] int? maDotDanhGia = null)
+		{
+			var danhSachChuaDanhGia = await _danhGiaService.GetDanhSachNguoiThieuDanhGiaAsync(maDotDanhGia);
+			if (danhSachChuaDanhGia == null)
+			{
+				return NotFound(Error<string>("Không tìm thấy danh sách người chưa đánh giá !"));
+			}
+			return Ok(Success(danhSachChuaDanhGia));
+		}
+
+		[HttpGet("admin-get-all-danh-sach-chua-danh-gia-paged")]
+		public async Task<IActionResult> AdminGetDanhSachDanhGia([FromQuery] int page = 1, [FromQuery] int pageSize = 10, string? search = null, int? maDotDanhGia = null)
+		{
+			var danhSachChuaDanhGia = await _danhGiaService.GetDanhSachNguoiThieuDanhGiaPagedAsync(page, pageSize, search, maDotDanhGia);
+			if (danhSachChuaDanhGia == null)
+			{
+				return NotFound(Error<string>("Không tìm thấy danh sách người chưa đánh giá !"));
+			}
+			return Ok(Success(danhSachChuaDanhGia));
+		}
+
+		[HttpGet("admin-get-all-danh-sach-danh-gia")]
+		public async Task<IActionResult> AdminGetDanhSachDanhGia([FromQuery] int page = 1, [FromQuery] int pageSize = 10, string? search = null)
+		{
+			var danhSachDanhGia = await _danhGiaService.AdminGetAllDanhGiaAsync(page, pageSize, search);
+			if (danhSachDanhGia == null)
+			{
+				return NotFound(Error<string>("Không tìm thấy danh sách đánh giá."));
+			}
+			return Ok(Success(danhSachDanhGia));
+		}
+
+		[HttpGet("admin-get-all-danh-sach-tu-danh-gia")]
+		public async Task<IActionResult> AdminGetDanhSachTuDanhGia([FromQuery] int page = 1, [FromQuery] int pageSize = 10, string? search = null)
+		{
+			var danhSachDanhGia = await _danhGiaService.AdminGetAllTuDanhGiaAsync(page, pageSize, search);
+			if (danhSachDanhGia == null)
+			{
+				return NotFound(Error<string>("Không tìm thấy danh sách đánh giá."));
+			}
+			return Ok(Success(danhSachDanhGia));
+		}
+
+		[HttpGet("admin-get-all-danh-sach-danh-gia-cheo")]
+		public async Task<IActionResult> AdminGetDanhSachDanhGiaCheo([FromQuery] int page = 1, [FromQuery] int pageSize = 10, string? search = null)
+		{
+			var danhSachDanhGia = await _danhGiaService.NhanVienGetAllDanhGiaCheoAsync(page, pageSize, search);
+			if (danhSachDanhGia == null)
+			{
+				return NotFound(Error<string>("Không tìm thấy danh sách đánh giá."));
+			}
+			return Ok(Success(danhSachDanhGia));
+		}
+
 		[HttpGet("get-danh-gia-by-id/{maDanhGia}")]
 		public async Task<IActionResult> LayCauTraLoi(int maDanhGia)
 		{
