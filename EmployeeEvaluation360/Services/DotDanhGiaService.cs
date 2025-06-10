@@ -30,7 +30,7 @@ namespace EmployeeEvaluation360.Services
 				.ToListAsync();
 			return dotDanhGias.Select(d => d.ToDto()).ToList();
 		}
-		private async Task<string> CreateKetQuaDanhGiaByMaNguoiDung(int maDotDanhGia)
+		public async Task<string> CreateKetQuaDanhGiaByMaNguoiDung(int maDotDanhGia)
 		{
 			try
 			{

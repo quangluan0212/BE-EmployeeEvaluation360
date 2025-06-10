@@ -16,6 +16,16 @@ namespace EmployeeEvaluation360.Controllers
 		{
 			_duAnService = duAnService;
 		}
+		[HttpPut("ket-thuc-du-an")]
+		public async Task<IActionResult> UpdateDuAn(int maDuAn)
+		{
+			var result = await _duAnService.KetThucDuAnAsync(maDuAn);
+			if (result == false)
+			{
+				return NotFound(Error<string>("Kết thúc dự án không thành công."));
+			}
+			return Ok(Success<string>("Kết thúc dự án thành công."));
+		}
 
 		[HttpGet("simple-danh-sach-du-an")]
 		public async Task<IActionResult> GetSimpleDanhSachDuAn()

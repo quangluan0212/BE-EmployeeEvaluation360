@@ -13,5 +13,6 @@ namespace EmployeeEvaluation360.Interfaces
 		Task<DuAn> UpdateDuAnAsync(int maDuAn, UpdateDuAnDto updateDto);
 		Task<bool> DeleteDuAnAsync(int maDuAn);
 		Task<List<DuAnIdNameDto>> getDuAnActive();
+		Task<bool> KetThucDuAnAsync(int maDuAn);
 	}
 }

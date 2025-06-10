@@ -15,7 +15,29 @@ namespace EmployeeEvaluation360.Services
 		{
 			_context = context;
 		}
-
+		public async Task<bool> KetThucDuAnAsync(int maDuAn)
+		{
+			var duAn = await _context.DUAN.FindAsync(maDuAn);
+			if (duAn == null)
+			{
+				throw new Exception("Dự án không tồn tại");
+			}
+			if (duAn.TrangThai != "Active")
+			{
+				throw new Exception("Dự án đã kết thúc hoặc không hoạt động");
+			}
+			duAn.TrangThai = "Completed";
+			_context.DUAN.Update(duAn);
+			var isLinkedToGroup = await _context.NHOM.Where(n => n.MaDuAn == maDuAn && n.TrangThai == "Active").ToListAsync();
+			foreach (var nhom in isLinkedToGroup)
+			{
+				nhom.TrangThai = "Inactive";
+				_context.NHOM.Update(nhom);
+			}
+			await _context.SaveChangesAsync();
+			return true;
+		}
+			 
 		public async Task<List<DuAn>> GetAllDuAnAsync()
 		{
 			return await _context.DUAN.Where(d => d.TrangThai == "Active").OrderBy(d=>d.MaDuAn).ToListAsync();					 

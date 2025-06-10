@@ -13,6 +13,7 @@ namespace EmployeeEvaluation360.Interfaces
 		Task<List<ThanhVienDto>> getListLeaderActive();
 		Task<List<NguoiDungDto>> getListAdminActive();
 		Task<List<DotDanhGiaDto>> getDotDanhGiaByYear(int? year);
+		Task<string> CreateKetQuaDanhGiaByMaNguoiDung(int maDotDanhGia);
 		Task<List<NhomVaThanhVienDto>> getNhomVaThanhVienCungNhomByMaNguoiDung(string maNguoiDung);
 		Task<string> GenDanhGia(int maDotDanhGia);
 

@@ -63,6 +63,8 @@ namespace EmployeeEvaluation360
 			builder.Services.AddScoped<IMailService, MailService>();
 			builder.Services.AddScoped<IKetQuaDanhGiaService, KetQuaDanhGiaService>();
 
+			builder.Services.AddHostedService<AutoCloseEvaluationPeriodService>();
+
 			builder.Services.AddMemoryCache();
 
 
