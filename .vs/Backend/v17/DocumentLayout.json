@@ -3,16 +3,16 @@
   "WorkspaceRootPath": "D:\\DOANTOTNGHIEP\\DanhGiaNhanSu\\Backend\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{66602F94-8D9B-4E9E-86FC-ABF4B0300417}|EmployeeEvaluation360\\EmployeeEvaluation360.csproj|d:\\doantotnghiep\\danhgianhansu\\backend\\employeeevaluation360\\services\\autocloseevaluationperiodservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{66602F94-8D9B-4E9E-86FC-ABF4B0300417}|EmployeeEvaluation360\\EmployeeEvaluation360.csproj|solutionrelative:employeeevaluation360\\services\\autocloseevaluationperiodservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{66602F94-8D9B-4E9E-86FC-ABF4B0300417}|EmployeeEvaluation360\\EmployeeEvaluation360.csproj|d:\\doantotnghiep\\danhgianhansu\\backend\\employeeevaluation360\\services\\chucvuservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{66602F94-8D9B-4E9E-86FC-ABF4B0300417}|EmployeeEvaluation360\\EmployeeEvaluation360.csproj|solutionrelative:employeeevaluation360\\services\\chucvuservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{66602F94-8D9B-4E9E-86FC-ABF4B0300417}|EmployeeEvaluation360\\EmployeeEvaluation360.csproj|d:\\doantotnghiep\\danhgianhansu\\backend\\employeeevaluation360\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{66602F94-8D9B-4E9E-86FC-ABF4B0300417}|EmployeeEvaluation360\\EmployeeEvaluation360.csproj|solutionrelative:employeeevaluation360\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{66602F94-8D9B-4E9E-86FC-ABF4B0300417}|EmployeeEvaluation360\\EmployeeEvaluation360.csproj|d:\\doantotnghiep\\danhgianhansu\\backend\\employeeevaluation360\\controllers\\chucvucontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{66602F94-8D9B-4E9E-86FC-ABF4B0300417}|EmployeeEvaluation360\\EmployeeEvaluation360.csproj|solutionrelative:employeeevaluation360\\controllers\\chucvucontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{66602F94-8D9B-4E9E-86FC-ABF4B0300417}|EmployeeEvaluation360\\EmployeeEvaluation360.csproj|d:\\doantotnghiep\\danhgianhansu\\backend\\employeeevaluation360\\interfaces\\idotdanhgiaservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{66602F94-8D9B-4E9E-86FC-ABF4B0300417}|EmployeeEvaluation360\\EmployeeEvaluation360.csproj|solutionrelative:employeeevaluation360\\interfaces\\idotdanhgiaservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{66602F94-8D9B-4E9E-86FC-ABF4B0300417}|EmployeeEvaluation360\\EmployeeEvaluation360.csproj|d:\\doantotnghiep\\danhgianhansu\\backend\\employeeevaluation360\\interfaces\\ichucvuservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{66602F94-8D9B-4E9E-86FC-ABF4B0300417}|EmployeeEvaluation360\\EmployeeEvaluation360.csproj|solutionrelative:employeeevaluation360\\interfaces\\ichucvuservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -22,34 +22,8 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 5,
+          "SelectedChildIndex": 4,
           "Children": [
-            {
-              "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "Program.cs",
-              "DocumentMoniker": "D:\\DOANTOTNGHIEP\\DanhGiaNhanSu\\Backend\\EmployeeEvaluation360\\Program.cs",
-              "RelativeDocumentMoniker": "EmployeeEvaluation360\\Program.cs",
-              "ToolTip": "D:\\DOANTOTNGHIEP\\DanhGiaNhanSu\\Backend\\EmployeeEvaluation360\\Program.cs",
-              "RelativeToolTip": "EmployeeEvaluation360\\Program.cs",
-              "ViewState": "AgIAADQAAAAAAAAAAAAiwEEAAABFAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-06-10T15:26:33.231Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "IDotDanhGiaService.cs",
-              "DocumentMoniker": "D:\\DOANTOTNGHIEP\\DanhGiaNhanSu\\Backend\\EmployeeEvaluation360\\Interfaces\\IDotDanhGiaService.cs",
-              "RelativeDocumentMoniker": "EmployeeEvaluation360\\Interfaces\\IDotDanhGiaService.cs",
-              "ToolTip": "D:\\DOANTOTNGHIEP\\DanhGiaNhanSu\\Backend\\EmployeeEvaluation360\\Interfaces\\IDotDanhGiaService.cs",
-              "RelativeToolTip": "EmployeeEvaluation360\\Interfaces\\IDotDanhGiaService.cs",
-              "ViewState": "AgIAAAMAAAAAAAAAAAAWwAkAAAAyAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-06-10T15:23:09.795Z",
-              "EditorCaption": ""
-            },
             {
               "$type": "Bookmark",
               "Name": "ST:0:0:{74946827-37a0-11d2-a273-00c04f8ef4ff}"
@@ -64,15 +38,41 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "AutoCloseEvaluationPeriodService.cs",
-              "DocumentMoniker": "D:\\DOANTOTNGHIEP\\DanhGiaNhanSu\\Backend\\EmployeeEvaluation360\\Services\\AutoCloseEvaluationPeriodService.cs",
-              "RelativeDocumentMoniker": "EmployeeEvaluation360\\Services\\AutoCloseEvaluationPeriodService.cs",
-              "ToolTip": "D:\\DOANTOTNGHIEP\\DanhGiaNhanSu\\Backend\\EmployeeEvaluation360\\Services\\AutoCloseEvaluationPeriodService.cs",
-              "RelativeToolTip": "EmployeeEvaluation360\\Services\\AutoCloseEvaluationPeriodService.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAB8AAAAsAAAAAAAAAA==",
+              "DocumentIndex": 1,
+              "Title": "ChucVuController.cs",
+              "DocumentMoniker": "D:\\DOANTOTNGHIEP\\DanhGiaNhanSu\\Backend\\EmployeeEvaluation360\\Controllers\\ChucVuController.cs",
+              "RelativeDocumentMoniker": "EmployeeEvaluation360\\Controllers\\ChucVuController.cs",
+              "ToolTip": "D:\\DOANTOTNGHIEP\\DanhGiaNhanSu\\Backend\\EmployeeEvaluation360\\Controllers\\ChucVuController.cs",
+              "RelativeToolTip": "EmployeeEvaluation360\\Controllers\\ChucVuController.cs",
+              "ViewState": "AgIAADIAAAAAAAAAAAAYwBYAAAAoAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-06-10T15:15:31.728Z",
+              "WhenOpened": "2025-06-17T09:00:06.41Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "ChucVuService.cs",
+              "DocumentMoniker": "D:\\DOANTOTNGHIEP\\DanhGiaNhanSu\\Backend\\EmployeeEvaluation360\\Services\\ChucVuService.cs",
+              "RelativeDocumentMoniker": "EmployeeEvaluation360\\Services\\ChucVuService.cs",
+              "ToolTip": "D:\\DOANTOTNGHIEP\\DanhGiaNhanSu\\Backend\\EmployeeEvaluation360\\Services\\ChucVuService.cs",
+              "RelativeToolTip": "EmployeeEvaluation360\\Services\\ChucVuService.cs",
+              "ViewState": "AgIAAHsAAAAAAAAAAAAowIsAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-06-17T08:49:30.94Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "IChucVuService.cs",
+              "DocumentMoniker": "D:\\DOANTOTNGHIEP\\DanhGiaNhanSu\\Backend\\EmployeeEvaluation360\\Interfaces\\IChucVuService.cs",
+              "RelativeDocumentMoniker": "EmployeeEvaluation360\\Interfaces\\IChucVuService.cs",
+              "ToolTip": "D:\\DOANTOTNGHIEP\\DanhGiaNhanSu\\Backend\\EmployeeEvaluation360\\Interfaces\\IChucVuService.cs",
+              "RelativeToolTip": "EmployeeEvaluation360\\Interfaces\\IChucVuService.cs",
+              "ViewState": "AgIAAA0AAAAAAAAAAADgvxsAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-06-17T08:49:10.843Z",
               "EditorCaption": ""
             }
           ]

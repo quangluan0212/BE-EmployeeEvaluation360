@@ -4,7 +4,6 @@ using EmployeeEvaluation360.Helppers;
 using EmployeeEvaluation360.Interfaces;
 using EmployeeEvaluation360.Models;
 using Microsoft.EntityFrameworkCore;
-using static Microsoft.Extensions.Logging.EventSource.LoggingEventSource;
 
 namespace EmployeeEvaluation360.Services
 {
@@ -23,6 +22,71 @@ namespace EmployeeEvaluation360.Services
 				.OrderBy(c => c.TenChucVu)
 				.ToListAsync();
 		}
+
+		public async Task<int> GetCapBacChucVu(string maNguoiDung, int maChucVu)
+		{
+			if (string.IsNullOrEmpty(maNguoiDung) || maChucVu <= 0)
+			{
+				return 0; // Invalid input
+			}
+			var nguoiDungChucVu = await _context.NGUOIDUNG_CHUCVU
+				.FirstOrDefaultAsync(nc => nc.MaNguoiDung == maNguoiDung && nc.MaChucVu == maChucVu && nc.TrangThai == "Active");
+			return nguoiDungChucVu?.CapBac ?? 0;
+		}
+
+		public async Task<CapNhatChucVuDto> CapNhatChucVuChoNguoiDung(CapNhatChucVuDto capNhatChucVu)
+		{
+			if (capNhatChucVu == null || string.IsNullOrEmpty(capNhatChucVu.MaNguoiDung) || capNhatChucVu.MaChucVu <= 0)
+			{
+				throw new ArgumentException("Invalid input data");
+			}
+
+			// tim kiếm người dùng theo mã
+			var nguoiDung = await _context.NGUOIDUNG
+				.Include(nd => nd.NguoiDungChucVus)
+				.FirstOrDefaultAsync(nd => nd.MaNguoiDung == capNhatChucVu.MaNguoiDung);
+
+			if (nguoiDung == null)
+			{
+				throw new Exception("User not found");
+			}
+
+			// tim kiếm chức vụ theo mã
+			var currentActiveChucVu = nguoiDung.NguoiDungChucVus
+				.FirstOrDefault(cv => cv.TrangThai == "Active");
+
+			// kiem tra xem chức vụ hiện tại có tồn tại không
+			if (currentActiveChucVu != null && currentActiveChucVu.MaChucVu == capNhatChucVu.MaChucVu)
+			{
+				// cap nhật cấp bậc của chức vụ hiện tại
+				currentActiveChucVu.CapBac = capNhatChucVu.CapBac;
+			}
+			else
+			{
+				// chuyển trạng thái chức vụ hiện tại sang không hoạt động
+				if (currentActiveChucVu != null)
+				{
+					currentActiveChucVu.TrangThai = "Inactive";
+				}
+
+				// tam thêm chức vụ mới
+				var newChucVu = new NguoiDung_ChucVu
+				{
+					MaNguoiDung = capNhatChucVu.MaNguoiDung,
+					MaChucVu = capNhatChucVu.MaChucVu,
+					CapBac = 0,
+					TrangThai = "Active"
+				};
+
+				_context.NGUOIDUNG_CHUCVU.Add(newChucVu);
+			}
+
+			// Save changes to database
+			await _context.SaveChangesAsync();
+
+			return capNhatChucVu;
+		}
+
 
 
 		public async Task<PagedResult<ChucVuDto>> GetAllChucVuPagedAsync(int page, int pageSize, string? s)

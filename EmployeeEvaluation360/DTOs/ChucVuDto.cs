@@ -11,6 +11,13 @@ namespace EmployeeEvaluation360.DTOs
 		public string trangThai { get; set; }
 	}
 
+	public class CapNhatChucVuDto
+	{
+		public string MaNguoiDung { get; set; }  // Mã người dùng để cập nhật chức vụ
+		public int MaChucVu { get; set; }
+		public int CapBac { get; set; }  // Cấp bậc của chức vụ
+	}
+
 	public class ChucVuCreateDto
 	{
 		[Required(ErrorMessage = "Tên chức vụ không được để trống")]

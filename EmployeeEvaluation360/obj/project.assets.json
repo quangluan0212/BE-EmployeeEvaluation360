@@ -3626,11 +3626,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\DOANTOTNGHIEP\\DanhGiaNhanSu\\Backend\\EmployeeEvaluation360\\EmployeeEvaluation360.csproj",
+      "projectUniqueName": "D:\\DOANTOTNGHIEP\\DanhGiaNhanSu\\backend\\EmployeeEvaluation360\\EmployeeEvaluation360.csproj",
       "projectName": "EmployeeEvaluation360",
-      "projectPath": "D:\\DOANTOTNGHIEP\\DanhGiaNhanSu\\Backend\\EmployeeEvaluation360\\EmployeeEvaluation360.csproj",
+      "projectPath": "D:\\DOANTOTNGHIEP\\DanhGiaNhanSu\\backend\\EmployeeEvaluation360\\EmployeeEvaluation360.csproj",
       "packagesPath": "C:\\Users\\LE QUANG LUAN\\.nuget\\packages\\",
-      "outputPath": "D:\\DOANTOTNGHIEP\\DanhGiaNhanSu\\Backend\\EmployeeEvaluation360\\obj\\",
+      "outputPath": "D:\\DOANTOTNGHIEP\\DanhGiaNhanSu\\backend\\EmployeeEvaluation360\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -3663,7 +3663,7 @@
         "auditLevel": "low",
         "auditMode": "direct"
       },
-      "SdkAnalysisLevel": "9.0.200"
+      "SdkAnalysisLevel": "9.0.300"
     },
     "frameworks": {
       "net8.0": {
@@ -3725,7 +3725,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.204/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.301/PortableRuntimeIdentifierGraph.json"
       }
     }
   }

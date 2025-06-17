@@ -2,6 +2,7 @@
 using EmployeeEvaluation360.Interfaces;
 using EmployeeEvaluation360.Mappers;
 using EmployeeEvaluation360.Models;
+using EmployeeEvaluation360.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -17,6 +18,47 @@ namespace EmployeeEvaluation360.Controllers
 		public ChucVuController(IChucVuService chucVuService)
 		{
 			_chucVuService = chucVuService;
+		}
+
+		[HttpGet("admin-get-cap-bac-nguoi-dung")]
+		public async Task<IActionResult> GetCapBacChucVu(string maNguoiDung, int maChucVu)
+		{
+			if (string.IsNullOrEmpty(maNguoiDung) || maChucVu <= 0)
+			{
+				return BadRequest(Error<string>("Mã người dùng hoặc mã chức vụ không hợp lệ."));
+			}
+			try
+			{
+				var capBac = await _chucVuService.GetCapBacChucVu(maNguoiDung, maChucVu);
+				return Ok(Success(capBac));
+			}
+			catch (Exception ex)
+			{
+				return NotFound(Error<string>(ex.Message));
+			}
+		}
+
+		[HttpPut("admin-cap-nhat-chuc-vu")]
+		public async Task<IActionResult> CapNhatChucVu([FromBody] CapNhatChucVuDto capNhatChucVu)
+		{
+			if (!ModelState.IsValid)
+			{
+				return BadRequest(Error<string>("Đã xảy ra lỗi !!!"));
+			}
+
+			try
+			{
+				var result = await _chucVuService.CapNhatChucVuChoNguoiDung(capNhatChucVu);
+				return Ok(Success(result));
+			}
+			catch (ArgumentException ex)
+			{
+				return BadRequest(Error<string>(ex.Message));
+			}
+			catch (Exception ex)
+			{
+				return NotFound(Error<string>(ex.Message));
+			}
 		}
 
 		[HttpGet]

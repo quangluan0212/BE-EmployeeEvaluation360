@@ -22,12 +22,6 @@ D:\DOANTOTNGHIEP\DanhGiaNhanSu\Backend\EmployeeEvaluation360\obj\Debug\net8.0\sc
 D:\DOANTOTNGHIEP\DanhGiaNhanSu\Backend\EmployeeEvaluation360\obj\Debug\net8.0\staticwebassets.build.json
 D:\DOANTOTNGHIEP\DanhGiaNhanSu\Backend\EmployeeEvaluation360\obj\Debug\net8.0\staticwebassets.development.json
 D:\DOANTOTNGHIEP\DanhGiaNhanSu\Backend\EmployeeEvaluation360\obj\Debug\net8.0\staticwebassets.build.endpoints.json
-D:\DOANTOTNGHIEP\DanhGiaNhanSu\Backend\EmployeeEvaluation360\obj\Debug\net8.0\staticwebassets\msbuild.EmployeeEvaluation360.Microsoft.AspNetCore.StaticWebAssets.props
-D:\DOANTOTNGHIEP\DanhGiaNhanSu\Backend\EmployeeEvaluation360\obj\Debug\net8.0\staticwebassets\msbuild.EmployeeEvaluation360.Microsoft.AspNetCore.StaticWebAssetEndpoints.props
-D:\DOANTOTNGHIEP\DanhGiaNhanSu\Backend\EmployeeEvaluation360\obj\Debug\net8.0\staticwebassets\msbuild.build.EmployeeEvaluation360.props
-D:\DOANTOTNGHIEP\DanhGiaNhanSu\Backend\EmployeeEvaluation360\obj\Debug\net8.0\staticwebassets\msbuild.buildMultiTargeting.EmployeeEvaluation360.props
-D:\DOANTOTNGHIEP\DanhGiaNhanSu\Backend\EmployeeEvaluation360\obj\Debug\net8.0\staticwebassets\msbuild.buildTransitive.EmployeeEvaluation360.props
-D:\DOANTOTNGHIEP\DanhGiaNhanSu\Backend\EmployeeEvaluation360\obj\Debug\net8.0\staticwebassets.pack.json
 D:\DOANTOTNGHIEP\DanhGiaNhanSu\Backend\EmployeeEvaluation360\obj\Debug\net8.0\Employee.AE2CD638.Up2Date
 D:\DOANTOTNGHIEP\DanhGiaNhanSu\Backend\EmployeeEvaluation360\obj\Debug\net8.0\EmployeeEvaluation360.dll
 D:\DOANTOTNGHIEP\DanhGiaNhanSu\Backend\EmployeeEvaluation360\obj\Debug\net8.0\refint\EmployeeEvaluation360.dll
@@ -96,3 +90,8 @@ D:\DOANTOTNGHIEP\DanhGiaNhanSu\Backend\EmployeeEvaluation360\bin\Debug\net8.0\Mi
 D:\DOANTOTNGHIEP\DanhGiaNhanSu\Backend\EmployeeEvaluation360\bin\Debug\net8.0\System.Diagnostics.DiagnosticSource.dll
 D:\DOANTOTNGHIEP\DanhGiaNhanSu\Backend\EmployeeEvaluation360\bin\Debug\net8.0\System.Formats.Asn1.dll
 D:\DOANTOTNGHIEP\DanhGiaNhanSu\Backend\EmployeeEvaluation360\bin\Debug\net8.0\System.Security.Cryptography.Xml.dll
+D:\DOANTOTNGHIEP\DanhGiaNhanSu\Backend\EmployeeEvaluation360\obj\Debug\net8.0\rpswa.dswa.cache.json
+D:\DOANTOTNGHIEP\DanhGiaNhanSu\Backend\EmployeeEvaluation360\obj\Debug\net8.0\rjimswa.dswa.cache.json
+D:\DOANTOTNGHIEP\DanhGiaNhanSu\Backend\EmployeeEvaluation360\obj\Debug\net8.0\rjsmrazor.dswa.cache.json
+D:\DOANTOTNGHIEP\DanhGiaNhanSu\Backend\EmployeeEvaluation360\obj\Debug\net8.0\rjsmcshtml.dswa.cache.json
+D:\DOANTOTNGHIEP\DanhGiaNhanSu\Backend\EmployeeEvaluation360\obj\Debug\net8.0\staticwebassets.build.json.cache

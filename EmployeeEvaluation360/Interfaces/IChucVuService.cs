@@ -24,5 +24,7 @@ namespace EmployeeEvaluation360.Interfaces
 
 		Task<IEnumerable<NguoiDung>> GetNguoiDungByChucVuAsync(int maChucVu);
 		Task<bool> ChucVuExistsAsync(int maChucVu);
+		Task<CapNhatChucVuDto> CapNhatChucVuChoNguoiDung(CapNhatChucVuDto capNhatChucVu);
+		Task<int> GetCapBacChucVu(string maNguoiDung, int maChucVu);
 	}
 }
