@@ -15,6 +15,22 @@ namespace EmployeeEvaluation360.Services
 			_context = applicationDBContext;
 		}
 
+		public async Task<int> GetDanhGiaChuaDanhGiaAsyncByMaNguoiDungAsync(string maNguoiDung)
+		{
+			var currentDotDanhGia = await _context.DOT_DANHGIA
+				.Where(ddg => ddg.TrangThai == "Active")
+				.FirstOrDefaultAsync();
+			if (currentDotDanhGia == null)
+				return 0;
+			var danhGiaChuaDanhGia = await _context.DANHGIA
+				.Where(dg => dg.NguoiDanhGia == maNguoiDung
+							 && dg.MaDotDanhGia == currentDotDanhGia.MaDotDanhGia
+							 && dg.TrangThai == "Chưa đánh giá")
+				.Select(dg => dg.MaDanhGia)
+				.ToListAsync();
+			return danhGiaChuaDanhGia.Count();
+		}
+
 		private async Task<int> GetLatestMaDotDanhGia()
 		{
 			// Tìm DotDanhGia gần nhất dựa trên ThoiGianKetThuc

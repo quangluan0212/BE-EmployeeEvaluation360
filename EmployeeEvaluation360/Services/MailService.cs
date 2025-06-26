@@ -149,7 +149,7 @@ namespace EmployeeEvaluation360.Services
                                     </ul>
                                     <p>Vui lòng đăng nhập vào hệ thống để xem chi tiết nhóm và bắt đầu tham gia.</p>
                                     <p style=""text-align: center;"">
-                                        <a href=""https://your-app-url.com/group/{SecurityElement.Escape(groupId)}"" class=""button"">Xem chi tiết nhóm</a>
+                                        <a href=""https://quangluanle.id.vn/group-members-page"" class=""button"">Xem chi tiết nhóm</a>
                                     </p>
                                 </div>
                                 <div class=""footer"">

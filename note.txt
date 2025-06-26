@@ -2,22 +2,6 @@ ERD - SQL
 - tên bảng tiếng việt k dấu, viết hoa (SINHVIEN).
 - ten trường (maSV, hoTenSV, ...)
 
-//DOKER
--pull:
-  docker pull quangluan0212/vietan360-backend:latest
-  docker pull quangluan0212/vietan360-sqlserver-init:latest
--build prod:
-  docker build -t quangluan0212/vietan360-backend:latest -f EmployeeEvaluation360/Dockerfile .
-  docker build -t quangluan0212/vietan360-sqlserver-init:latest -f SqlServerInit.Dockerfile .
--push image
-  docker push quangluan0212/vietan360-backend:latest
-  docker push quangluan0212/vietan360-sqlserver-init:latest
--tag
-  docker tag quangluan0212/vietan360-backend:latest quangluan0212/vietan360-backend:v1.0
-  docker tag quangluan0212/vietan360-sqlserver-init:latest quangluan0212/vietan360-sqlserver-init:v1.0
--buill prod
-docker-compose -f docker-compose.yml -f docker-compose.prod.yml up
-
 
 dotnet ed migrations add ...
 dotnet ef databse update
@@ -44,6 +28,7 @@ cd EmployeeEvaluation360
 
 "DefaultConnection": "Server=sqlserver;Database=VietAn360_DB;User Id=sa;Password=YourStrong!Passw0rd;TrustServerCertificate=True" /// docker
 "DefaultConnection": "Data Source=LEQUANGLUAN\\LQL;Initial Catalog=VietAn360_DB;Integrated Security=True;Trust Server Certificate=True" // local
+Server=tcp:vietan360.database.windows.net,1433;Initial Catalog=VietAn360_DB;Persist Security Info=False;User ID=luan;Password=Abc123@@;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30; //azure
 
 DECLARE @SoLuong INT;
 

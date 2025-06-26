@@ -8,7 +8,7 @@ namespace EmployeeEvaluation360.Controllers
 {
 	[ApiController]
 	[Route("api/[controller]")]
-	//[Authorize(Roles = "Admin")]
+	[Authorize(Roles = "Admin")]
 	public class DuAnController : BaseController
 	{
 		private readonly IDuAnService _duAnService;

@@ -7,6 +7,7 @@ namespace EmployeeEvaluation360.Controllers
 {
 	[ApiController]
 	[Route("api/[controller]")]
+	[Authorize]
 	public class DotDanhGiaController : BaseController
 	{
 		private readonly IDotDanhGiaService _service;

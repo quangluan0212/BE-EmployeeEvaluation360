@@ -8,8 +8,10 @@ namespace EmployeeEvaluation360.Interfaces
 	{
 		Task<PagedResult<MauDanhGiaDto>> GetAllAsync(int page, int pageSize, string search);
 		Task<List<MauDanhGiaDto>> GetAllMauDanhGiaActive();
-		Task<MauDanhGiaDto> GetMauDanhGiaById(int maMau);
+		Task<GetMauDanhGia> GetMauDanhGiaById(int maMau);
 		Task<CreateMauDanhGiaDto> CreateMauDanhGia(CreateMauDanhGiaDto mauDanhGiaDto);
 		Task<List<MauDanhGiaDto>> GetMauDanhGiaByMaDotDanhGia(int maDotDanhGia);
+		Task<UpdateMauDanhGiaDto> UpdateMauDanhGia(int maMau, UpdateMauDanhGiaDto mauDanhGiaDto);
+		Task<bool> DeleteMauDanhGia(int maMau);
 	}
 }

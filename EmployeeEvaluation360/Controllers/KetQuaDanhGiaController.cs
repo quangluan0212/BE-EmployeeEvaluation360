@@ -7,7 +7,7 @@ namespace EmployeeEvaluation360.Controllers
 {
 	[Route("api/[controller]")]
 	[ApiController]
-	//[Authorize]
+	[Authorize]
 	public class KetQuaDanhGiaController : BaseController
 	{
 		private readonly IKetQuaDanhGiaService _service;
@@ -35,7 +35,7 @@ namespace EmployeeEvaluation360.Controllers
 		
 		}
 
-		//[Authorize(Roles ="Admin")]
+		[Authorize(Roles ="Admin")]
 		[HttpGet("get-all-ket-qua-danh-gia-paged")]
 		public async Task<IActionResult> GetKetQuaDanhGiaPagedResult(int page = 1, int pageSize = 10, string? search = null, int? maDotDanhGia = null)
 		{
@@ -50,7 +50,7 @@ namespace EmployeeEvaluation360.Controllers
 			}
 		}
 
-		//[Authorize(Roles = "Admin")]
+		[Authorize(Roles = "Admin")]
 		[HttpGet("get-latest-ket-qua-danh-gia-paged")]
 		public async Task<IActionResult> GetCurrentKetQuaDanhGiaPagedResult(int page = 1, int pageSize = 10, string? search = null, int? maDotDanhGia = null)
 		{
@@ -65,7 +65,7 @@ namespace EmployeeEvaluation360.Controllers
 			}
 		}
 
-		//[Authorize(Roles = "Admin")]
+		[Authorize(Roles = "Admin")]
 		[HttpGet("get-good-ket-qua-danh-gia-paged")]
 		public async Task<IActionResult> GetGoodKetQuaDanhGiaPagedResult(int page = 1, int pageSize = 10, string? search = null, int? maDotDanhGia = null)
 		{
@@ -80,7 +80,7 @@ namespace EmployeeEvaluation360.Controllers
 			}
 		}
 
-		//[Authorize(Roles = "Admin")]
+		[Authorize(Roles = "Admin")]
 		[HttpGet("get-bad-ket-qua-danh-gia-paged")]
 		public async Task<IActionResult> GetBadKetQuaDanhGiaPagedResult(int page = 1, int pageSize = 10, string? search = null, int? maDotDanhGia = null)
 		{
@@ -95,7 +95,7 @@ namespace EmployeeEvaluation360.Controllers
 			}
 		}
 
-		//[Authorize(Roles = "Admin")]
+		[Authorize(Roles = "Admin")]
 		[HttpGet("get-all-ket-qua-danh-gia")]
 		public async Task<IActionResult> GetKetQuaDanhGiaResult(int? maDotDanhGia = null)
 		{
@@ -110,7 +110,7 @@ namespace EmployeeEvaluation360.Controllers
 			}
 		}
 
-		//[Authorize(Roles = "Admin")]
+		[Authorize(Roles = "Admin")]
 		[HttpGet("get-latest-ket-qua-danh-gia")]
 		public async Task<IActionResult> GetCurrentKetQuaDanhGiaResult(int? maDotDanhGia)
 		{
@@ -125,7 +125,7 @@ namespace EmployeeEvaluation360.Controllers
 			}
 		}
 
-		//[Authorize(Roles = "Admin")]
+		[Authorize(Roles = "Admin")]
 		[HttpGet("get-good-ket-qua-danh-gia")]
 		public async Task<IActionResult> GetGoodKetQuaDanhGiaResult(int? maDotDanhGia)
 		{
@@ -140,7 +140,7 @@ namespace EmployeeEvaluation360.Controllers
 			}
 		}
 
-		//[Authorize(Roles = "Admin")]
+		[Authorize(Roles = "Admin")]
 		[HttpGet("get-bad-ket-qua-danh-gia")]
 		public async Task<IActionResult> GetBadKetQuaDanhGiaResult(int? maDotDanhGia)
 		{

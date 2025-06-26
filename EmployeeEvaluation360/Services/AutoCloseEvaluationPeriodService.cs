@@ -25,21 +25,19 @@ namespace EmployeeEvaluation360.Services
 					var currentVietnamTime = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, vietnamTimeZone);
 
 					// Lấy các Đợt Đánh Giá còn Active và đã đến thời gian kết thúc
-					var evaluations = await context.DOT_DANHGIA
+					var dotDanhGia = await context.DOT_DANHGIA
 						.Where(e => e.TrangThai == "Active" && e.ThoiGianKetThuc <= currentVietnamTime)
 						.ToListAsync(stoppingToken);
 
-					foreach (var evaluation in evaluations)
+					foreach (var evaluation in dotDanhGia)
 					{
-						Console.WriteLine($"Closing evaluation {evaluation.MaDotDanhGia} at {currentVietnamTime}");
 						evaluation.TrangThai = "Inactive";
 						context.DOT_DANHGIA.Update(evaluation);
 						await context.SaveChangesAsync(stoppingToken);
 
 						try
 						{
-							var result = await dotDanhGiaService.CreateKetQuaDanhGiaByMaNguoiDung(evaluation.MaDotDanhGia);
-							Console.WriteLine($"Kết quả tính KETQUA_DANHGIA cho MaDotDanhGia {evaluation.MaDotDanhGia}: {result}");
+							var result = await dotDanhGiaService.CreateKetQuaDanhGiaByMaDotDanhGia(evaluation.MaDotDanhGia);
 						}
 						catch (Exception ex)
 						{

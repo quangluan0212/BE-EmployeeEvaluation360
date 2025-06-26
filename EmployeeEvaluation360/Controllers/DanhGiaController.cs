@@ -1,5 +1,6 @@
 ﻿using EmployeeEvaluation360.DTOs;
 using EmployeeEvaluation360.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 
@@ -7,6 +8,7 @@ namespace EmployeeEvaluation360.Controllers
 {
 	[Route("api/[controller]")]
 	[ApiController]
+	[Authorize]
 	public class DanhGiaController : BaseController
 	{
 		private readonly IDanhGiaService _danhGiaService;
@@ -15,6 +17,18 @@ namespace EmployeeEvaluation360.Controllers
 			_danhGiaService = danhGiaService;
 		}
 
+		[HttpGet("thong-bao-danh-gia")]
+		public async Task<IActionResult> GetThongBaoDanhGia(string maNguoiDung)
+		{
+			if (string.IsNullOrEmpty(maNguoiDung))
+			{
+				return BadRequest(Error<string>("Đã xảy ra lỗi vui lòng đăng nhập lại !!!"));
+			}
+			var result = await _danhGiaService.GetDanhGiaChuaDanhGiaAsyncByMaNguoiDungAsync(maNguoiDung);
+			return Ok(Success(result));
+		}
+
+		[Authorize(Roles = "Admin")]
 		[HttpGet("admin-get-all-danh-sach-chua-danh-gia")]
 		public async Task<IActionResult> AdminGetDanhSachDanhGia([FromQuery] int? maDotDanhGia = null)
 		{
@@ -26,6 +40,7 @@ namespace EmployeeEvaluation360.Controllers
 			return Ok(Success(danhSachChuaDanhGia));
 		}
 
+		[Authorize(Roles = "Admin")]
 		[HttpGet("admin-get-all-danh-sach-chua-danh-gia-paged")]
 		public async Task<IActionResult> AdminGetDanhSachDanhGia([FromQuery] int page = 1, [FromQuery] int pageSize = 10, string? search = null, int? maDotDanhGia = null)
 		{
@@ -37,6 +52,7 @@ namespace EmployeeEvaluation360.Controllers
 			return Ok(Success(danhSachChuaDanhGia));
 		}
 
+		[Authorize(Roles = "Admin")]
 		[HttpGet("admin-get-all-danh-sach-danh-gia")]
 		public async Task<IActionResult> AdminGetDanhSachDanhGia([FromQuery] int page = 1, [FromQuery] int pageSize = 10, string? search = null)
 		{
@@ -47,7 +63,7 @@ namespace EmployeeEvaluation360.Controllers
 			}
 			return Ok(Success(danhSachDanhGia));
 		}
-
+		[Authorize(Roles = "Admin")]
 		[HttpGet("admin-get-all-danh-sach-tu-danh-gia")]
 		public async Task<IActionResult> AdminGetDanhSachTuDanhGia([FromQuery] int page = 1, [FromQuery] int pageSize = 10, string? search = null)
 		{
@@ -59,6 +75,7 @@ namespace EmployeeEvaluation360.Controllers
 			return Ok(Success(danhSachDanhGia));
 		}
 
+		[Authorize(Roles = "Admin")]
 		[HttpGet("admin-get-all-danh-sach-danh-gia-cheo")]
 		public async Task<IActionResult> AdminGetDanhSachDanhGiaCheo([FromQuery] int page = 1, [FromQuery] int pageSize = 10, string? search = null)
 		{
@@ -115,7 +132,7 @@ namespace EmployeeEvaluation360.Controllers
 			}
 			return BadRequest(ModelState);
 		}
-
+		[Authorize(Roles = "Admin")]
 		[HttpGet("admin-danh-sach-danh-gia-leader")]
 		public async Task<IActionResult> AdminGetListDanhGiaLeader([FromQuery]string maNguoiDung)
 		{

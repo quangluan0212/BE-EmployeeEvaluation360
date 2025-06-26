@@ -62,11 +62,30 @@ namespace EmployeeEvaluation360
 			builder.Services.AddScoped<IMauDanhGiaService, MauDanhGiaService>();
 			builder.Services.AddScoped<IMailService, MailService>();
 			builder.Services.AddScoped<IKetQuaDanhGiaService, KetQuaDanhGiaService>();
+			//builder.Services.AddCors(options =>
+			//{
+			//	options.AddPolicy("AllowFrontend",
+			//		policy => policy
+			//			.WithOrigins("http://localhost:5173")
+			//			.AllowAnyHeader()
+			//			.AllowAnyMethod()
+			//			.AllowCredentials());
+			//});
+
+			builder.Services.AddCors(options =>
+			{
+				options.AddPolicy("AllowAll", policy =>
+				{
+					policy.AllowAnyOrigin()
+						  .AllowAnyMethod()
+						  .AllowAnyHeader();
+				});
+			});
+			builder.Services.AddScoped<SeedData>();
 
 			builder.Services.AddHostedService<AutoCloseEvaluationPeriodService>();
 
 			builder.Services.AddMemoryCache();
-
 
 			builder.Services.AddAuthentication(options =>	
 			{
@@ -114,27 +133,13 @@ namespace EmployeeEvaluation360
 			builder.Services.AddDataProtection()
 				.PersistKeysToFileSystem(new DirectoryInfo("/root/.aspnet/DataProtection-Keys"));
 
-			builder.Services.AddCors(options =>
+
+			builder.WebHost.ConfigureKestrel(serverOptions =>
 			{
-				options.AddPolicy("AllowFrontend",
-					policy => policy
-						.WithOrigins("http://localhost:5173")
-						.AllowAnyHeader()
-						.AllowAnyMethod()
-						.AllowCredentials());
+				serverOptions.ListenAnyIP(8080);
 			});
 
-			//builder.Services.AddCors(options =>
-			//{
-			//	options.AddPolicy("AllowAll", policy =>
-			//	{
-			//		policy.AllowAnyOrigin()
-			//			  .AllowAnyMethod()
-			//			  .AllowAnyHeader();
-			//	});
-			//});
 
-			builder.Services.AddScoped<SeedData>();
 
 			var app = builder.Build();
 
@@ -143,20 +148,16 @@ namespace EmployeeEvaluation360
 			{
 				app.UseSwagger();
 				app.UseSwaggerUI();				
-			}
-			else // redirect HTTPS khi KHÔNG phải môi trường dev
-			{
-				app.UseSwagger();
-    			app.UseSwaggerUI();
-				app.UseHttpsRedirection();
-			}
-
+			}			
+			app.UseSwagger();
+    		app.UseSwaggerUI();
+			app.UseHttpsRedirection();	
 
 			app.UseAuthentication();
 			app.UseAuthorization();
 
-			app.UseCors("AllowFrontend");
-			//app.UseCors("AllowAll");
+			 //app.UseCors("AllowFrontend");
+			app.UseCors("AllowAll");
 
 			app.MapControllers();
 

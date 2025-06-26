@@ -25,6 +25,7 @@ namespace EmployeeEvaluation360.Services
 				new Claim("maNguoiDung", nguoiDung.MaNguoiDung.ToString()),
 				new Claim("hoTen", nguoiDung.HoTen),
 			};
+
 			var roles = nguoiDung.NguoiDungChucVus?
 				.Select(c => c.ChucVu.TenChucVu)
 				.Where(r => !string.IsNullOrEmpty(r))

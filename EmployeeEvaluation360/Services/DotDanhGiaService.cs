@@ -30,7 +30,7 @@ namespace EmployeeEvaluation360.Services
 				.ToListAsync();
 			return dotDanhGias.Select(d => d.ToDto()).ToList();
 		}
-		public async Task<string> CreateKetQuaDanhGiaByMaNguoiDung(int maDotDanhGia)
+		public async Task<string> CreateKetQuaDanhGiaByMaDotDanhGia(int maDotDanhGia)
 		{
 			try
 			{
@@ -68,7 +68,6 @@ namespace EmployeeEvaluation360.Services
 						.FirstOrDefaultAsync(k => k.MaNguoiDung == item.MaNguoiDung && k.ThoiGianTinh == dotDanhGia.ThoiGianKetThuc);
 					if (existingKetQua != null)
 					{
-
 						results.Add($"Kết quả đánh giá của ID : {item.MaNguoiDung} đã tồn tại");
 						continue;
 					}
@@ -101,7 +100,6 @@ namespace EmployeeEvaluation360.Services
 				Console.WriteLine($"Lỗi khi tính kết quả đánh giá: {ex.Message}\nStackTrace: {ex.StackTrace}");
 				return $"Có lỗi xảy ra khi tính kết quả đánh giá: {ex.Message}";
 			}
-
 		}		
 
 		public async Task<string>KetThucDotDanhGia(int maDotDanhGia)
@@ -120,7 +118,7 @@ namespace EmployeeEvaluation360.Services
 			}
 			else
 			{
-				var tinhKetQuaDanhGia  = await CreateKetQuaDanhGiaByMaNguoiDung(maDotDanhGia);
+				var tinhKetQuaDanhGia  = await CreateKetQuaDanhGiaByMaDotDanhGia(maDotDanhGia);
 				return tinhKetQuaDanhGia;
 			}
 		}
