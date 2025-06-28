@@ -17,6 +17,13 @@ namespace EmployeeEvaluation360.DTOs
 		public string TrangThai { get; set; } = string.Empty;
 	}
 
+	public class SimpleNhomDto
+	{
+		public int MaNhom { get; set; }
+		public string TenNhom { get; set; } = string.Empty;
+
+	}
+
 	public class CreateNhomDto
 	{
 		public string TenNhom { get; set; } = string.Empty;

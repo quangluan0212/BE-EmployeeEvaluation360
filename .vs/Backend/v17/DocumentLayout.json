@@ -1,7 +1,48 @@
 {
   "Version": 1,
   "WorkspaceRootPath": "D:\\DOANTOTNGHIEP\\DanhGiaNhanSu\\Backend\\",
-  "Documents": [],
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{66602F94-8D9B-4E9E-86FC-ABF4B0300417}|EmployeeEvaluation360\\EmployeeEvaluation360.csproj|d:\\doantotnghiep\\danhgianhansu\\backend\\employeeevaluation360\\controllers\\nhomcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{66602F94-8D9B-4E9E-86FC-ABF4B0300417}|EmployeeEvaluation360\\EmployeeEvaluation360.csproj|solutionrelative:employeeevaluation360\\controllers\\nhomcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{66602F94-8D9B-4E9E-86FC-ABF4B0300417}|EmployeeEvaluation360\\EmployeeEvaluation360.csproj|d:\\doantotnghiep\\danhgianhansu\\backend\\employeeevaluation360\\controllers\\nguoidungcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{66602F94-8D9B-4E9E-86FC-ABF4B0300417}|EmployeeEvaluation360\\EmployeeEvaluation360.csproj|solutionrelative:employeeevaluation360\\controllers\\nguoidungcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{66602F94-8D9B-4E9E-86FC-ABF4B0300417}|EmployeeEvaluation360\\EmployeeEvaluation360.csproj|d:\\doantotnghiep\\danhgianhansu\\backend\\employeeevaluation360\\controllers\\maudanhgiacontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{66602F94-8D9B-4E9E-86FC-ABF4B0300417}|EmployeeEvaluation360\\EmployeeEvaluation360.csproj|solutionrelative:employeeevaluation360\\controllers\\maudanhgiacontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{66602F94-8D9B-4E9E-86FC-ABF4B0300417}|EmployeeEvaluation360\\EmployeeEvaluation360.csproj|d:\\doantotnghiep\\danhgianhansu\\backend\\employeeevaluation360\\controllers\\ketquadanhgiacontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{66602F94-8D9B-4E9E-86FC-ABF4B0300417}|EmployeeEvaluation360\\EmployeeEvaluation360.csproj|solutionrelative:employeeevaluation360\\controllers\\ketquadanhgiacontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{66602F94-8D9B-4E9E-86FC-ABF4B0300417}|EmployeeEvaluation360\\EmployeeEvaluation360.csproj|d:\\doantotnghiep\\danhgianhansu\\backend\\employeeevaluation360\\controllers\\duancontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{66602F94-8D9B-4E9E-86FC-ABF4B0300417}|EmployeeEvaluation360\\EmployeeEvaluation360.csproj|solutionrelative:employeeevaluation360\\controllers\\duancontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{66602F94-8D9B-4E9E-86FC-ABF4B0300417}|EmployeeEvaluation360\\EmployeeEvaluation360.csproj|d:\\doantotnghiep\\danhgianhansu\\backend\\employeeevaluation360\\controllers\\dotdanhgiacontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{66602F94-8D9B-4E9E-86FC-ABF4B0300417}|EmployeeEvaluation360\\EmployeeEvaluation360.csproj|solutionrelative:employeeevaluation360\\controllers\\dotdanhgiacontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{66602F94-8D9B-4E9E-86FC-ABF4B0300417}|EmployeeEvaluation360\\EmployeeEvaluation360.csproj|d:\\doantotnghiep\\danhgianhansu\\backend\\employeeevaluation360\\controllers\\danhgiacontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{66602F94-8D9B-4E9E-86FC-ABF4B0300417}|EmployeeEvaluation360\\EmployeeEvaluation360.csproj|solutionrelative:employeeevaluation360\\controllers\\danhgiacontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{66602F94-8D9B-4E9E-86FC-ABF4B0300417}|EmployeeEvaluation360\\EmployeeEvaluation360.csproj|d:\\doantotnghiep\\danhgianhansu\\backend\\employeeevaluation360\\controllers\\cauhoicontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{66602F94-8D9B-4E9E-86FC-ABF4B0300417}|EmployeeEvaluation360\\EmployeeEvaluation360.csproj|solutionrelative:employeeevaluation360\\controllers\\cauhoicontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{66602F94-8D9B-4E9E-86FC-ABF4B0300417}|EmployeeEvaluation360\\EmployeeEvaluation360.csproj|d:\\doantotnghiep\\danhgianhansu\\backend\\employeeevaluation360\\controllers\\authcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{66602F94-8D9B-4E9E-86FC-ABF4B0300417}|EmployeeEvaluation360\\EmployeeEvaluation360.csproj|solutionrelative:employeeevaluation360\\controllers\\authcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{66602F94-8D9B-4E9E-86FC-ABF4B0300417}|EmployeeEvaluation360\\EmployeeEvaluation360.csproj|d:\\doantotnghiep\\danhgianhansu\\backend\\employeeevaluation360\\controllers\\basecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{66602F94-8D9B-4E9E-86FC-ABF4B0300417}|EmployeeEvaluation360\\EmployeeEvaluation360.csproj|solutionrelative:employeeevaluation360\\controllers\\basecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
   "DocumentGroupContainers": [
     {
       "Orientation": 0,
@@ -9,7 +50,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": -1,
+          "SelectedChildIndex": 3,
           "Children": [
             {
               "$type": "Bookmark",
@@ -22,6 +63,136 @@
             {
               "$type": "Bookmark",
               "Name": "ST:0:0:{1c4feeaa-4718-4aa9-859d-94ce25d182ba}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "NhomController.cs",
+              "DocumentMoniker": "D:\\DOANTOTNGHIEP\\DanhGiaNhanSu\\Backend\\EmployeeEvaluation360\\Controllers\\NhomController.cs",
+              "RelativeDocumentMoniker": "EmployeeEvaluation360\\Controllers\\NhomController.cs",
+              "ToolTip": "D:\\DOANTOTNGHIEP\\DanhGiaNhanSu\\Backend\\EmployeeEvaluation360\\Controllers\\NhomController.cs",
+              "RelativeToolTip": "EmployeeEvaluation360\\Controllers\\NhomController.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAsAAAAtAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-06-28T06:44:27.38Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "NguoiDungController.cs",
+              "DocumentMoniker": "D:\\DOANTOTNGHIEP\\DanhGiaNhanSu\\Backend\\EmployeeEvaluation360\\Controllers\\NguoiDungController.cs",
+              "RelativeDocumentMoniker": "EmployeeEvaluation360\\Controllers\\NguoiDungController.cs",
+              "ToolTip": "D:\\DOANTOTNGHIEP\\DanhGiaNhanSu\\Backend\\EmployeeEvaluation360\\Controllers\\NguoiDungController.cs",
+              "RelativeToolTip": "EmployeeEvaluation360\\Controllers\\NguoiDungController.cs",
+              "ViewState": "AgIAALkAAAAAAAAAAAAswAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-06-28T06:44:17.087Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "MauDanhGiaController.cs",
+              "DocumentMoniker": "D:\\DOANTOTNGHIEP\\DanhGiaNhanSu\\Backend\\EmployeeEvaluation360\\Controllers\\MauDanhGiaController.cs",
+              "RelativeDocumentMoniker": "EmployeeEvaluation360\\Controllers\\MauDanhGiaController.cs",
+              "ToolTip": "D:\\DOANTOTNGHIEP\\DanhGiaNhanSu\\Backend\\EmployeeEvaluation360\\Controllers\\MauDanhGiaController.cs",
+              "RelativeToolTip": "EmployeeEvaluation360\\Controllers\\MauDanhGiaController.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-06-28T06:44:15.3Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "KetQuaDanhGiaController.cs",
+              "DocumentMoniker": "D:\\DOANTOTNGHIEP\\DanhGiaNhanSu\\Backend\\EmployeeEvaluation360\\Controllers\\KetQuaDanhGiaController.cs",
+              "RelativeDocumentMoniker": "EmployeeEvaluation360\\Controllers\\KetQuaDanhGiaController.cs",
+              "ToolTip": "D:\\DOANTOTNGHIEP\\DanhGiaNhanSu\\Backend\\EmployeeEvaluation360\\Controllers\\KetQuaDanhGiaController.cs",
+              "RelativeToolTip": "EmployeeEvaluation360\\Controllers\\KetQuaDanhGiaController.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-06-28T06:44:13.05Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "DuAnController.cs",
+              "DocumentMoniker": "D:\\DOANTOTNGHIEP\\DanhGiaNhanSu\\Backend\\EmployeeEvaluation360\\Controllers\\DuAnController.cs",
+              "RelativeDocumentMoniker": "EmployeeEvaluation360\\Controllers\\DuAnController.cs",
+              "ToolTip": "D:\\DOANTOTNGHIEP\\DanhGiaNhanSu\\Backend\\EmployeeEvaluation360\\Controllers\\DuAnController.cs",
+              "RelativeToolTip": "EmployeeEvaluation360\\Controllers\\DuAnController.cs",
+              "ViewState": "AgIAABUAAAAAAAAAAAAowAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-06-28T06:44:10.833Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "DotDanhGiaController.cs",
+              "DocumentMoniker": "D:\\DOANTOTNGHIEP\\DanhGiaNhanSu\\Backend\\EmployeeEvaluation360\\Controllers\\DotDanhGiaController.cs",
+              "RelativeDocumentMoniker": "EmployeeEvaluation360\\Controllers\\DotDanhGiaController.cs",
+              "ToolTip": "D:\\DOANTOTNGHIEP\\DanhGiaNhanSu\\Backend\\EmployeeEvaluation360\\Controllers\\DotDanhGiaController.cs",
+              "RelativeToolTip": "EmployeeEvaluation360\\Controllers\\DotDanhGiaController.cs",
+              "ViewState": "AgIAACEAAAAAAAAAAAAowAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-06-28T06:44:08.319Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "DanhGiaController.cs",
+              "DocumentMoniker": "D:\\DOANTOTNGHIEP\\DanhGiaNhanSu\\Backend\\EmployeeEvaluation360\\Controllers\\DanhGiaController.cs",
+              "RelativeDocumentMoniker": "EmployeeEvaluation360\\Controllers\\DanhGiaController.cs",
+              "ToolTip": "D:\\DOANTOTNGHIEP\\DanhGiaNhanSu\\Backend\\EmployeeEvaluation360\\Controllers\\DanhGiaController.cs",
+              "RelativeToolTip": "EmployeeEvaluation360\\Controllers\\DanhGiaController.cs",
+              "ViewState": "AgIAAGQAAAAAAAAAAAAqwHoAAABAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-06-28T06:43:28.185Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "CauHoiController.cs",
+              "DocumentMoniker": "D:\\DOANTOTNGHIEP\\DanhGiaNhanSu\\Backend\\EmployeeEvaluation360\\Controllers\\CauHoiController.cs",
+              "RelativeDocumentMoniker": "EmployeeEvaluation360\\Controllers\\CauHoiController.cs",
+              "ToolTip": "D:\\DOANTOTNGHIEP\\DanhGiaNhanSu\\Backend\\EmployeeEvaluation360\\Controllers\\CauHoiController.cs",
+              "RelativeToolTip": "EmployeeEvaluation360\\Controllers\\CauHoiController.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-06-28T06:43:26.555Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "BaseController.cs",
+              "DocumentMoniker": "D:\\DOANTOTNGHIEP\\DanhGiaNhanSu\\Backend\\EmployeeEvaluation360\\Controllers\\BaseController.cs",
+              "RelativeDocumentMoniker": "EmployeeEvaluation360\\Controllers\\BaseController.cs",
+              "ToolTip": "D:\\DOANTOTNGHIEP\\DanhGiaNhanSu\\Backend\\EmployeeEvaluation360\\Controllers\\BaseController.cs",
+              "RelativeToolTip": "EmployeeEvaluation360\\Controllers\\BaseController.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-06-28T06:43:22.698Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "AuthController.cs",
+              "DocumentMoniker": "D:\\DOANTOTNGHIEP\\DanhGiaNhanSu\\Backend\\EmployeeEvaluation360\\Controllers\\AuthController.cs",
+              "RelativeDocumentMoniker": "EmployeeEvaluation360\\Controllers\\AuthController.cs",
+              "ToolTip": "D:\\DOANTOTNGHIEP\\DanhGiaNhanSu\\Backend\\EmployeeEvaluation360\\Controllers\\AuthController.cs",
+              "RelativeToolTip": "EmployeeEvaluation360\\Controllers\\AuthController.cs",
+              "ViewState": "AgIAACoAAAAAAAAAAAAowAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-06-28T06:43:21.465Z",
+              "EditorCaption": ""
             }
           ]
         }

@@ -10,16 +10,16 @@ using Microsoft.AspNetCore.DataProtection;
 
 namespace EmployeeEvaluation360
 {
-    public class Program
-    {
-        public static void Main(string[] args)
-        {
-            var builder = WebApplication.CreateBuilder(args);
+	public class Program
+	{
+		public static void Main(string[] args)
+		{
+			var builder = WebApplication.CreateBuilder(args);
 
-            builder.Services.AddControllers();
-            // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-            builder.Services.AddEndpointsApiExplorer();
-            builder.Services.AddSwaggerGen(c =>
+			builder.Services.AddControllers();
+			// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+			builder.Services.AddEndpointsApiExplorer();
+			builder.Services.AddSwaggerGen(c =>
 			{
 				c.SwaggerDoc("v1", new OpenApiInfo { Title = "EmployeeEvaluation360", Version = "v1" });
 				c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
@@ -48,11 +48,11 @@ namespace EmployeeEvaluation360
 					}
 				});
 			});
-            builder.Services.AddDbContext<ApplicationDBContext>(options =>
+			builder.Services.AddDbContext<ApplicationDBContext>(options =>
 				options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 
-            builder.Services.AddScoped<IChucVuService, ChucVuService>();
+			builder.Services.AddScoped<IChucVuService, ChucVuService>();
 			builder.Services.AddScoped<INguoiDungService, NguoiDungService>();
 			builder.Services.AddScoped<ITokenService, TokenService>();
 			builder.Services.AddScoped<IDuAnService, DuAnService>();
@@ -62,24 +62,23 @@ namespace EmployeeEvaluation360
 			builder.Services.AddScoped<IMauDanhGiaService, MauDanhGiaService>();
 			builder.Services.AddScoped<IMailService, MailService>();
 			builder.Services.AddScoped<IKetQuaDanhGiaService, KetQuaDanhGiaService>();
-			//builder.Services.AddCors(options =>
-			//{
-			//	options.AddPolicy("AllowFrontend",
-			//		policy => policy
-			//			.WithOrigins("http://localhost:5173")
-			//			.AllowAnyHeader()
-			//			.AllowAnyMethod()
-			//			.AllowCredentials());
-			//});
+			// builder.Services.AddCors(options =>
+			// {
+			// 	options.AddPolicy("AllowFrontend",
+			// 		policy => policy
+			// 			.WithOrigins("http://localhost:5173")
+			// 			.AllowAnyHeader()
+			// 			.AllowAnyMethod()
+			// 			.AllowCredentials());
+			// });
 
 			builder.Services.AddCors(options =>
 			{
-				options.AddPolicy("AllowAll", policy =>
-				{
-					policy.AllowAnyOrigin()
-						  .AllowAnyMethod()
-						  .AllowAnyHeader();
-				});
+				options.AddPolicy("AllowSpecificOrigin",
+					builder => builder
+						.WithOrigins("https://quangluanle.id.vn")
+						.AllowAnyHeader()
+						.AllowAnyMethod());
 			});
 			builder.Services.AddScoped<SeedData>();
 
@@ -87,7 +86,7 @@ namespace EmployeeEvaluation360
 
 			builder.Services.AddMemoryCache();
 
-			builder.Services.AddAuthentication(options =>	
+			builder.Services.AddAuthentication(options =>
 			{
 				options.DefaultAuthenticateScheme =
 				options.DefaultChallengeScheme =
@@ -107,7 +106,7 @@ namespace EmployeeEvaluation360
 					IssuerSigningKey = new SymmetricSecurityKey(
 						System.Text.Encoding.UTF8.GetBytes(builder.Configuration["JWT:SigningKey"])
 					),
-					RoleClaimType =  ClaimTypes.Role
+					RoleClaimType = ClaimTypes.Role
 				};
 
 				options.Events = new JwtBearerEvents
@@ -147,17 +146,17 @@ namespace EmployeeEvaluation360
 			if (app.Environment.IsDevelopment())
 			{
 				app.UseSwagger();
-				app.UseSwaggerUI();				
-			}			
+				app.UseSwaggerUI();
+			}
 			app.UseSwagger();
-    		app.UseSwaggerUI();
-			app.UseHttpsRedirection();	
+			app.UseSwaggerUI();
+			app.UseHttpsRedirection();
 
 			app.UseAuthentication();
 			app.UseAuthorization();
 
-			 //app.UseCors("AllowFrontend");
-			app.UseCors("AllowAll");
+			//  app.UseCors("AllowFrontend");
+			app.UseCors("AllowSpecificOrigin");
 
 			app.MapControllers();
 
@@ -168,6 +167,6 @@ namespace EmployeeEvaluation360
 			}
 
 			app.Run();
-        }
-    }
+		}
+	}
 }

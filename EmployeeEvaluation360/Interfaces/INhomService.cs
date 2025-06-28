@@ -17,5 +17,6 @@ namespace EmployeeEvaluation360.Interfaces
 		Task<List<NhomVaThanhVienDto>> LayDanhSachNhomVaThanhVienAsync(string maNguoiDung);
 		Task<List<NguoiDungKhongNhomDto>> LayDanhSachNguoiDungKhongCoTrongNhomAsync(int maNhom);
 		Task<bool> XoaThanhVien(int maNhom, string maNguoiDung);
+		Task<List<SimpleNhomDto>> GetDanhSachNhomByLeader(string maNguoiDung);
 	}
 }

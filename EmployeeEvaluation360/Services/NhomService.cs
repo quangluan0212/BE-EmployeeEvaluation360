@@ -17,6 +17,29 @@ namespace EmployeeEvaluation360.Services
 			_context = context;
 			_mailService = mailService;
 		}
+
+		public async Task<List<SimpleNhomDto>> GetDanhSachNhomByLeader(string maNguoiDung)
+		{
+			var leader = await _context.NGUOIDUNG
+				.Include(x => x.NguoiDungChucVus)
+				.FirstOrDefaultAsync(x => x.MaNguoiDung == maNguoiDung && x.NguoiDungChucVus.Any(c => c.ChucVu.TenChucVu == "Leader" && c.TrangThai == "Active"));
+
+			if (leader == null)
+			{
+				return new List<SimpleNhomDto>();
+			}
+			var nhoms = await _context.NHOM_NGUOIDUNG
+				.Include(x => x.Nhom)
+				.Where(x => x.MaNguoiDung == maNguoiDung && x.TrangThai == "Active" && x.VaiTro == "Leader")
+				.Select(x => new SimpleNhomDto
+				{
+					MaNhom = x.Nhom.MaNhom,
+					TenNhom = x.Nhom.TenNhom,
+				})
+				.ToListAsync();
+			return nhoms;
+		}
+
 		public async Task<bool> XoaThanhVien(int maNhom, string maNguoiDung)
 		{
 			var nhomNguoiDung = await _context.NHOM_NGUOIDUNG

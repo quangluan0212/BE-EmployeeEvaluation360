@@ -1,13 +1,14 @@
 ﻿using EmployeeEvaluation360.DTOs;
 using EmployeeEvaluation360.Interfaces;
-using Microsoft.AspNetCore.Mvc;
 using EmployeeEvaluation360.Mappers;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 
 namespace EmployeeEvaluation360.Controllers
 {
 	[ApiController]
 	[Route("api/[controller]")]
-
+	[Authorize]
 	public class NhomController : BaseController
 	{
 		private readonly INhomService _nhomService;
@@ -16,6 +17,17 @@ namespace EmployeeEvaluation360.Controllers
 			_nhomService = nhomService;
 		}
 
+		[HttpGet("danh-sach-nhom-theo-leader")]
+		public async Task<IActionResult> GetDanhSachNhomTheoLeader(string maNguoiDung)
+		{
+			if (string.IsNullOrEmpty(maNguoiDung))
+			{
+				return BadRequest(Error<string>("Mã người dùng không được để trống."));
+			}
+			var result = await _nhomService.GetDanhSachNhomByLeader(maNguoiDung);
+			return Ok(Success(result));
+		}
+		[Authorize(Roles = "Admin")]
 		[HttpDelete("xoa-thanh-vien-khoi-nhom")]
 		public async Task<IActionResult> XoaThanhVienKhoiNhom(int maNhom, string maNguoiDung)
 		{
@@ -30,7 +42,7 @@ namespace EmployeeEvaluation360.Controllers
 			}
 			return Ok(Success<string>("Thành viên đã được xóa khỏi nhóm thành công."));
 		}
-
+		[Authorize(Roles = "Admin")]
 		[HttpGet("danh-sach-nguoi-dung-khong-co-trong-nhom")]
 		public async Task<IActionResult> GetDanhSachNguoiDungKhongCoTrongNhom(int maNhom)
 		{
@@ -44,6 +56,7 @@ namespace EmployeeEvaluation360.Controllers
 			var result = await _nhomService.GetAllNhomPagedAsync(page, pageSize, search);
 			return Ok(Success(result));
 		}
+		[Authorize(Roles = "Admin")]
 		[HttpPost("them-nhom")]
 		public async Task<IActionResult> CreateNhom([FromBody] CreateNhomDto nhom)
 		{
@@ -58,6 +71,7 @@ namespace EmployeeEvaluation360.Controllers
 			}
 			return Ok(Success(createdNhom.ToDto()));
 		}
+		[Authorize(Roles = "Admin")]
 		[HttpPut("cap-nhat-nhom")]
 		public async Task<IActionResult> UpdateNhom(int maNhom, [FromBody] UpdateNhomDto updateDto)
 		{
@@ -72,7 +86,7 @@ namespace EmployeeEvaluation360.Controllers
 			}
 			return Ok(Success(updatedNhom.ToDto()));
 		}
-
+		[Authorize(Roles = "Admin")]
 		[HttpDelete("xoa-nhom")]
 		public async Task<IActionResult> DeleteNhom(int maNhom)
 		{
@@ -108,7 +122,7 @@ namespace EmployeeEvaluation360.Controllers
 
 			return Ok(Success<string>("Nhóm đã được xóa thành công."));
 		}
-
+		[Authorize(Roles = "Admin")]
 		[HttpPost("them-thanh-vien-vao-nhom")]
 		public async Task<IActionResult> ThemNhanVienVaoNhom([FromBody] ThemNhanVienVaoNhomDto addDto)
 		{

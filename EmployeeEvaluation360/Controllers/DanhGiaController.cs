@@ -17,6 +17,18 @@ namespace EmployeeEvaluation360.Controllers
 			_danhGiaService = danhGiaService;
 		}
 
+		[Authorize(Roles = "Leader")]
+		[HttpGet("leader-get-all-danh-sach-danh-gia-paged")]
+		public async Task<IActionResult> AdminGetDanhSachDanhGia(string maNguoiDung, [FromQuery] int page = 1, [FromQuery] int pageSize = 10, string? search = null, int? maNhom = null)
+		{
+			var danhSachDanhGia = await _danhGiaService.LeaderGetAllDanhGiaAsync(maNguoiDung, page, pageSize, search, maNhom);
+			if (danhSachDanhGia == null)
+			{
+				return NotFound(Error<string>("Không tìm thấy danh sách đánh giá !"));
+			}
+			return Ok(Success(danhSachDanhGia));
+		}
+
 		[HttpGet("thong-bao-danh-gia")]
 		public async Task<IActionResult> GetThongBaoDanhGia(string maNguoiDung)
 		{

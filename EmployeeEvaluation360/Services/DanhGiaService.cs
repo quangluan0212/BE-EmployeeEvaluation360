@@ -4,6 +4,7 @@ using EmployeeEvaluation360.Helppers;
 using EmployeeEvaluation360.Interfaces;
 using EmployeeEvaluation360.Models;
 using Microsoft.EntityFrameworkCore;
+using MimeKit;
 
 namespace EmployeeEvaluation360.Services
 {
@@ -13,6 +14,127 @@ namespace EmployeeEvaluation360.Services
 		public DanhGiaService(ApplicationDBContext applicationDBContext)
 		{
 			_context = applicationDBContext;
+		}
+
+		public async Task<PagedResult<DanhGiaDto>> LeaderGetAllDanhGiaAsync(string leaderId, int page, int pageSize, string? search, int? MaNhom)
+		{
+			page = page < 1 ? 1 : page;
+			pageSize = pageSize < 1 ? 10 : pageSize;
+
+			try
+			{
+				// Lấy danh sách nhóm mà leader quản lý
+				var leaderGroupsQuery = _context.NHOM_NGUOIDUNG
+					.Where(nnd => nnd.MaNguoiDung == leaderId && nnd.VaiTro == "Leader" && nnd.TrangThai == "Active");
+
+				if (MaNhom.HasValue)
+				{
+					leaderGroupsQuery = leaderGroupsQuery.Where(nnd => nnd.MaNhom == MaNhom.Value);
+				}
+
+				var leaderGroups = await leaderGroupsQuery
+					.Select(nnd => nnd.MaNhom)
+					.ToListAsync();
+
+				if (!leaderGroups.Any())
+				{
+					return new PagedResult<DanhGiaDto>
+					{
+						CurrentPage = page,
+						PageSize = pageSize,
+						TotalCount = 0,
+						TotalPages = 0,
+						Items = new List<DanhGiaDto>()
+					};
+				}
+
+				// Lấy danh sách MaNhomNguoiDung trong các nhóm, trừ leader
+				var groupMembers = await _context.NHOM_NGUOIDUNG
+					.Where(nnd => leaderGroups.Contains(nnd.MaNhom) && nnd.VaiTro != "Leader" && nnd.TrangThai == "Active" && nnd.MaNguoiDung != leaderId)
+					.Select(nnd => nnd.MaNhomNguoiDung)
+					.ToListAsync();
+
+				if (!groupMembers.Any())
+				{
+					return new PagedResult<DanhGiaDto>
+					{
+						CurrentPage = page,
+						PageSize = pageSize,
+						TotalCount = 0,
+						TotalPages = 0,
+						Items = new List<DanhGiaDto>()
+					};
+				}
+
+				// Truy vấn đánh giá
+				var query = _context.DANHGIA
+					.Where(dg => groupMembers.Contains(dg.NguoiDuocDanhGia) && dg.TrangThai == "Đã đánh giá")
+					.Include(dg => dg.NguoiDanhGiaObj)
+					.Include(dg => dg.NguoiDuocDanhGiaObj)
+						.ThenInclude(nnd => nnd.NguoiDung)
+					.Include(dg => dg.DotDanhGia).AsQueryable();
+
+				// Tìm kiếm theo HoTen hoặc TenDot
+				if (!string.IsNullOrEmpty(search))
+				{
+					query = query.Where(dg => (dg.NguoiDanhGiaObj != null && dg.NguoiDanhGiaObj.HoTen != null && dg.NguoiDanhGiaObj.HoTen.Contains(search)) ||
+											  (dg.NguoiDuocDanhGiaObj != null && dg.NguoiDuocDanhGiaObj.NguoiDung != null && dg.NguoiDuocDanhGiaObj.NguoiDung.HoTen != null && dg.NguoiDuocDanhGiaObj.NguoiDung.HoTen.Contains(search)) ||
+											  (dg.DotDanhGia != null && dg.DotDanhGia.TenDot != null && dg.DotDanhGia.TenDot.Contains(search)));
+				}
+
+				// Phân trang
+				var totalCount = await query.CountAsync();
+				var totalPages = (int)Math.Ceiling((double)totalCount / pageSize);
+				var danhGiaList = await query
+					.OrderBy(dg => dg.NguoiDuocDanhGiaObj.NguoiDung != null ? dg.NguoiDuocDanhGiaObj.NguoiDung.HoTen : string.Empty)
+					.Skip((page - 1) * pageSize)
+					.Take(pageSize)
+					.Select(dg => new DanhGiaDto
+					{
+						MaDanhGia = dg.MaDanhGia,
+						MaNguoiDanhGia = dg.NguoiDanhGia ?? string.Empty,
+						NguoiDanhGia = dg.NguoiDanhGiaObj != null && dg.NguoiDanhGiaObj.HoTen != null ? dg.NguoiDanhGiaObj.HoTen : string.Empty,
+						maNguoiDuocDanhGia = dg.NguoiDuocDanhGiaObj != null && dg.NguoiDuocDanhGiaObj.MaNguoiDung != null ? dg.NguoiDuocDanhGiaObj.MaNguoiDung : string.Empty,
+						NguoiDuocDanhGia = dg.NguoiDuocDanhGiaObj != null && dg.NguoiDuocDanhGiaObj.NguoiDung != null && dg.NguoiDuocDanhGiaObj.NguoiDung.HoTen != null ? dg.NguoiDuocDanhGiaObj.NguoiDung.HoTen : string.Empty,
+						MaDotDanhGia = dg.MaDotDanhGia,
+						TenDotDanhGia = dg.DotDanhGia != null && dg.DotDanhGia.TenDot != null ? dg.DotDanhGia.TenDot : string.Empty,
+						Diem = dg.Diem
+					})
+					.ToListAsync();
+
+				if (!danhGiaList.Any())
+				{
+					return new PagedResult<DanhGiaDto>
+					{
+						CurrentPage = page,
+						PageSize = pageSize,
+						TotalCount = 0,
+						TotalPages = 0,
+						Items = new List<DanhGiaDto>()
+					};
+				}
+
+				return new PagedResult<DanhGiaDto>
+				{
+					Items = danhGiaList,
+					CurrentPage = page,
+					PageSize = pageSize,
+					TotalCount = totalCount,
+					TotalPages = totalPages
+				};
+			}
+			catch (Exception ex)
+			{
+				Console.WriteLine($"Lỗi khi lấy danh sách đánh giá: {ex.Message}\nStackTrace: {ex.StackTrace}");
+				return new PagedResult<DanhGiaDto>
+				{
+					CurrentPage = page,
+					PageSize = pageSize,
+					TotalCount = 0,
+					TotalPages = 0,
+					Items = new List<DanhGiaDto>()
+				};
+			}
 		}
 
 		public async Task<int> GetDanhGiaChuaDanhGiaAsyncByMaNguoiDungAsync(string maNguoiDung)
@@ -68,7 +190,7 @@ namespace EmployeeEvaluation360.Services
 							.Select(c => c.ChucVu.TenChucVu)
 							.FirstOrDefault()
 					})
-					.GroupBy(x => new { x.nd.MaNguoiDung, x.nd.HoTen, TenChucVu = x.chucVu ?? "" })
+					.GroupBy(x => new { x.nd.MaNguoiDung, x.nd.HoTen, TenChucVu = x.chucVu ?? "" })//Nhom theo MaNguoiDung, HoTen và TenChucVu
 					.Select(g => new
 					{
 						g.Key.MaNguoiDung,

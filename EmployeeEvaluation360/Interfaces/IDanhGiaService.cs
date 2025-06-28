@@ -17,5 +17,6 @@ namespace EmployeeEvaluation360.Interfaces
 		Task<PagedResult<NguoiThieuDanhGiaDto>> GetDanhSachNguoiThieuDanhGiaPagedAsync(int page, int pageSize, string? search, int? maDotDanhGia);
 		Task<List<NguoiThieuDanhGiaDto>> GetDanhSachNguoiThieuDanhGiaAsync(int? maDotDanhGia);
 		Task<int> GetDanhGiaChuaDanhGiaAsyncByMaNguoiDungAsync(string maNguoiDung);
+		Task<PagedResult<DanhGiaDto>> LeaderGetAllDanhGiaAsync(string leaderId, int page, int pageSize, string? search, int? MaNhom);
 	}
 }
