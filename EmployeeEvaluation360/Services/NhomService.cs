@@ -48,6 +48,18 @@ namespace EmployeeEvaluation360.Services
 			{
 				return false;
 			}
+			// Kiểm tra xem maNhomNguoiDung có đang được sử dụng trong các đánh giá hay không
+			var isUsedInDanhGia = await _context.DANHGIA
+				.AnyAsync(dg => dg.NguoiDuocDanhGia == nhomNguoiDung.MaNhomNguoiDung);
+
+			if(isUsedInDanhGia)
+			{
+				// Nếu đang được sử dụng, chỉ cần cập nhật trạng thái
+				nhomNguoiDung.TrangThai = "Deleted";
+				_context.NHOM_NGUOIDUNG.Update(nhomNguoiDung);
+				await _context.SaveChangesAsync();
+				return true;
+			}
 			var result = await _context.NHOM_NGUOIDUNG
 				.Where(x => x.MaNhom == maNhom && x.MaNguoiDung == maNguoiDung)
 				.ExecuteDeleteAsync();
@@ -96,6 +108,13 @@ namespace EmployeeEvaluation360.Services
 			if (linkedToGroup)
 			{
 				nhom.TrangThai = "Deleted";
+				// Cập nhật trạng thái của NHOM_NGUOIDUNG liên quan
+				var nhomNguoiDungs = _context.NHOM_NGUOIDUNG.Where(x => x.MaNhom == maNhom).ToList();
+				foreach (var item in nhomNguoiDungs)
+				{
+					item.TrangThai = "Deleted";
+				}
+				_context.NHOM_NGUOIDUNG.UpdateRange(nhomNguoiDungs);
 				_context.NHOM.Update(nhom);
 			}
 			else
@@ -325,6 +344,7 @@ namespace EmployeeEvaluation360.Services
 			var query = _context.NHOM_NGUOIDUNG
 				.Include(n => n.NguoiDung)
 				.Include(n => n.Nhom)
+				.Where(n => n.TrangThai == "Active")
 				.AsQueryable();
 			if (maNhom > 0)
 			{

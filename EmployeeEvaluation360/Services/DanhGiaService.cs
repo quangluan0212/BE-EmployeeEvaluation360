@@ -373,7 +373,6 @@ namespace EmployeeEvaluation360.Services
 			}
 			catch (Exception ex)
 			{
-				// Ghi log lỗi
 				Console.WriteLine($"Lỗi khi lấy danh sách đánh giá: {ex.Message}\nStackTrace: {ex.StackTrace}");
 				return new PagedResult<DanhGiaDto>
 				{
@@ -469,9 +468,9 @@ namespace EmployeeEvaluation360.Services
 			try
 			{
 				var query = _context.DANHGIA.Where(dg => dg.TrangThai == "Đã đánh giá").AsQueryable();
-
+				// Lấy tổng số lượng đánh giá
 				var totalCount = await query.CountAsync();
-				var totalPages = (int)Math.Ceiling((double)totalCount / pageSize);
+				var totalPages = (int)Math.Ceiling((double)totalCount / pageSize); // Tính tổng số trang
 
 				if (!string.IsNullOrEmpty(search))
 				{
@@ -562,15 +561,16 @@ namespace EmployeeEvaluation360.Services
 
 		public async Task<bool> SubmitDanhGia(DanhGiaTraLoiDto giaTraLoiDto)
 		{
+			// Kiểm tra xem đánh giá có tồn tại không
 			var danhGia = await _context.DANHGIA
 				.FirstOrDefaultAsync(dg => dg.MaDanhGia == giaTraLoiDto.MaDanhGia);
-
+			// Nếu không tìm thấy đánh giá, ném ngoại lệ
 			if (danhGia == null)
 				throw new InvalidOperationException("Không tìm thấy đánh giá.");
-
+			
 			if (giaTraLoiDto.CauHoiTraLoi == null || !giaTraLoiDto.CauHoiTraLoi.Any())
 				throw new InvalidOperationException("Danh sách câu trả lời không được để trống.");
-
+			// Kiểm tra xem người dùng đã đánh giá hay chưa
 			var cauHoiCu = await _context.DANHGIA_CAUHOI
 				.Where(ch => ch.MaDanhGia == giaTraLoiDto.MaDanhGia)
 				.ToListAsync();
@@ -579,7 +579,7 @@ namespace EmployeeEvaluation360.Services
 			{
 				_context.DANHGIA_CAUHOI.RemoveRange(cauHoiCu);
 			}
-
+			// Thêm các câu trả lời mới vào cơ sở dữ liệu
 			var danhSachTraLoi = giaTraLoiDto.CauHoiTraLoi.Select(cauTraLoi => new DanhGia_CauHoi
 			{
 				MaDanhGia = giaTraLoiDto.MaDanhGia,
@@ -589,36 +589,36 @@ namespace EmployeeEvaluation360.Services
 
 			await _context.DANHGIA_CAUHOI.AddRangeAsync(danhSachTraLoi);
 
-
+			// Cập nhật trạng thái đánh giá và tính điểm
 			int tongDiem = danhSachTraLoi.Sum(t => t.TraLoi);
 			danhGia.Diem = tongDiem;
 			danhGia.TrangThai = "Đã đánh giá";
-
 			await _context.SaveChangesAsync();
-
 			return true;
 		}
 
 		public async Task<List<AdminGetDanhGiaDto>> AdminGetListDanhGiaAsync(string maNguoiDung)
 		{
+			// Kiểm tra đợt đánh giá hiện tại
 			var currentDotDanhGia = await _context.DOT_DANHGIA
 				.Where(ddg => ddg.TrangThai == "Active")
 				.FirstOrDefaultAsync();
 			if (currentDotDanhGia == null)
 				throw new InvalidOperationException("Không tìm thấy đợt đánh giá hiện tại.");
-
+			// Lấy danh sách đánh giá của người dùng trong đợt đánh giá hiện tại
 			var danhGias = await _context.DANHGIA
 				.Where(dg => dg.NguoiDanhGia == maNguoiDung && dg.MaDotDanhGia == currentDotDanhGia.MaDotDanhGia)
 				.Include(dg => dg.NguoiDanhGiaObj)
 				.Include(dg => dg.NguoiDuocDanhGiaObj)
+					.ThenInclude(nd => nd.NguoiDung)
 				.ToListAsync();
-
+			// Chọn dữ liệu cần thiết và chuyển đổi sang DTO
 			var result = danhGias.Select(dg => new AdminGetDanhGiaDto
 			{
 				MaDanhGia = dg.MaDanhGia,
-				MaNguoiDanhGia = dg.NguoiDanhGia,
+				MaNguoiDanhGia = dg.NguoiDanhGiaObj.MaNguoiDung,
 				MaNhomNguoiDung = dg.NguoiDuocDanhGia,
-				HotTen = dg.NguoiDanhGiaObj.HoTen,
+				HotTen = dg.NguoiDuocDanhGiaObj.NguoiDung.HoTen,
 				TrangThai = dg.TrangThai
 			}).ToList();
 
@@ -664,9 +664,10 @@ namespace EmployeeEvaluation360.Services
 		}
 
 
-
+		// Lấy mẫu đánh giá câu hỏi theo mã đánh giá
 		public async Task<MauDanhGiaCauHoiDto> GetFormDanhGiaCauHoiAsync(int maDanhGia)
 		{
+			// Kiểm trả xem mã đánh giá có hợp lệ không
 			var danhGia = await _context.DANHGIA
 				.FirstOrDefaultAsync(d => d.MaDanhGia == maDanhGia);
 
@@ -699,7 +700,7 @@ namespace EmployeeEvaluation360.Services
 			int maMau = chiTiet.MaMau;
 			string tenDot = chiTiet.DotDanhGia.TenDot;
 
-			// 4. Lấy danh sách câu hỏi theo mẫu
+			//Lấy danh sách câu hỏi theo mẫu
 			var cauHoiList = await _context.CAUHOI
 				.Where(c => c.MaMau == maMau)
 				.Select(c => new CauHoiDto
@@ -710,7 +711,7 @@ namespace EmployeeEvaluation360.Services
 				})
 				.ToListAsync();
 
-			// 5. Trả về DTO
+			//Trả về DTO
 			return new MauDanhGiaCauHoiDto
 			{
 				MaDanhGia = maDanhGia,
@@ -722,6 +723,7 @@ namespace EmployeeEvaluation360.Services
 
 		public async Task<string> XacDinhLoaiDanhGiaAsync(string nguoiDanhGia, int maNhomNguoiDung)
 		{
+			// Lấy người được đánh giá từ nhóm người dùng
 			var nguoiDuocDanhGia = await _context.NHOM_NGUOIDUNG
 				.Where(x => x.MaNhomNguoiDung == maNhomNguoiDung)
 				.Select(x => x.MaNguoiDung)
@@ -729,38 +731,39 @@ namespace EmployeeEvaluation360.Services
 
 			if (nguoiDuocDanhGia == null)
 				throw new Exception("Không tìm thấy người được đánh giá.");
-
+			// Nếu người đánh giá và người được đánh giá là cùng một người
 			if (nguoiDanhGia == nguoiDuocDanhGia)
 			{
+				// Kiểm tra xem người đánh giá có vai trò Leader trong nhóm của họ không
 				var isLeaderSelf = await _context.NHOM_NGUOIDUNG
 					.AnyAsync(x => x.MaNguoiDung == nguoiDanhGia && x.VaiTro == "Leader");
 				return isLeaderSelf ? "LEADER" : "NHANVIEN";
 			}
-
+			// Kiểm tra xem người đánh giá có vai trò Admin không
 			var isAdmin = await _context.NGUOIDUNG_CHUCVU
 				.Join(_context.CHUCVU,
 					  ndcv => ndcv.MaChucVu,
 					  cv => cv.MaChucVu,
 					  (ndcv, cv) => new { ndcv.MaNguoiDung, cv.TenChucVu })
 				.AnyAsync(x => x.MaNguoiDung == nguoiDanhGia && x.TenChucVu == "Admin");
-
+			// Kiểm tra xem người được đánh giá có vai trò Leader trong nhóm của họ không
 			var leaderGroups = await _context.NHOM_NGUOIDUNG
 				.Where(x => x.MaNguoiDung == nguoiDanhGia && x.VaiTro == "Leader")
 				.Select(x => x.MaNhom)
 				.ToListAsync();
-
+			// Lấy danh sách nhóm của người được đánh giá
 			var targetGroups = await _context.NHOM_NGUOIDUNG
 				.Where(x => x.MaNguoiDung == nguoiDuocDanhGia)
 				.Select(x => x.MaNhom)
 				.ToListAsync();
-
+			// Kiểm tra xem người đánh giá có cùng nhóm với người được đánh giá không
 			bool sameTeam = leaderGroups.Intersect(targetGroups).Any()
 							|| await _context.NHOM_NGUOIDUNG
 								.Where(x => x.MaNguoiDung == nguoiDanhGia)
 								.Select(x => x.MaNhom)
 								.Intersect(targetGroups)
 								.AnyAsync();
-
+			// Xác đinh người được đánh giá có vai trò Leader không
 			var isLeaderTarget = await _context.NHOM_NGUOIDUNG
 				.AnyAsync(x => x.MaNguoiDung == nguoiDuocDanhGia && x.VaiTro == "Leader");
 

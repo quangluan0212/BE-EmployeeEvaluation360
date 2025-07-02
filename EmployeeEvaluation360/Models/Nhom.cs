@@ -44,7 +44,7 @@ namespace EmployeeEvaluation360.Models
 		public string MaNguoiDung { get; set; }
 
 		[Required]
-		[Column("VaiTro", TypeName = "NVARCHAR(20)")]
+		[Column("VaiTro", TypeName = "NVARCHAR(50)")]
 		public string VaiTro { get; set; }
 
 		[Required]

@@ -16,9 +16,10 @@ namespace EmployeeEvaluation360.Services
 			_context = context;
 		}
 
+		// Lấy danh sách đợt đánh giá theo năm
 		public async Task<List<DotDanhGiaDto>> getDotDanhGiaByYear(int? year = null)
 		{
-			if(!year.HasValue)
+			if (!year.HasValue)
 			{
 				var result = await _context.DOT_DANHGIA
 				.Where(d => d.ThoiGianBatDau.Year == DateTime.Now.Year || d.ThoiGianKetThuc.Year == DateTime.Now.Year)
@@ -26,10 +27,13 @@ namespace EmployeeEvaluation360.Services
 				return result.Select(d => d.ToDto()).ToList();
 			}
 			var dotDanhGias = await _context.DOT_DANHGIA
-				.Where(d => d.ThoiGianBatDau.Year == year || d.ThoiGianKetThuc.Year == year)
+				.Where(d => d.ThoiGianBatDau.Year == year || d.ThoiGianKetThuc.Year == year && d.TrangThai == "Inactive")
+				.OrderByDescending(d => d.ThoiGianKetThuc)
 				.ToListAsync();
 			return dotDanhGias.Select(d => d.ToDto()).ToList();
 		}
+
+		// Tạo kết quả đánh giá dựa trên mã đợt đánh giá
 		public async Task<string> CreateKetQuaDanhGiaByMaDotDanhGia(int maDotDanhGia)
 		{
 			try
@@ -47,7 +51,7 @@ namespace EmployeeEvaluation360.Services
 				{
 					return "Không có đánh giá nào cho người dùng này trong đợt đánh giá hiện tại.";
 				}
-
+				// Nhóm các đánh giá theo Người được đánh giá (MaNguoiDung) và lấy các hệ số khác nhau
 				var groupedDanhGias = danhGias
 					.GroupBy(d => d.NguoiDuocDanhGiaObj.MaNguoiDung)
 					.Select(g => new
@@ -61,6 +65,7 @@ namespace EmployeeEvaluation360.Services
 				{
 					return "Không có người dùng nào có đủ cả ba loại đánh giá (HeSo 1, 2, 3).";
 				}
+				// Tính toán điểm trung bình cho mỗi người dùng
 				var results = new List<string>();
 				foreach (var item in groupedDanhGias)
 				{
@@ -71,6 +76,7 @@ namespace EmployeeEvaluation360.Services
 						results.Add($"Kết quả đánh giá của ID : {item.MaNguoiDung} đã tồn tại");
 						continue;
 					}
+					// Tính điểm trung bình cho từng hệ số
 					var tbDg1 = item.Evaluation.Where(d => d.HeSo == 1).Select(d => d.Diem).Average();
 					var tbDg2 = item.Evaluation.Where(d => d.HeSo == 2).Select(d => d.Diem).Average();
 					var tbDg3 = item.Evaluation.Where(d => d.HeSo == 3).Select(d => d.Diem).Average();
@@ -84,10 +90,12 @@ namespace EmployeeEvaluation360.Services
 						ThoiGianTinh = dotDanhGia.ThoiGianKetThuc,
 						MaDotDanhGia = maDotDanhGia,
 					};
+
 					await _context.KETQUA_DANHGIA.AddAsync(ketQuaDanhGia);
 
 					results.Add($"Tạo kết quả đánh giá cho ID: {item.MaNguoiDung} với điểm tổng kết {finalScore:F2}.");
 				}
+				// Lưu kết quả vào cơ sở dữ liệu
 				var saveResult = await _context.SaveChangesAsync();
 				if (saveResult == 0 && results.All(r => r.Contains("đã tồn tại")))
 				{
@@ -100,9 +108,10 @@ namespace EmployeeEvaluation360.Services
 				Console.WriteLine($"Lỗi khi tính kết quả đánh giá: {ex.Message}\nStackTrace: {ex.StackTrace}");
 				return $"Có lỗi xảy ra khi tính kết quả đánh giá: {ex.Message}";
 			}
-		}		
+		}
 
-		public async Task<string>KetThucDotDanhGia(int maDotDanhGia)
+		// Kết thúc đợt đánh giá
+		public async Task<string> KetThucDotDanhGia(int maDotDanhGia)
 		{
 			var dotDanhGia = await _context.DOT_DANHGIA.FindAsync(maDotDanhGia);
 			if (dotDanhGia == null)
@@ -118,12 +127,13 @@ namespace EmployeeEvaluation360.Services
 			}
 			else
 			{
-				var tinhKetQuaDanhGia  = await CreateKetQuaDanhGiaByMaDotDanhGia(maDotDanhGia);
+				var tinhKetQuaDanhGia = await CreateKetQuaDanhGiaByMaDotDanhGia(maDotDanhGia);
 				return tinhKetQuaDanhGia;
 			}
 		}
 
-		public async Task<string> UpdateDotDanhGia (UpdateDotDanhGia updateDotDanhGia)
+		// Cập nhật đợt đánh giá
+		public async Task<string> UpdateDotDanhGia(UpdateDotDanhGia updateDotDanhGia)
 		{
 			var dotDanhGia = await _context.DOT_DANHGIA.FindAsync(updateDotDanhGia.MaDotDanhGia);
 			if (dotDanhGia == null)
@@ -177,7 +187,7 @@ namespace EmployeeEvaluation360.Services
 
 		public async Task<List<DotDanhGiaDto>> getDanhSachDotDanhGia()
 		{
-			var listData = await _context.DOT_DANHGIA.ToListAsync();
+			var listData = await _context.DOT_DANHGIA.OrderByDescending(n => n.ThoiGianKetThuc).ToListAsync();
 			var listDataDto = listData.Select(x => new DotDanhGiaDto
 			{
 				MaDotDanhGia = x.MaDotDanhGia,
@@ -191,12 +201,12 @@ namespace EmployeeEvaluation360.Services
 
 		public async Task<DotDanhGiaDto> GetDotDanhGiaActivesAsync()
 		{
-			var listData = await _context.DOT_DANHGIA.Where(x=>x.TrangThai=="Active").ToListAsync();
+			var listData = await _context.DOT_DANHGIA.Where(x => x.TrangThai == "Active").ToListAsync();
 			if (!listData.Any())
 			{
 				return null;
 			}
-			var lisdDataDto = listData.Select(x => new DotDanhGiaDto 
+			var lisdDataDto = listData.Select(x => new DotDanhGiaDto
 			{
 				MaDotDanhGia = x.MaDotDanhGia,
 				TenDot = x.TenDot,
@@ -206,7 +216,7 @@ namespace EmployeeEvaluation360.Services
 			}).ToList();
 			return lisdDataDto.FirstOrDefault();
 		}
-
+		// Tạo đợt đánh giá mới
 		public async Task<DotDanhGiaDto> CreateDotDanhGia(CreateDotDanhGiaDto danhGiaDto)
 		{
 			var currentDdd = await GetDotDanhGiaActivesAsync();
@@ -227,7 +237,7 @@ namespace EmployeeEvaluation360.Services
 			{
 				await _context.DOT_DANHGIA.AddAsync(dotDanhGia);
 				await _context.SaveChangesAsync();
-
+				// Tạo chi tiết đợt đánh giá cho từng mẫu đánh giá
 				foreach (var mau in danhGiaDto.mauDanhGias)
 				{
 					var mauDanhGia = await _context.MAUDANHGIA.FindAsync(mau);
@@ -247,7 +257,7 @@ namespace EmployeeEvaluation360.Services
 				}
 
 				await _context.SaveChangesAsync();
-
+				// Gọi hàm GenDanhGia để tạo các đánh giá cho đợt đánh giá mới
 				string gen = await GenDanhGia(dotDanhGia.MaDotDanhGia);
 				Console.WriteLine(gen);
 
@@ -278,6 +288,7 @@ namespace EmployeeEvaluation360.Services
 
 			return nguoiDungs;
 		}
+		
 		public async Task<List<ThanhVienDto>> getListLeaderActive()
 		{
 			var leaders = await _context.NGUOIDUNG
@@ -294,6 +305,13 @@ namespace EmployeeEvaluation360.Services
 					ChucVu = "Leader"
 				})
 				.ToListAsync();
+
+			//Kiểm tra xem trong danh sách leaders có người nào không có MaNhomNguoiDung không, nếu có thì bỏ qua
+			leaders = leaders.Where(leader => leader.MaNhomNguoiDung != 0).ToList();
+			if (!leaders.Any())
+			{
+				return new List<ThanhVienDto>();
+			}
 
 			return leaders;
 		}
@@ -320,18 +338,19 @@ namespace EmployeeEvaluation360.Services
 		public async Task<List<NhomVaThanhVienDto>> getNhomVaThanhVienCungNhomByMaNguoiDung(string maNguoiDung)
 		{
 			var result = await _context.NHOM_NGUOIDUNG
-				.Where(nd => nd.MaNguoiDung == maNguoiDung)
+				.Where(nd => nd.MaNguoiDung == maNguoiDung && nd.TrangThai == "Active")
 				.Select(nd => nd.MaNhom)
 				.Distinct()
 				.ToListAsync();
 
 			var nhoms = await _context.NHOM
-				.Where(n => result.Contains(n.MaNhom))
+				.Where(n => result.Contains(n.MaNhom) && n.TrangThai == "Active")
 				.Select(n => new NhomVaThanhVienDto
 				{
 					MaNhom = n.MaNhom,
 					TenNhom = n.TenNhom,
-					ThanhVien = n.NhomNguoiDungs.Select(tv => new ThanhVienDto
+					ThanhVien = n.NhomNguoiDungs.Where(tv => tv.TrangThai == "Active")
+					.Select(tv => new ThanhVienDto
 					{
 						MaNhomNguoiDung = tv.MaNhomNguoiDung,
 						MaNguoiDung = tv.NguoiDung.MaNguoiDung,
@@ -350,10 +369,11 @@ namespace EmployeeEvaluation360.Services
 			var leaders = await getListLeaderActive();
 			var allNguoiDung = await getNguoiDungActiveNotIncludeAdmin();
 			var danhGias = new List<DanhGia>();
+			// Tạo đánh giá cho các Admin
 			foreach (var admin in admins)
 			{
 				foreach (var leader in leaders)
-				{					
+				{
 					danhGias.Add(new DanhGia
 					{
 						NguoiDanhGia = admin.MaNguoiDung,
@@ -363,9 +383,10 @@ namespace EmployeeEvaluation360.Services
 						TrangThai = "Chưa đánh giá",
 						HeSo = 3,
 					});
-					
+
 				}
 			}
+			// Tạo đánh giá cho các Leader
 			foreach (var user in allNguoiDung)
 			{
 				var nhoms = await getNhomVaThanhVienCungNhomByMaNguoiDung(user.MaNguoiDung);
@@ -373,17 +394,16 @@ namespace EmployeeEvaluation360.Services
 				foreach (var nhom in nhoms)
 				{
 					var thanhViens = nhom.ThanhVien;
-
 					var currentUser = thanhViens.FirstOrDefault(x => x.MaNguoiDung == user.MaNguoiDung);
 					bool isLeader = (currentUser != null && currentUser.ChucVu == "Leader");
 
 					foreach (var tv in thanhViens)
 					{
 						int heSo = 1;
-
+						// Nếu người đánh giá là người dùng hiện tại, thì hệ số là 2 -- tự đánh giá bản thân
 						if (user.MaNguoiDung == tv.MaNguoiDung)
 							heSo = 2;
-
+						// Nếu người đánh giá là Leader và không phải là người dùng hiện tại, thì hệ số là 3 -- đánh giá Leader
 						else if (isLeader && user.MaNguoiDung != tv.MaNguoiDung)
 							heSo = 3;
 
@@ -391,7 +411,7 @@ namespace EmployeeEvaluation360.Services
 						{
 							NguoiDanhGia = user.MaNguoiDung,
 							NguoiDuocDanhGia = tv.MaNhomNguoiDung,
-							MaDotDanhGia = maDotDanhGia,							
+							MaDotDanhGia = maDotDanhGia,
 							Diem = 0,
 							TrangThai = "Chưa đánh giá",
 							HeSo = heSo,
@@ -399,7 +419,7 @@ namespace EmployeeEvaluation360.Services
 					}
 				}
 			}
-
+			// Loại bỏ các đánh giá trùng lặp (nếu có) dựa trên Người đánh giá và Người được đánh giá
 			danhGias = danhGias
 				.GroupBy(d => new { d.NguoiDanhGia, d.NguoiDuocDanhGia })
 				.Select(g => g.First())

@@ -62,15 +62,16 @@ namespace EmployeeEvaluation360
 			builder.Services.AddScoped<IMauDanhGiaService, MauDanhGiaService>();
 			builder.Services.AddScoped<IMailService, MailService>();
 			builder.Services.AddScoped<IKetQuaDanhGiaService, KetQuaDanhGiaService>();
-			// builder.Services.AddCors(options =>
-			// {
-			// 	options.AddPolicy("AllowFrontend",
-			// 		policy => policy
-			// 			.WithOrigins("http://localhost:5173")
-			// 			.AllowAnyHeader()
-			// 			.AllowAnyMethod()
-			// 			.AllowCredentials());
-			// });
+
+			builder.Services.AddCors(options =>
+			{
+				options.AddPolicy("AllowFrontend",
+					policy => policy
+						.WithOrigins("http://localhost:5173")
+						.AllowAnyHeader()
+						.AllowAnyMethod()
+						.AllowCredentials());
+			});
 
 			builder.Services.AddCors(options =>
 			{
@@ -80,6 +81,7 @@ namespace EmployeeEvaluation360
 						.AllowAnyHeader()
 						.AllowAnyMethod());
 			});
+
 			builder.Services.AddScoped<SeedData>();
 
 			builder.Services.AddHostedService<AutoCloseEvaluationPeriodService>();
@@ -155,7 +157,7 @@ namespace EmployeeEvaluation360
 			app.UseAuthentication();
 			app.UseAuthorization();
 
-			//  app.UseCors("AllowFrontend");
+			 //app.UseCors("AllowFrontend");
 			app.UseCors("AllowSpecificOrigin");
 
 			app.MapControllers();
